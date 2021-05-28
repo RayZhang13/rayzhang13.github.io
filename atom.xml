@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://rayzhang13.github.io</id>
     <title>Ray&apos;s Blog</title>
-    <updated>2021-05-28T17:39:09.495Z</updated>
+    <updated>2021-05-28T18:21:52.204Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://rayzhang13.github.io"/>
     <link rel="self" href="https://rayzhang13.github.io/atom.xml"/>
@@ -11,7 +11,7 @@
     <icon>https://rayzhang13.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, Ray&apos;s Blog</rights>
     <entry>
-        <title type="html"><![CDATA[关于二分查找的边界问题]]></title>
+        <title type="html"><![CDATA[二分查找的边界问题]]></title>
         <id>https://rayzhang13.github.io/post/BinarySearchOccasions/</id>
         <link href="https://rayzhang13.github.io/post/BinarySearchOccasions/">
         </link>
@@ -20,7 +20,7 @@
 通过控制上下界不断缩小范围得到</p>
 <h1 id="二分查找模版">二分查找模版</h1>
 <h2 id="普通二分查找找到目标target即可">普通二分查找（找到目标target即可）</h2>
-<pre><code class="language-java">public class BinarySearch {
+<pre><code class="language-Java">public class BinarySearch {
     public int search(int[] arr, int target){
         int lo = 0, hi = arr.length - 1;
         while(lo &lt;= hi){
