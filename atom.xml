@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://rayzhang13.github.io</id>
     <title>Ray&apos;s Blog</title>
-    <updated>2021-05-28T16:43:31.475Z</updated>
+    <updated>2021-05-28T17:06:50.223Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://rayzhang13.github.io"/>
     <link rel="self" href="https://rayzhang13.github.io/atom.xml"/>
@@ -12,18 +12,19 @@
     <rights>All rights reserved 2021, Ray&apos;s Blog</rights>
     <entry>
         <title type="html"><![CDATA[关于二分查找的边界问题]]></title>
-        <id>https://rayzhang13.github.io/post/guan-yu-er-fen-cha-zhao-de-yi-xie-si-lu/</id>
-        <link href="https://rayzhang13.github.io/post/guan-yu-er-fen-cha-zhao-de-yi-xie-si-lu/">
+        <id>https://rayzhang13.github.io/post/BinarySearchOccasions/</id>
+        <link href="https://rayzhang13.github.io/post/BinarySearchOccasions/">
         </link>
         <updated>2021-05-28T14:47:13.000Z</updated>
         <content type="html"><![CDATA[<p>我们都知道对于一个单调数组，对其进行二分查找的复杂度一般为O(log N)<br>
-通过控制上下界不断缩小范围得到<br>
-e.g.</p>
+通过控制上下界不断缩小范围得到</p>
+<h1 id="二分查找模版">二分查找模版</h1>
+<h2 id="普通二分查找找到目标target即可">普通二分查找（找到目标target即可）</h2>
 <pre><code class="language-Java">public class BinarySearch {
     public int search(int[] arr, int target){
         int lo = 0, hi = arr.length - 1;
         while(lo &lt;= hi){
-            int mid = lo + (hi - lo) / 2;
+            int mid = lo + (hi - lo) / 2;       //为了防止 (hi + lo) / 2 发生整型溢出
             if(target &gt; arr[mid]) lo = mid + 1;
             else if(target &lt; arr[mid]) hi = mid - 1;
             else return mid;
@@ -32,12 +33,19 @@ e.g.</p>
     }
 
     public static void main(String[] args) {
-        int[] arr = new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9};
-        System.out.println(new BinarySearch().search(arr, 4));
+        int[] arr = new int[]{-1, 0, 3, 5, 9, 12};
+        System.out.println(new BinarySearch().search(arr, 9));
     }
 }
 </code></pre>
-<p>其中查找区间为[lo, hi]，即左闭右闭，因此while循环内条件为<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>l</mi><mi>o</mi><mo>≤</mo><mi>h</mi><mi>i</mi></mrow><annotation encoding="application/x-tex">lo \leq hi</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83041em;vertical-align:-0.13597em;"></span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">o</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">≤</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault">h</span><span class="mord mathdefault">i</span></span></span></span></p>
+<p>其中查找区间为<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>[</mo><mi>l</mi><mi>o</mi><mo separator="true">,</mo><mi>h</mi><mi>i</mi><mo>]</mo></mrow><annotation encoding="application/x-tex">[lo, hi]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">o</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">h</span><span class="mord mathdefault">i</span><span class="mclose">]</span></span></span></span>，即左闭右闭，因此while循环内条件为<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>l</mi><mi>o</mi><mo>≤</mo><mi>h</mi><mi>i</mi></mrow><annotation encoding="application/x-tex">lo \leq hi</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83041em;vertical-align:-0.13597em;"></span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">o</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">≤</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault">h</span><span class="mord mathdefault">i</span></span></span></span></p>
+<ol>
+<li>当查询到mid所在下标值为target时停止</li>
+<li>若mid所在下表值小于target，则说明目标值在当前区间右半侧，故将闭区间左端点调整为mid + 1<br>
+<img src="https://rayzhang13.github.io/post-images/1622221197511.png" alt="too small" loading="lazy"></li>
+<li>若mid所在下表值大于target，则说明目标值在当前区间左半侧，故将闭区间左端点调整为mid - 1<br>
+<img src="https://rayzhang13.github.io/post-images/1622221348036.png" alt="too large" loading="lazy"></li>
+</ol>
 ]]></content>
     </entry>
     <entry>
