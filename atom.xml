@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://rayzhang13.github.io</id>
     <title>Ray&apos;s Blog</title>
-    <updated>2021-05-28T16:36:17.644Z</updated>
+    <updated>2021-05-28T16:37:19.261Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://rayzhang13.github.io"/>
     <link rel="self" href="https://rayzhang13.github.io/atom.xml"/>
@@ -19,7 +19,7 @@
         <content type="html"><![CDATA[<p>我们都知道对于一个单调数组，对其进行二分查找的复杂度一般为O(log N)<br>
 通过控制上下界不断缩小范围得到<br>
 e.g.</p>
-<pre><code>public class BinarySearch {
+<pre><code class="language-Java">public class BinarySearch {
     public int search(int[] arr, int target){
         int lo = 0, hi = arr.length - 1;
         while(lo &lt;= hi){
