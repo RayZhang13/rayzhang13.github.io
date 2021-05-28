@@ -2182,9 +2182,7 @@ p > code {
       background: #FFFFFFcc;
     }.bg-img img {
         filter: blur(5px)
-      }.box-shadow-wrapper {
-      box-shadow: none !important;
-    }body {
+      }body {
       cursor: default;
     }a {
       cursor: pointer;
