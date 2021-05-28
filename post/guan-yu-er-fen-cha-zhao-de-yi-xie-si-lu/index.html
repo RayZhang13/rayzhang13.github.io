@@ -3,7 +3,7 @@
     <meta charset="utf-8" />
 <meta name="viewport" content="width=device-width, initial-scale=1" />
 <title>关于二分查找的一些感想 | Ray&#39;s Blog</title>
-<link rel="shortcut icon" href="https://rayzhang13.github.io/favicon.ico?v=1622219621134">
+<link rel="shortcut icon" href="https://rayzhang13.github.io/favicon.ico?v=1622219706527">
 <link href="https://cdn.jsdelivr.net/npm/remixicon@2.3.0/fonts/remixicon.css" rel="stylesheet">
 <link rel="stylesheet" href="https://rayzhang13.github.io/styles/main.css">
 <link rel="alternate" type="application/atom+xml" title="关于二分查找的一些感想 | Ray&#39;s Blog - Atom Feed" href="https://rayzhang13.github.io/atom.xml">
@@ -14,9 +14,8 @@
     <meta name="description" content="我们都知道对于一个单调数组，对其进行二分查找的复杂度一般为O(log N)
 通过控制上下界不断缩小范围得到
 e.g.
-`
 public class BinarySearch {
-public int search(int[] arr, in..." />
+    public int search(int[] arr, ..." />
     <meta name="keywords" content="" />
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.10.0/katex.min.css">
     <script src="https://cdn.bootcss.com/highlight.js/9.12.0/highlight.min.js"></script>
@@ -26,7 +25,7 @@ public int search(int[] arr, in..." />
       <div class="main-content">
         <div class="site-header">
   <a href="https://rayzhang13.github.io">
-  <img class="avatar" src="https://rayzhang13.github.io/images/avatar.png?v=1622219621134" alt="">
+  <img class="avatar" src="https://rayzhang13.github.io/images/avatar.png?v=1622219706527" alt="">
   </a>
   <h1 class="site-title">
     Ray&#39;s Blog
@@ -95,26 +94,25 @@ public int search(int[] arr, in..." />
               <div class="post-content">
                 <p>我们都知道对于一个单调数组，对其进行二分查找的复杂度一般为O(log N)<br>
 通过控制上下界不断缩小范围得到<br>
-e.g.<br>
-`<br>
-public class BinarySearch {<br>
-public int search(int[] arr, int target){<br>
-int lo = 0, hi = arr.length - 1;<br>
-while(lo &lt;= hi){<br>
-int mid = lo + (hi - lo) / 2;<br>
-if(target &gt; arr[mid]) lo = mid + 1;<br>
-else if(target &lt; arr[mid]) hi = mid - 1;<br>
-else return mid;<br>
-}<br>
-return -1;<br>
-}</p>
-<pre><code>public static void main(String[] args) {
-    int[] arr = new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9};
-    System.out.println(new BinarySearch().search(arr, 4));
+e.g.</p>
+<pre><code>public class BinarySearch {
+    public int search(int[] arr, int target){
+        int lo = 0, hi = arr.length - 1;
+        while(lo &lt;= hi){
+            int mid = lo + (hi - lo) / 2;
+            if(target &gt; arr[mid]) lo = mid + 1;
+            else if(target &lt; arr[mid]) hi = mid - 1;
+            else return mid;
+        }
+        return -1;
+    }
+
+    public static void main(String[] args) {
+        int[] arr = new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9};
+        System.out.println(new BinarySearch().search(arr, 4));
+    }
 }
 </code></pre>
-<p>}<br>
-`</p>
 
               </div>
               <div class="toc-container">

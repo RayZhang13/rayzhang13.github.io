@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://rayzhang13.github.io</id>
     <title>Ray&apos;s Blog</title>
-    <updated>2021-05-28T16:33:44.612Z</updated>
+    <updated>2021-05-28T16:35:10.552Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://rayzhang13.github.io"/>
     <link rel="self" href="https://rayzhang13.github.io/atom.xml"/>
@@ -18,26 +18,25 @@
         <updated>2021-05-28T14:47:13.000Z</updated>
         <content type="html"><![CDATA[<p>我们都知道对于一个单调数组，对其进行二分查找的复杂度一般为O(log N)<br>
 通过控制上下界不断缩小范围得到<br>
-e.g.<br>
-`<br>
-public class BinarySearch {<br>
-public int search(int[] arr, int target){<br>
-int lo = 0, hi = arr.length - 1;<br>
-while(lo &lt;= hi){<br>
-int mid = lo + (hi - lo) / 2;<br>
-if(target &gt; arr[mid]) lo = mid + 1;<br>
-else if(target &lt; arr[mid]) hi = mid - 1;<br>
-else return mid;<br>
-}<br>
-return -1;<br>
-}</p>
-<pre><code>public static void main(String[] args) {
-    int[] arr = new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9};
-    System.out.println(new BinarySearch().search(arr, 4));
+e.g.</p>
+<pre><code>public class BinarySearch {
+    public int search(int[] arr, int target){
+        int lo = 0, hi = arr.length - 1;
+        while(lo &lt;= hi){
+            int mid = lo + (hi - lo) / 2;
+            if(target &gt; arr[mid]) lo = mid + 1;
+            else if(target &lt; arr[mid]) hi = mid - 1;
+            else return mid;
+        }
+        return -1;
+    }
+
+    public static void main(String[] args) {
+        int[] arr = new int[]{1, 2, 3, 4, 5, 6, 7, 8, 9};
+        System.out.println(new BinarySearch().search(arr, 4));
+    }
 }
 </code></pre>
-<p>}<br>
-`</p>
 ]]></content>
     </entry>
     <entry>
