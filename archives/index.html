@@ -9,7 +9,7 @@
 <meta name="description" content="Everything&#39;s gonna be just fine.">
 <meta name="theme-color" content="#000">
 <title>Ray&#39;s Blog</title>
-<link rel="shortcut icon" href="/favicon.ico?v=1622275818180">
+<link rel="shortcut icon" href="/favicon.ico?v=1622279096483">
 <link rel="stylesheet" href="/media/css/pisces.css">
 <link rel="stylesheet" href="/media/fonts/font-awesome.css">
 <link
@@ -194,7 +194,7 @@
     <div class="sidebar-item-box">
       <a href="/archives/">
         
-        <span class="site-item-stat-count">3</span>
+        <span class="site-item-stat-count">4</span>
         <span class="site-item-stat-name language" data-lan="article">文章</span>
       </a>
     </div>
@@ -254,7 +254,7 @@
   <div class="archive-timeline-box">
     <div class="archive-timeline-title">
       
-        <h2 class="language" data-lan="archives" data-count="3">非常好！目前共计3篇日志，继续努力！</h2>
+        <h2 class="language" data-lan="archives" data-count="4">非常好！目前共计4篇日志，继续努力！</h2>
       
     </div>
     
@@ -265,7 +265,20 @@
         </div>    
         
       
-      <a href="https://rayzhang13.github.io/post/hanoi-wen-ti/">
+      <a href="https://rayzhang13.github.io/post/eight-digit-maze/">
+        <div class="motion-warpper tag-archive-node">
+          <div class="tag-node">
+            <h1>
+              05-29
+              <small>A*算法解决八数码问题</small>
+            </h1>
+          </div>  
+      </div>
+      </a>
+    
+      
+      
+      <a href="https://rayzhang13.github.io/post/hanoi-problem/">
         <div class="motion-warpper tag-archive-node">
           <div class="tag-node">
             <h1>
@@ -278,7 +291,7 @@
     
       
       
-      <a href="https://rayzhang13.github.io/post/leetcode-shua-ti-ji-hua/">
+      <a href="https://rayzhang13.github.io/post/leetcode-project/">
         <div class="motion-warpper tag-archive-node">
           <div class="tag-node">
             <h1>
@@ -596,7 +609,158 @@
     <div class="result" id="result">
       
       <div class="item">
-        <a class="result-title" style="opacity: 0;" href="https://rayzhang13.github.io/post/hanoi-wen-ti/"" data-c="
+        <a class="result-title" style="opacity: 0;" href="https://rayzhang13.github.io/post/eight-digit-maze/"" data-c="
+          &lt;h1 id=&#34;介绍&#34;&gt;介绍&lt;/h1&gt;
+&lt;h2 id=&#34;八数码问题&#34;&gt;八数码问题&lt;/h2&gt;
+&lt;p&gt;八数码问题也称为九宫问题。在3×3的棋盘，摆有八个棋子，每个棋子上标有1至8的某一数字，不同棋子上标的数字不相同。棋盘上还有一个空格，与空格相邻的棋子可以移到空格中。要求解决的问题是：给出一个初始状态和一个目标状态，找出一种从初始转变成目标状态的移动棋子步数最少的移动步骤。&lt;br&gt;
+所谓问题的一个状态就是棋子在棋盘上的一种摆法。棋子移动后，状态就会发生改变。解八数码问题实际上就是找出从初始状态到达目标状态所经过的一系列中间过渡状态。&lt;br&gt;
+&lt;img src=&#34;https://rayzhang13.github.io/post-images/1622276905057.jpg&#34; alt=&#34;&#34; loading=&#34;lazy&#34;&gt;&lt;/p&gt;
+&lt;h2 id=&#34;a算法&#34;&gt;A*算法&lt;/h2&gt;
+&lt;p&gt;A*算法是一种启发式搜索算法，启发式搜索就是在状态空间中的搜索对每一个搜索的位置进行评估，得到最好的位置，再从这个位置进行搜索直到目标。这样可以省略大量无谓的搜索路径，提高了效率。&lt;/p&gt;
+&lt;p&gt;算法核心公式：&lt;br&gt;
+F = G + H&lt;br&gt;
+F - 决策的总代价&lt;br&gt;
+G - 从开始到决策时刻所花费的真实代价&lt;br&gt;
+H - 从决策时刻到目标的预估代价&lt;/p&gt;
+&lt;p&gt;其中G值是一个真实的代价，也就是从算法流程一开始到进行这个决策的时候，一共花费的代价。H值是一个预估的代价。在极端情况下，如果H是常量0，这个算法退化成广度优先搜索算法，即按照顺序的依次扩充每个节点。如果G是常量，这个算法退化成贪心算法，即每次扩充可以使下一次最优的节点。每次进行决策的时候，A*算法选择遍历所有当前可能的决策，并执行使F最大的决策。&lt;/p&gt;
+&lt;h2 id=&#34;策略&#34;&gt;策略&lt;/h2&gt;
+&lt;p&gt;我们定义从开始状态执行的总步数为真实代价G，而当前状态与最终结果的格数差异我们记为H即从决策时刻到目标的预估代价。例如上图所示中的初始状态与最终状态之间相距了5个位置，即&lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mi&gt;H&lt;/mi&gt;&lt;mo&gt;=&lt;/mo&gt;&lt;mn&gt;5&lt;/mn&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;H = 5&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.68333em;vertical-align:0em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34; style=&#34;margin-right:0.08125em;&#34;&gt;H&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.2777777777777778em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mrel&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.2777777777777778em;&#34;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.64444em;vertical-align:0em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;5&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/p&gt;
+&lt;h1 id=&#34;代码解决&#34;&gt;代码解决&lt;/h1&gt;
+&lt;p&gt;对于八数码问题，我们先考虑到的是如何使用数据结构将各个状态一一对应的表达出来&lt;br&gt;
+例如&lt;br&gt;
+&lt;img src=&#34;https://rayzhang13.github.io/post-images/1622277406237.png&#34; alt=&#34;&#34; loading=&#34;lazy&#34;&gt;&lt;/p&gt;
+&lt;p&gt;我们看到八数码问题中有9个元素的位置，我们按照行将其标记为0, 1, 2, 3, 4, 5, 6, 7, 8个元素，每个位置的元素n满足&lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mn&gt;0&lt;/mn&gt;&lt;mo&gt;≤&lt;/mo&gt;&lt;mi&gt;n&lt;/mi&gt;&lt;mo&gt;≤&lt;/mo&gt;&lt;mn&gt;8&lt;/mn&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;0 \leq n \leq 8&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.78041em;vertical-align:-0.13597em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.2777777777777778em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mrel&#34;&gt;≤&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.2777777777777778em;&#34;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.7719400000000001em;vertical-align:-0.13597em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;n&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.2777777777777778em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mrel&#34;&gt;≤&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.2777777777777778em;&#34;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.64444em;vertical-align:0em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;8&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;，我们定义空位置为0&lt;br&gt;
+而最大8的极端情况下其二进制表达为8&lt;sub&gt;D&lt;/sub&gt; = (1000)&lt;sub&gt;B&lt;/sub&gt;，需要4位的二进制空间，则9个元素总共需要&lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mn&gt;4&lt;/mn&gt;&lt;mo&gt;∗&lt;/mo&gt;&lt;mn&gt;9&lt;/mn&gt;&lt;mo&gt;=&lt;/mo&gt;&lt;mn&gt;36&lt;/mn&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;4 * 9 = 36&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.64444em;vertical-align:0em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;4&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.2222222222222222em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mbin&#34;&gt;∗&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.2222222222222222em;&#34;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.64444em;vertical-align:0em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;9&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.2777777777777778em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mrel&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.2777777777777778em;&#34;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.64444em;vertical-align:0em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;3&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;6&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;位的二进制数来表示一个状态，故我们需要长整型long来进行表示&lt;/p&gt;
+&lt;p&gt;对于上图其十进制对应状态表达为1 4 2 8 0 3 7 6 5&lt;br&gt;
+二进制表达为 0001 0100 0010 1000 0000 0011 0111 0110 0101，记为一个32位的整型&lt;/p&gt;
+&lt;p&gt;对应A*算法，其本质是一个贪心算法，我们维护一个优先队列pq，每次取出F最小的节点并对其进行拓展，每次取出的节点由贪心可知应为最优解，拓展过程中记得去重&lt;/p&gt;
+&lt;p&gt;&lt;img src=&#34;https://rayzhang13.github.io/post-images/1622278983736.png&#34; alt=&#34;&#34; loading=&#34;lazy&#34;&gt;&lt;br&gt;
+代码如下：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;import java.util.Arrays;
+import java.util.HashSet;
+import java.util.PriorityQueue;
+import java.util.Set;
+
+public class grid {
+    Set&amp;lt;Long&amp;gt; set = new HashSet&amp;lt;&amp;gt;();
+    //为了防止入队时产生的重复情况，采用Set对入队元素进行去重
+    int[][] adjacency = {{1, 3}, {0, 2, 4}, {1, 5}, {0, 4, 6}, {1, 3, 5, 7}, {2, 4, 8}, {3, 7}, {4, 6, 8}, {5, 7}}; 
+    //adjacency数组用于表示第i个元素若为空，他可以和adjacency[i]内部的元素进行交换
+    public long convert(int[] arr){   //将arr数组表示为32位整型long
+        long res = 0l;
+        for(int i = 0; i &amp;lt; 9; i++){
+            res += arr[i] * (1l &amp;lt;&amp;lt; (i * 4));
+        }
+        return res;
+    }
+    public int diff(long stat1, long stat2){ 
+        //计算stat1与stat2之间的距离差距，用于计算当前状态与目标状态之间的距离H
+        int cnt = 0;
+        for(int i = 0; i &amp;lt; 9; i++){
+            long tmp1 = (stat1 &amp;gt;&amp;gt; (i * 4)) % 16;
+            long tmp2 = (stat2 &amp;gt;&amp;gt; (i * 4)) % 16;
+            if(tmp1 != tmp2) cnt++;
+        }
+        return cnt;
+    }
+    public long swap(long stat, int pos1, int pos2){ 
+        //对于状态stat，若pos1所在位置位空（记为0），将其与pos2位置进行交换，并返回新的状态
+        long tmp2 = (stat &amp;gt;&amp;gt; (pos2 * 4)) % 16; //取出pos2位置的元素
+        stat -= tmp2 * (1l &amp;lt;&amp;lt; (pos2 * 4));  //将pos2对应位置清0
+        stat += tmp2 * (1l &amp;lt;&amp;lt; (pos1 * 4));  //将0对应位置填充为pos2原先的值，完成交换
+        return stat;
+    }
+    public int AStarSearch(int[] start, int[] target){
+        int zero = -1;
+        for(int i = 0; i &amp;lt; 9; i++){
+            if(start[i] == 0) zero = i;  //标记start数组中0的位置
+        }
+        long a = convert(start), b = convert(target); //转换为整型状态
+        PriorityQueue&amp;lt;long[]&amp;gt; pq = new PriorityQueue&amp;lt;&amp;gt;((o1, o2) -&amp;gt; (int) (diff(o1[1], b) + o1[2] - diff(o2[1], b) - o2[2]));
+        //pq内部数组定义：{0的位置, 当前状态整型, 真实步数}
+        pq.offer(new long[]{zero, a, 0l}); //优先队列加入初始状态
+        set.add(a);     //将初始状态加入去重Set
+        while(!pq.isEmpty()){
+            long[] cur = pq.poll();
+            display(cur, b);
+            if(cur[1] == b) return (int)cur[2]; //若取出的数组与目标对应，记为结束
+            int blank = (int)cur[0];  //当前数组的0所在位置
+            for(int x: adjacency[blank]) {
+                long n_stat = swap(cur[1], blank, x);  
+                //将元素0与其周围元素进行交换，得到新状态
+                if (!set.contains(n_stat)) {   //Set去重
+                    pq.offer(new long[]{x, n_stat, cur[2] + 1}); //交换后新状态
+                    set.add(n_stat);  //新状态加入去重Set
+                }
+            }
+        }
+        return -1; //找不到返回-1
+    }
+
+    private void display(long[] cur, long target) { //打印数组的相关信息
+        int[][] res = new int[3][3];
+        long stat = cur[1];
+        for(int i = 0; i &amp;lt; 9; i++){
+            res[i / 3][i % 3] = (int) (stat % 16);
+            stat = stat &amp;gt;&amp;gt; 4;
+        }
+        for(int[] x: res) System.out.println(Arrays.toString(x)); //打印数组
+        System.out.println(&amp;quot;steps: &amp;quot; + cur[2]); //打印当前步数
+        System.out.println(&amp;quot;distance: &amp;quot; + diff(cur[1], target)); //打印与目标距离
+    }
+
+    public static void main(String[] args) {
+        int[] start = new int[]{1, 4, 2, 8, 0, 3, 7, 6, 5};
+        int[] target = new int[]{1, 2, 3, 8, 0, 4, 7, 6, 5};
+        System.out.println(&amp;quot;\nSTEP: &amp;quot; + new grid().AStarSearch(start, target));
+    }
+}
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;每一轮while循环，程序都将打印出队的cur数组相关信息，最后打印STEP最终步数&lt;br&gt;
+运行结果如下：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;/Users/ray/Library/Java/JavaVirtualMachines/openjdk-15.0.2/Contents/Home/bin/java -javaagent:/Users/ray/Library/Application Support/JetBrains/Toolbox/apps/IDEA-U/ch-0/211.7142.45/IntelliJ IDEA.app/Contents/lib/idea_rt.jar=52037:/Users/ray/Library/Application Support/JetBrains/Toolbox/apps/IDEA-U/ch-0/211.7142.45/IntelliJ IDEA.app/Contents/bin -Dfile.encoding=UTF-8 -classpath /Users/ray/IdeaProjects/oj/out/production/oj com.company.grid
+[1, 4, 2]
+[8, 0, 3]
+[7, 6, 5]
+steps: 0
+distance: 3
+[1, 0, 2]
+[8, 4, 3]
+[7, 6, 5]
+steps: 1
+distance: 4
+[1, 4, 2]
+[8, 3, 0]
+[7, 6, 5]
+steps: 1
+distance: 4
+[1, 2, 0]
+[8, 4, 3]
+[7, 6, 5]
+steps: 2
+distance: 3
+[1, 2, 3]
+[8, 4, 0]
+[7, 6, 5]
+steps: 3
+distance: 2
+[1, 2, 3]
+[8, 0, 4]
+[7, 6, 5]
+steps: 4
+distance: 0
+
+STEP: 4
+
+Process finished with exit code 0
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;我们得到最终步数为4&lt;/p&gt;
+">A*算法解决八数码问题</a>
+      </div>
+      
+      <div class="item">
+        <a class="result-title" style="opacity: 0;" href="https://rayzhang13.github.io/post/hanoi-problem/"" data-c="
           &lt;h1 id=&#34;起源&#34;&gt;起源&lt;/h1&gt;
 &lt;p&gt;最早发明这个问题的人是法国数学家爱德华·卢卡斯。&lt;/p&gt;
 &lt;p&gt;传说越南河内某间寺院有三根银棒，上串 64 个金盘。寺院里的僧侣依照一个古老的预言，以上述规则移动这些盘子；预言说当这些盘子移动完毕，世界就会灭亡。这个传说叫做梵天寺之塔问题（Tower of Brahma puzzle）。但不知道是卢卡斯自创的这个传说，还是他受他人启发。&lt;br&gt;
@@ -640,7 +804,7 @@ Process finished with exit code 0
       </div>
       
       <div class="item">
-        <a class="result-title" style="opacity: 0;" href="https://rayzhang13.github.io/post/leetcode-shua-ti-ji-hua/"" data-c="
+        <a class="result-title" style="opacity: 0;" href="https://rayzhang13.github.io/post/leetcode-project/"" data-c="
           &lt;p&gt;这是菜鸡的主页&lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mo&gt;⟹&lt;/mo&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;\Longrightarrow&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.549em;vertical-align:-0.024em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mrel&#34;&gt;⟹&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;  &lt;a href=&#34;https://leetcode-cn.com/u/chmod-r-000-e/&#34;&gt;https://leetcode-cn.com/u/chmod-r-000-e/&lt;/a&gt;&lt;br&gt;
 &lt;img src=&#34;https://rayzhang13.github.io/post-images/1622271963578.png&#34; alt=&#34;&#34; loading=&#34;lazy&#34;&gt;&lt;/p&gt;
 &lt;p&gt;从大二下坚持下也快有一年了，期间经历了风风雨雨&lt;br&gt;

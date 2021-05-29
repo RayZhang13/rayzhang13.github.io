@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://rayzhang13.github.io</id>
     <title>Ray&apos;s Blog</title>
-    <updated>2021-05-29T08:10:22.693Z</updated>
+    <updated>2021-05-29T09:05:00.395Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://rayzhang13.github.io"/>
     <link rel="self" href="https://rayzhang13.github.io/atom.xml"/>
@@ -11,9 +11,163 @@
     <icon>https://rayzhang13.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, Ray&apos;s Blog</rights>
     <entry>
+        <title type="html"><![CDATA[A*算法解决八数码问题]]></title>
+        <id>https://rayzhang13.github.io/post/eight-digit-maze/</id>
+        <link href="https://rayzhang13.github.io/post/eight-digit-maze/">
+        </link>
+        <updated>2021-05-29T08:24:46.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="介绍">介绍</h1>
+<h2 id="八数码问题">八数码问题</h2>
+<p>八数码问题也称为九宫问题。在3×3的棋盘，摆有八个棋子，每个棋子上标有1至8的某一数字，不同棋子上标的数字不相同。棋盘上还有一个空格，与空格相邻的棋子可以移到空格中。要求解决的问题是：给出一个初始状态和一个目标状态，找出一种从初始转变成目标状态的移动棋子步数最少的移动步骤。<br>
+所谓问题的一个状态就是棋子在棋盘上的一种摆法。棋子移动后，状态就会发生改变。解八数码问题实际上就是找出从初始状态到达目标状态所经过的一系列中间过渡状态。<br>
+<img src="https://rayzhang13.github.io/post-images/1622276905057.jpg" alt="" loading="lazy"></p>
+<h2 id="a算法">A*算法</h2>
+<p>A*算法是一种启发式搜索算法，启发式搜索就是在状态空间中的搜索对每一个搜索的位置进行评估，得到最好的位置，再从这个位置进行搜索直到目标。这样可以省略大量无谓的搜索路径，提高了效率。</p>
+<p>算法核心公式：<br>
+F = G + H<br>
+F - 决策的总代价<br>
+G - 从开始到决策时刻所花费的真实代价<br>
+H - 从决策时刻到目标的预估代价</p>
+<p>其中G值是一个真实的代价，也就是从算法流程一开始到进行这个决策的时候，一共花费的代价。H值是一个预估的代价。在极端情况下，如果H是常量0，这个算法退化成广度优先搜索算法，即按照顺序的依次扩充每个节点。如果G是常量，这个算法退化成贪心算法，即每次扩充可以使下一次最优的节点。每次进行决策的时候，A*算法选择遍历所有当前可能的决策，并执行使F最大的决策。</p>
+<h2 id="策略">策略</h2>
+<p>我们定义从开始状态执行的总步数为真实代价G，而当前状态与最终结果的格数差异我们记为H即从决策时刻到目标的预估代价。例如上图所示中的初始状态与最终状态之间相距了5个位置，即<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>H</mi><mo>=</mo><mn>5</mn></mrow><annotation encoding="application/x-tex">H = 5</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.08125em;">H</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">5</span></span></span></span></p>
+<h1 id="代码解决">代码解决</h1>
+<p>对于八数码问题，我们先考虑到的是如何使用数据结构将各个状态一一对应的表达出来<br>
+例如<br>
+<img src="https://rayzhang13.github.io/post-images/1622277406237.png" alt="" loading="lazy"></p>
+<p>我们看到八数码问题中有9个元素的位置，我们按照行将其标记为0, 1, 2, 3, 4, 5, 6, 7, 8个元素，每个位置的元素n满足<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>0</mn><mo>≤</mo><mi>n</mi><mo>≤</mo><mn>8</mn></mrow><annotation encoding="application/x-tex">0 \leq n \leq 8</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.78041em;vertical-align:-0.13597em;"></span><span class="mord">0</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">≤</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.7719400000000001em;vertical-align:-0.13597em;"></span><span class="mord mathdefault">n</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">≤</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">8</span></span></span></span>，我们定义空位置为0<br>
+而最大8的极端情况下其二进制表达为8<sub>D</sub> = (1000)<sub>B</sub>，需要4位的二进制空间，则9个元素总共需要<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>4</mn><mo>∗</mo><mn>9</mn><mo>=</mo><mn>36</mn></mrow><annotation encoding="application/x-tex">4 * 9 = 36</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">4</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">9</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">3</span><span class="mord">6</span></span></span></span>位的二进制数来表示一个状态，故我们需要长整型long来进行表示</p>
+<p>对于上图其十进制对应状态表达为1 4 2 8 0 3 7 6 5<br>
+二进制表达为 0001 0100 0010 1000 0000 0011 0111 0110 0101，记为一个32位的整型</p>
+<p>对应A*算法，其本质是一个贪心算法，我们维护一个优先队列pq，每次取出F最小的节点并对其进行拓展，每次取出的节点由贪心可知应为最优解，拓展过程中记得去重</p>
+<p><img src="https://rayzhang13.github.io/post-images/1622278983736.png" alt="" loading="lazy"><br>
+代码如下：</p>
+<pre><code class="language-java">import java.util.Arrays;
+import java.util.HashSet;
+import java.util.PriorityQueue;
+import java.util.Set;
+
+public class grid {
+    Set&lt;Long&gt; set = new HashSet&lt;&gt;();
+    //为了防止入队时产生的重复情况，采用Set对入队元素进行去重
+    int[][] adjacency = {{1, 3}, {0, 2, 4}, {1, 5}, {0, 4, 6}, {1, 3, 5, 7}, {2, 4, 8}, {3, 7}, {4, 6, 8}, {5, 7}}; 
+    //adjacency数组用于表示第i个元素若为空，他可以和adjacency[i]内部的元素进行交换
+    public long convert(int[] arr){   //将arr数组表示为32位整型long
+        long res = 0l;
+        for(int i = 0; i &lt; 9; i++){
+            res += arr[i] * (1l &lt;&lt; (i * 4));
+        }
+        return res;
+    }
+    public int diff(long stat1, long stat2){ 
+        //计算stat1与stat2之间的距离差距，用于计算当前状态与目标状态之间的距离H
+        int cnt = 0;
+        for(int i = 0; i &lt; 9; i++){
+            long tmp1 = (stat1 &gt;&gt; (i * 4)) % 16;
+            long tmp2 = (stat2 &gt;&gt; (i * 4)) % 16;
+            if(tmp1 != tmp2) cnt++;
+        }
+        return cnt;
+    }
+    public long swap(long stat, int pos1, int pos2){ 
+        //对于状态stat，若pos1所在位置位空（记为0），将其与pos2位置进行交换，并返回新的状态
+        long tmp2 = (stat &gt;&gt; (pos2 * 4)) % 16; //取出pos2位置的元素
+        stat -= tmp2 * (1l &lt;&lt; (pos2 * 4));  //将pos2对应位置清0
+        stat += tmp2 * (1l &lt;&lt; (pos1 * 4));  //将0对应位置填充为pos2原先的值，完成交换
+        return stat;
+    }
+    public int AStarSearch(int[] start, int[] target){
+        int zero = -1;
+        for(int i = 0; i &lt; 9; i++){
+            if(start[i] == 0) zero = i;  //标记start数组中0的位置
+        }
+        long a = convert(start), b = convert(target); //转换为整型状态
+        PriorityQueue&lt;long[]&gt; pq = new PriorityQueue&lt;&gt;((o1, o2) -&gt; (int) (diff(o1[1], b) + o1[2] - diff(o2[1], b) - o2[2]));
+        //pq内部数组定义：{0的位置, 当前状态整型, 真实步数}
+        pq.offer(new long[]{zero, a, 0l}); //优先队列加入初始状态
+        set.add(a);     //将初始状态加入去重Set
+        while(!pq.isEmpty()){
+            long[] cur = pq.poll();
+            display(cur, b);
+            if(cur[1] == b) return (int)cur[2]; //若取出的数组与目标对应，记为结束
+            int blank = (int)cur[0];  //当前数组的0所在位置
+            for(int x: adjacency[blank]) {
+                long n_stat = swap(cur[1], blank, x);  
+                //将元素0与其周围元素进行交换，得到新状态
+                if (!set.contains(n_stat)) {   //Set去重
+                    pq.offer(new long[]{x, n_stat, cur[2] + 1}); //交换后新状态
+                    set.add(n_stat);  //新状态加入去重Set
+                }
+            }
+        }
+        return -1; //找不到返回-1
+    }
+
+    private void display(long[] cur, long target) { //打印数组的相关信息
+        int[][] res = new int[3][3];
+        long stat = cur[1];
+        for(int i = 0; i &lt; 9; i++){
+            res[i / 3][i % 3] = (int) (stat % 16);
+            stat = stat &gt;&gt; 4;
+        }
+        for(int[] x: res) System.out.println(Arrays.toString(x)); //打印数组
+        System.out.println(&quot;steps: &quot; + cur[2]); //打印当前步数
+        System.out.println(&quot;distance: &quot; + diff(cur[1], target)); //打印与目标距离
+    }
+
+    public static void main(String[] args) {
+        int[] start = new int[]{1, 4, 2, 8, 0, 3, 7, 6, 5};
+        int[] target = new int[]{1, 2, 3, 8, 0, 4, 7, 6, 5};
+        System.out.println(&quot;\nSTEP: &quot; + new grid().AStarSearch(start, target));
+    }
+}
+
+</code></pre>
+<p>每一轮while循环，程序都将打印出队的cur数组相关信息，最后打印STEP最终步数<br>
+运行结果如下：</p>
+<pre><code class="language-bash">/Users/ray/Library/Java/JavaVirtualMachines/openjdk-15.0.2/Contents/Home/bin/java -javaagent:/Users/ray/Library/Application Support/JetBrains/Toolbox/apps/IDEA-U/ch-0/211.7142.45/IntelliJ IDEA.app/Contents/lib/idea_rt.jar=52037:/Users/ray/Library/Application Support/JetBrains/Toolbox/apps/IDEA-U/ch-0/211.7142.45/IntelliJ IDEA.app/Contents/bin -Dfile.encoding=UTF-8 -classpath /Users/ray/IdeaProjects/oj/out/production/oj com.company.grid
+[1, 4, 2]
+[8, 0, 3]
+[7, 6, 5]
+steps: 0
+distance: 3
+[1, 0, 2]
+[8, 4, 3]
+[7, 6, 5]
+steps: 1
+distance: 4
+[1, 4, 2]
+[8, 3, 0]
+[7, 6, 5]
+steps: 1
+distance: 4
+[1, 2, 0]
+[8, 4, 3]
+[7, 6, 5]
+steps: 2
+distance: 3
+[1, 2, 3]
+[8, 4, 0]
+[7, 6, 5]
+steps: 3
+distance: 2
+[1, 2, 3]
+[8, 0, 4]
+[7, 6, 5]
+steps: 4
+distance: 0
+
+STEP: 4
+
+Process finished with exit code 0
+</code></pre>
+<p>我们得到最终步数为4</p>
+]]></content>
+    </entry>
+    <entry>
         <title type="html"><![CDATA[Hanoi问题]]></title>
-        <id>https://rayzhang13.github.io/post/hanoi-wen-ti/</id>
-        <link href="https://rayzhang13.github.io/post/hanoi-wen-ti/">
+        <id>https://rayzhang13.github.io/post/hanoi-problem/</id>
+        <link href="https://rayzhang13.github.io/post/hanoi-problem/">
         </link>
         <updated>2021-05-29T07:49:01.000Z</updated>
         <content type="html"><![CDATA[<h1 id="起源">起源</h1>
@@ -59,8 +213,8 @@ Process finished with exit code 0
     </entry>
     <entry>
         <title type="html"><![CDATA[Leetcode刷题计划]]></title>
-        <id>https://rayzhang13.github.io/post/leetcode-shua-ti-ji-hua/</id>
-        <link href="https://rayzhang13.github.io/post/leetcode-shua-ti-ji-hua/">
+        <id>https://rayzhang13.github.io/post/leetcode-project/</id>
+        <link href="https://rayzhang13.github.io/post/leetcode-project/">
         </link>
         <updated>2021-05-29T07:02:29.000Z</updated>
         <content type="html"><![CDATA[<p>这是菜鸡的主页<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>⟹</mo></mrow><annotation encoding="application/x-tex">\Longrightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.549em;vertical-align:-0.024em;"></span><span class="mrel">⟹</span></span></span></span>  <a href="https://leetcode-cn.com/u/chmod-r-000-e/">https://leetcode-cn.com/u/chmod-r-000-e/</a><br>
