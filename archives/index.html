@@ -9,7 +9,7 @@
 <meta name="description" content="Everything&#39;s gonna be just fine.">
 <meta name="theme-color" content="#000">
 <title>Ray&#39;s Blog</title>
-<link rel="shortcut icon" href="/favicon.ico?v=1622268146745">
+<link rel="shortcut icon" href="/favicon.ico?v=1622269273933">
 <link rel="stylesheet" href="/media/css/pisces.css">
 <link rel="stylesheet" href="/media/fonts/font-awesome.css">
 <link
@@ -572,7 +572,8 @@
       <div class="item">
         <a class="result-title" style="opacity: 0;" href="https://rayzhang13.github.io/post/BinarySearchOccasions/"" data-c="
           &lt;p&gt;我们都知道对于一个单调数组，对其进行二分查找的复杂度一般为O(log N)&lt;br&gt;
-通过控制上下界不断缩小范围得到&lt;/p&gt;
+通过控制上下界lo和hi不断缩小范围得到&lt;br&gt;
+本文将探讨二分搜索中的几种情况&lt;/p&gt;
 &lt;h1 id=&#34;二分查找模版&#34;&gt;二分查找模版&lt;/h1&gt;
 &lt;h2 id=&#34;普通二分查找找到目标target即可&#34;&gt;普通二分查找（找到目标target即可）&lt;/h2&gt;
 &lt;pre&gt;&lt;code class=&#34;language-Java&#34;&gt;public class BinarySearch {
@@ -602,7 +603,59 @@
 &lt;img src=&#34;https://rayzhang13.github.io/post-images/1622221348036.png&#34; alt=&#34;too large&#34; loading=&#34;lazy&#34;&gt;&lt;/li&gt;
 &lt;/ol&gt;
 &lt;h2 id=&#34;二分查找下界&#34;&gt;二分查找下界&lt;/h2&gt;
-&lt;p&gt;例如&lt;/p&gt;
+&lt;p&gt;例如数组{1, 2, 2, 2, 2, 3, 4, 5}&lt;br&gt;
+当查找2时，区间缩小时可能取到下标1, 2, 3, 4任意一点，故需要重新修改边界条件&lt;br&gt;
+代码如下:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public class BinarySearch {
+    public int search(int[] arr, int target){
+        int res = -1;
+        int lo = 0, hi = arr.length - 1;
+        while(lo &amp;lt;= hi){
+            int mid = lo + (hi - lo) / 2;
+            if(target &amp;gt; arr[mid]) lo = mid + 1;
+            else {
+                if(arr[mid] == target) res = mid;   //若满足要求提前将res记录
+                hi = mid - 1;   //排除当前mid，继续缩小区间
+            }
+        }
+        return res;
+    }
+
+    public static void main(String[] args) {
+        int[] arr = new int[]{1, 1, 1, 2, 2, 3, 3, 5};
+        System.out.println(new BinarySearch().search(arr, 5));
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;若&lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mi&gt;a&lt;/mi&gt;&lt;mi&gt;r&lt;/mi&gt;&lt;mi&gt;r&lt;/mi&gt;&lt;mo&gt;[&lt;/mo&gt;&lt;mi&gt;m&lt;/mi&gt;&lt;mi&gt;i&lt;/mi&gt;&lt;mi&gt;d&lt;/mi&gt;&lt;mo&gt;]&lt;/mo&gt;&lt;mo&gt;≤&lt;/mo&gt;&lt;mi&gt;t&lt;/mi&gt;&lt;mi&gt;a&lt;/mi&gt;&lt;mi&gt;r&lt;/mi&gt;&lt;mi&gt;g&lt;/mi&gt;&lt;mi&gt;e&lt;/mi&gt;&lt;mi&gt;t&lt;/mi&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;arr[mid] \leq target&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:1em;vertical-align:-0.25em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;a&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34; style=&#34;margin-right:0.02778em;&#34;&gt;r&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34; style=&#34;margin-right:0.02778em;&#34;&gt;r&lt;/span&gt;&lt;span class=&#34;mopen&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;m&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;d&lt;/span&gt;&lt;span class=&#34;mclose&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.2777777777777778em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mrel&#34;&gt;≤&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.2777777777777778em;&#34;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.80952em;vertical-align:-0.19444em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;t&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;a&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34; style=&#34;margin-right:0.02778em;&#34;&gt;r&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34; style=&#34;margin-right:0.03588em;&#34;&gt;g&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;e&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;t&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;若小于，则应该缩小上界，继续向下搜索&lt;/li&gt;
+&lt;li&gt;若等于，则应该首先标记当前mid下标为res，再排除当前mid以后的所有元素，继续尝试向下查找&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;二分查找上界&#34;&gt;二分查找上界&lt;/h2&gt;
+&lt;p&gt;同理，与上方类似&lt;br&gt;
+二分下界查找如下：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public class BinarySearch {
+    public int search(int[] arr, int target){
+        int res = -1;
+        int lo = 0, hi = arr.length - 1;
+        while(lo &amp;lt;= hi){
+            int mid = lo + (hi - lo) / 2;
+            if(target &amp;lt; arr[mid]) hi = mid - 1;
+            else {
+                if(arr[mid] == target) res = mid;
+                lo = mid + 1;
+            }
+        }
+        return res;
+    }
+
+    public static void main(String[] args) {
+        int[] arr = new int[]{1, 1, 1, 2, 2, 3, 3, 5};
+        System.out.println(new BinarySearch().search(arr, 3));
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
 ">二分查找的边界问题</a>
       </div>
       
