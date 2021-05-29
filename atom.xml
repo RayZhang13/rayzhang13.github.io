@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://rayzhang13.github.io</id>
     <title>Ray&apos;s Blog</title>
-    <updated>2021-05-29T06:45:45.913Z</updated>
+    <updated>2021-05-29T06:47:22.551Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://rayzhang13.github.io"/>
     <link rel="self" href="https://rayzhang13.github.io/atom.xml"/>
@@ -150,7 +150,7 @@ public static int minSpeedOnTime(int[] dist, double hour) {
             return -1;
         }
         int left = 1;
-        int right = 10000000;
+        int right = 1000000000;
         int speed = left + (right - left) / 2;
         int result = -1;
         while (left &lt; right) {
