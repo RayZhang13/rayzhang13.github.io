@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://rayzhang13.github.io</id>
     <title>Ray&apos;s Blog</title>
-    <updated>2021-05-29T06:21:16.556Z</updated>
+    <updated>2021-05-29T06:45:45.913Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://rayzhang13.github.io"/>
     <link rel="self" href="https://rayzhang13.github.io/atom.xml"/>
@@ -98,6 +98,150 @@
     public static void main(String[] args) {
         int[] arr = new int[]{1, 1, 1, 2, 2, 3, 3, 5};
         System.out.println(new BinarySearch().search(arr, 3));
+    }
+}
+</code></pre>
+<h1 id="二分查找例题">二分查找例题</h1>
+<h2 id="leetcode-1870-准时到达的列车最小时速-round-242-t2"><a href="https://leetcode-cn.com/problems/minimum-speed-to-arrive-on-time/">leetcode 1870. 准时到达的列车最小时速 Round 242 T2</a></h2>
+<p>给你一个浮点数 hour ，表示你到达办公室可用的总通勤时间。要到达办公室，你必须按给定次序乘坐 n 趟列车。另给你一个长度为 n 的整数数组 dist ，其中 dist[i] 表示第 i 趟列车的行驶距离（单位是千米）。</p>
+<p>每趟列车均只能在整点发车，所以你可能需要在两趟列车之间等待一段时间。</p>
+<p>例如，第 1 趟列车需要 1.5 小时，那你必须再等待 0.5 小时，搭乘在第 2 小时发车的第 2 趟列车。<br>
+返回能满足你准时到达办公室所要求全部列车的 最小正整数 时速（单位：千米每小时），如果无法准时到达，则返回 -1 。</p>
+<p>生成的测试用例保证答案不超过 107 ，且 hour 的 小数点后最多存在两位数字 。</p>
+<ul>
+<li>
+<p>示例 1：<br>
+<strong>输入：dist = [1,3,2], hour = 6<br>
+输出：1</strong><br>
+解释：速度为 1 时：<br>
+第 1 趟列车运行需要 1/1 = 1 小时。<br>
+由于是在整数时间到达，可以立即换乘在第 1 小时发车的列车。第 2 趟列车运行需要 3/1 = 3 小时。<br>
+由于是在整数时间到达，可以立即换乘在第 4 小时发车的列车。第 3 趟列车运行需要 2/1 = 2 小时。<br>
+你将会恰好在第 6 小时到达。</p>
+</li>
+<li>
+<p>示例 2：<br>
+<strong>输入：dist = [1,3,2], hour = 2.7<br>
+输出：3</strong><br>
+解释：速度为 3 时：<br>
+第 1 趟列车运行需要 1/3 = 0.33333 小时。<br>
+由于不是在整数时间到达，故需要等待至第 1 小时才能搭乘列车。第 2 趟列车运行需要 3/3 = 1 小时。<br>
+由于是在整数时间到达，可以立即换乘在第 2 小时发车的列车。第 3 趟列车运行需要 2/3 = 0.66667 小时。<br>
+你将会在第 2.66667 小时到达。</p>
+</li>
+<li>
+<p>示例 3：<br>
+<strong>输入：dist = [1,3,2], hour = 1.9<br>
+输出：-1</strong><br>
+解释：不可能准时到达，因为第 3 趟列车最早是在第 2 小时发车。</p>
+</li>
+</ul>
+<p>提示：<br>
+n == dist.length<br>
+1 &lt;= n &lt;= 105<br>
+1 &lt;= dist[i] &lt;= 105<br>
+1 &lt;= hour &lt;= 109<br>
+hours 中，<strong>小数点后最多存在两位数字</strong></p>
+<p>我们可以用二分的方法寻找到能够按时到达的最小时速。<br>
+由于时速必须为正整数，因此二分的下界为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1</mn></mrow><annotation encoding="application/x-tex">1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span>；对于二分的上界，我们考虑 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>h</mi><mi>o</mi><mi>u</mi><mi>r</mi><mi>s</mi></mrow><annotation encoding="application/x-tex">hours</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault">h</span><span class="mord mathdefault">o</span><span class="mord mathdefault">u</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault">s</span></span></span></span> 为两位小数，因此对于最后一段路程，最小的时限为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>0.01</mn></mrow><annotation encoding="application/x-tex">0.01</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span><span class="mord">.</span><span class="mord">0</span><span class="mord">1</span></span></span></span>，那么最高的时速要求即为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>d</mi><mi>i</mi><mi>s</mi><mi>t</mi><mo>[</mo><mi>i</mi><mo>]</mo><mi mathvariant="normal">/</mi><mn>0.01</mn><mo>≤</mo><mn>1</mn><msup><mn>0</mn><mn>7</mn></msup></mrow><annotation encoding="application/x-tex">dist[i] / 0.01 \leq 10^7</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">d</span><span class="mord mathdefault">i</span><span class="mord mathdefault">s</span><span class="mord mathdefault">t</span><span class="mopen">[</span><span class="mord mathdefault">i</span><span class="mclose">]</span><span class="mord">/</span><span class="mord">0</span><span class="mord">.</span><span class="mord">0</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">≤</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="mord">1</span><span class="mord"><span class="mord">0</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">7</span></span></span></span></span></span></span></span></span></span></span> ，同时为二分时速的上界, 即<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>d</mi><mi>i</mi><mi>s</mi><mi>t</mi><mo>≤</mo><mn>1</mn><msup><mn>0</mn><mn>9</mn></msup></mrow><annotation encoding="application/x-tex">dist \leq 10^9</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83041em;vertical-align:-0.13597em;"></span><span class="mord mathdefault">d</span><span class="mord mathdefault">i</span><span class="mord mathdefault">s</span><span class="mord mathdefault">t</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">≤</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="mord">1</span><span class="mord"><span class="mord">0</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">9</span></span></span></span></span></span></span></span></span></span></span>。注意向上取整细节</p>
+<pre><code class="language-java">class Solution {
+public static int minSpeedOnTime(int[] dist, double hour) {
+        if ((((dist[dist.length - 1] * 1.0) / (10000000 * 1.0)) + dist.length - 1) &gt; hour) {
+            return -1;
+        }
+        int left = 1;
+        int right = 10000000;
+        int speed = left + (right - left) / 2;
+        int result = -1;
+        while (left &lt; right) {
+            boolean isOk = judge(speed, dist, hour);
+            if (isOk) {
+                result = result == -1 ? speed : Math.min(result, speed);
+                right = speed;
+            } else {
+                left = speed + 1;
+            }
+            speed = left + (right - left) / 2;
+        }
+        if (result != -1) {
+            return result;
+        }
+        boolean isOk = judge(speed, dist, hour);
+        if (isOk) {
+            return speed;
+        } else {
+            return -1;
+        }
+    }
+    private static boolean judge(int speed, int[] dist, double hour) {
+        double time = 0.0;
+        for (int i = 0; i &lt; dist.length - 1; i++) {
+            time += ceilDiv(dist[i], speed);
+            if (time &gt; hour) {
+                continue;
+            }
+        }
+        time += (dist[dist.length - 1] * 1.0) / (speed * 1.0);
+        return time &lt;= hour;
+    }
+    private static int ceilDiv(int a, int b) {
+        int temp = Math.floorDiv(a, b);
+        if (temp * b &lt; a) {
+            return (temp + 1);
+        } else {
+            return temp;
+        }
+    }
+}
+</code></pre>
+<h2 id="leetcode-962-最大宽度坡"><a href="https://leetcode-cn.com/problems/maximum-width-ramp/">leetcode 962. 最大宽度坡</a></h2>
+<p>给定一个整数数组 A，坡是元组 (i, j)，其中  <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>i</mi><mo>≦</mo><mi>j</mi></mrow><annotation encoding="application/x-tex">i \leqq j</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.01166em;vertical-align:-0.25583em;"></span><span class="mord mathdefault">i</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel amsrm">≦</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.85396em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.05724em;">j</span></span></span></span> 且 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>A</mi><mo>[</mo><mi>i</mi><mo>]</mo><mo>≤</mo><mi>A</mi><mo>[</mo><mi>j</mi><mo>]</mo></mrow><annotation encoding="application/x-tex">A[i] \leq A[j]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">A</span><span class="mopen">[</span><span class="mord mathdefault">i</span><span class="mclose">]</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">≤</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">A</span><span class="mopen">[</span><span class="mord mathdefault" style="margin-right:0.05724em;">j</span><span class="mclose">]</span></span></span></span>。这样的坡的宽度为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>j</mi><mo>−</mo><mi>i</mi></mrow><annotation encoding="application/x-tex">j - i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.85396em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.05724em;">j</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.65952em;vertical-align:0em;"></span><span class="mord mathdefault">i</span></span></span></span>。<br>
+找出 A 中的坡的最大宽度，如果不存在，返回 0 。</p>
+<p>示例 1：<br>
+<strong>输入：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>[</mo><mn>6</mn><mo separator="true">,</mo><mn>0</mn><mo separator="true">,</mo><mn>8</mn><mo separator="true">,</mo><mn>2</mn><mo separator="true">,</mo><mn>1</mn><mo separator="true">,</mo><mn>5</mn><mo>]</mo></mrow><annotation encoding="application/x-tex">[6,0,8,2,1,5]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord">6</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">0</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">8</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">2</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">5</span><span class="mclose">]</span></span></span></span><br>
+输出：4</strong><br>
+解释：<br>
+最大宽度的坡为 (i, j) = (1, 5): <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>A</mi><mo>[</mo><mn>1</mn><mo>]</mo><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">A[1] = 0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">A</span><span class="mopen">[</span><span class="mord">1</span><span class="mclose">]</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span> 且 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>A</mi><mo>[</mo><mn>5</mn><mo>]</mo><mo>=</mo><mn>5</mn></mrow><annotation encoding="application/x-tex">A[5] = 5</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">A</span><span class="mopen">[</span><span class="mord">5</span><span class="mclose">]</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">5</span></span></span></span>.</p>
+<p>示例 2：<br>
+<strong>输入：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>[</mo><mn>9</mn><mo separator="true">,</mo><mn>8</mn><mo separator="true">,</mo><mn>1</mn><mo separator="true">,</mo><mn>0</mn><mo separator="true">,</mo><mn>1</mn><mo separator="true">,</mo><mn>9</mn><mo separator="true">,</mo><mn>4</mn><mo separator="true">,</mo><mn>0</mn><mo separator="true">,</mo><mn>4</mn><mo separator="true">,</mo><mn>1</mn><mo>]</mo></mrow><annotation encoding="application/x-tex">[9,8,1,0,1,9,4,0,4,1]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord">9</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">8</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">0</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">9</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">4</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">0</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">4</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">1</span><span class="mclose">]</span></span></span></span><br>
+输出：7</strong><br>
+解释：<br>
+最大宽度的坡为 (i, j) = (2, 9): <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>A</mi><mo>[</mo><mn>2</mn><mo>]</mo><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">A[2] = 1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">A</span><span class="mopen">[</span><span class="mord">2</span><span class="mclose">]</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span> 且 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>A</mi><mo>[</mo><mn>9</mn><mo>]</mo><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">A[9] = 1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">A</span><span class="mopen">[</span><span class="mord">9</span><span class="mclose">]</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span>.</p>
+<p>维护一个max数组，自右向左遍历当前最大元素<br>
+再A数组自左向右一次遍历，查询max数组中大于<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>A</mi><mo>[</mo><mi>i</mi><mo>]</mo></mrow><annotation encoding="application/x-tex">A[i]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">A</span><span class="mopen">[</span><span class="mord mathdefault">i</span><span class="mclose">]</span></span></span></span>的元素下标的上界，查询后将差与res取大</p>
+<pre><code class="language-java">class Solution {
+    public int maxWidthRamp(int[] A) {
+        int len = A.length;
+        int[] max = new int[len];
+        int tmp = 0;
+        int res = 0;
+        for(int i = len - 1; i &gt;= 0; i--){
+            tmp = Math.max(tmp, A[i]);
+            max[i] = tmp;
+        }
+        //System.out.println(Arrays.toString(max));
+        for(int i = 0 ; i &lt; len; i++){
+            int target = search(max, i + 1, A[i]);
+            //System.out.println(i + &quot; &quot; + target);
+            if(target != -1) res = Math.max(res, target - i);
+        }
+        return res;
+    }
+    public int search(int[] arr, int start, int target){
+        int lo = start, hi = arr.length - 1;
+        int ans = -1;
+        while(lo &lt;= hi){
+            int mid = lo + (hi - lo) / 2;
+            //System.out.println(lo + &quot; &quot; + hi + &quot; &quot; + mid);
+            if(arr[mid] &lt; target){
+                hi = mid - 1;
+            }
+            else{
+                ans = mid;
+                lo = mid + 1;
+            }
+        }
+        return ans;
     }
 }
 </code></pre>
