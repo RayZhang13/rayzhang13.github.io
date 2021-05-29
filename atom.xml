@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://rayzhang13.github.io</id>
     <title>Ray&apos;s Blog</title>
-    <updated>2021-05-29T07:40:06.476Z</updated>
+    <updated>2021-05-29T08:10:22.693Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://rayzhang13.github.io"/>
     <link rel="self" href="https://rayzhang13.github.io/atom.xml"/>
@@ -11,12 +11,59 @@
     <icon>https://rayzhang13.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, Ray&apos;s Blog</rights>
     <entry>
+        <title type="html"><![CDATA[Hanoi问题]]></title>
+        <id>https://rayzhang13.github.io/post/hanoi-wen-ti/</id>
+        <link href="https://rayzhang13.github.io/post/hanoi-wen-ti/">
+        </link>
+        <updated>2021-05-29T07:49:01.000Z</updated>
+        <content type="html"><![CDATA[<h1 id="起源">起源</h1>
+<p>最早发明这个问题的人是法国数学家爱德华·卢卡斯。</p>
+<p>传说越南河内某间寺院有三根银棒，上串 64 个金盘。寺院里的僧侣依照一个古老的预言，以上述规则移动这些盘子；预言说当这些盘子移动完毕，世界就会灭亡。这个传说叫做梵天寺之塔问题（Tower of Brahma puzzle）。但不知道是卢卡斯自创的这个传说，还是他受他人启发。<br>
+若传说属实，僧侣们需要<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mn>2</mn><mn>64</mn></msup><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">2^{64} - 1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.897438em;vertical-align:-0.08333em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">6</span><span class="mord mtight">4</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span>步才能完成这个任务；若他们每秒可完成一个盘子的移动，就需要 5849 亿年才能完成。整个宇宙现在也不过 137 亿年。</p>
+<p>这个传说有若干变体：寺院换成修道院、僧侣换成修士等等。寺院的地点众说纷纭，其中一说是位于越南的河内，所以被命名为“河内塔”。另外亦有“金盘是创世时所造”、“僧侣们每天移动一盘”之类的背景设定。</p>
+<h1 id="求解思想">求解思想</h1>
+<p><img src="https://rayzhang13.github.io/post-images/1622275695419.jpg" alt="" loading="lazy"><br>
+解法的基本思想是递归。假设有 A、B、C 三个塔，A 塔有<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>N</mi></mrow><annotation encoding="application/x-tex">N</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.10903em;">N</span></span></span></span>块盘，目标是把这些盘全部移到 C 塔。那么先把 A 塔顶部的<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>N</mi><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">N - 1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.76666em;vertical-align:-0.08333em;"></span><span class="mord mathdefault" style="margin-right:0.10903em;">N</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span>块盘移动到 B 塔，再把 A 塔剩下的大盘移到 C，最后把 B 塔的 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>N</mi><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">N - 1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.76666em;vertical-align:-0.08333em;"></span><span class="mord mathdefault" style="margin-right:0.10903em;">N</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span>块盘移到 C。<br>
+<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>f</mi><mo>(</mo><mi>n</mi><mo>)</mo><mo>=</mo><mi>f</mi><mo>(</mo><mi>n</mi><mo>−</mo><mn>1</mn><mo>)</mo><mo>∗</mo><mn>2</mn><mo>+</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">f(n) = f(n - 1) * 2 + 1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathdefault">n</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathdefault">n</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">2</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span><br>
+复杂度应为<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mn>2</mn><mi>n</mi></msup><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">2^n - 1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.747722em;vertical-align:-0.08333em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.664392em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">n</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span></p>
+<p>如此递归地使用下去, 就可以求解。</p>
+<h1 id="递归解">递归解</h1>
+<p>盘子自上到下编号依次为1、2、3 ..... n</p>
+<pre><code class="language-java">public class Main {
+    public void hanoi(int n, char a, char b, char c){       //目标操作a-&gt;c, 中间变量b
+        if(n == 1) System.out.println(&quot;1th plate: &quot; + a + &quot;-&gt;&quot; + c);
+        else{
+            hanoi(n - 1, a, c, b); //现将1~ n-1从a移到b
+            System.out.println(n + &quot;th plate: &quot; + a + &quot;-&gt;&quot; + c); //将n移到c
+            hanoi(n - 1, b, a, c); //将1~ n-1从b移到c
+        }
+    }
+    public static void main(String[] args) {
+        new Main().hanoi(3, 'a', 'b', 'c');
+    }
+}
+</code></pre>
+<p>运行结果：</p>
+<pre><code class="language-bash">/Users/ray/Library/Java/JavaVirtualMachines/openjdk-15.0.2/Contents/Home/bin/java -javaagent:/Users/ray/Library/Application Support/JetBrains/Toolbox/apps/IDEA-U/ch-0/211.7142.45/IntelliJ IDEA.app/Contents/lib/idea_rt.jar=63346:/Users/ray/Library/Application Support/JetBrains/Toolbox/apps/IDEA-U/ch-0/211.7142.45/IntelliJ IDEA.app/Contents/bin -Dfile.encoding=UTF-8 -classpath /Users/ray/IdeaProjects/oj/out/production/oj com.company.Main
+1th plate: a-&gt;c
+2th plate: a-&gt;b
+1th plate: c-&gt;b
+3th plate: a-&gt;c
+1th plate: b-&gt;a
+2th plate: b-&gt;c
+1th plate: a-&gt;c
+
+Process finished with exit code 0
+</code></pre>
+]]></content>
+    </entry>
+    <entry>
         <title type="html"><![CDATA[Leetcode刷题计划]]></title>
         <id>https://rayzhang13.github.io/post/leetcode-shua-ti-ji-hua/</id>
         <link href="https://rayzhang13.github.io/post/leetcode-shua-ti-ji-hua/">
         </link>
         <updated>2021-05-29T07:02:29.000Z</updated>
-        <content type="html"><![CDATA[<p>这是菜鸡的主页-&gt;  <a href="https://leetcode-cn.com/u/chmod-r-000-e/">https://leetcode-cn.com/u/chmod-r-000-e/</a><br>
+        <content type="html"><![CDATA[<p>这是菜鸡的主页<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>⟹</mo></mrow><annotation encoding="application/x-tex">\Longrightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.549em;vertical-align:-0.024em;"></span><span class="mrel">⟹</span></span></span></span>  <a href="https://leetcode-cn.com/u/chmod-r-000-e/">https://leetcode-cn.com/u/chmod-r-000-e/</a><br>
 <img src="https://rayzhang13.github.io/post-images/1622271963578.png" alt="" loading="lazy"></p>
 <p>从大二下坚持下也快有一年了，期间经历了风风雨雨<br>
 可惜我就只顾着刷题了，也没想着做点项目啥的，基础也不扎实，Java写了个寂寞</p>
