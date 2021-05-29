@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://rayzhang13.github.io</id>
     <title>Ray&apos;s Blog</title>
-    <updated>2021-05-29T10:41:44.234Z</updated>
+    <updated>2021-05-29T11:08:12.345Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://rayzhang13.github.io"/>
     <link rel="self" href="https://rayzhang13.github.io/atom.xml"/>
@@ -29,6 +29,14 @@ F - 决策的总代价<br>
 G - 从开始到决策时刻所花费的真实代价<br>
 H - 从决策时刻到目标的预估代价</p>
 <p>其中G值是一个真实的代价，也就是从算法流程一开始到进行这个决策的时候，一共花费的代价。H值是一个预估的代价。在极端情况下，如果H是常量0，这个算法退化成广度优先搜索算法，即按照顺序的依次扩充每个节点。如果G是常量，这个算法退化成贪心算法，即每次扩充可以使下一次最优的节点。每次进行决策的时候，A*算法选择遍历所有当前可能的决策，并执行使F最大的决策。</p>
+<p>open表：先能够简单认为是一个未搜索节点的表<br>
+close表：先能够简单认为是一个已完成搜索的节点的表（即已经将下一个状态放入open表内）</p>
+<ul>
+<li>规则一：对于新添加的节点S（open表和close表中均没有这个状态），S直接添加到open表中</li>
+<li>规则二：对于已经添加的节点S（open表或者close表中已经有这个状态），若在open表中，与原来的状态S0​的f(n)比较，取最小的一个。若在close表中，那就分两种状况，第一种,close表中的该状态S0​的f(n)大于S的，不作修改；第二种S0​的f(n)小于S的,那就要须要将close表中S0​的f(n)更新，同时将该状态移入到open表中。</li>
+<li>规则三：下一个搜索节点的选择问题，选取open表中f(n)的值最小的状态做为下一个待搜索节点</li>
+<li>规则四：每次须要将带搜索的节点下一个全部的状态按照规则一二更新open表,close表，搜索完该节点后，移到close表中。</li>
+</ul>
 <h2 id="策略">策略</h2>
 <p>我们定义从开始状态执行的总步数为真实代价G，而当前状态与最终结果的格数差异我们记为H即从决策时刻到目标的预估代价。例如上图所示中的初始状态与最终状态之间相距了5个位置，即<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>H</mi><mo>=</mo><mn>5</mn></mrow><annotation encoding="application/x-tex">H = 5</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.08125em;">H</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">5</span></span></span></span></p>
 <h1 id="代码解决">代码解决</h1>
@@ -39,7 +47,6 @@ H - 从决策时刻到目标的预估代价</p>
 而最大8的极端情况下其二进制表达为8<sub>D</sub> = (1000)<sub>B</sub>，需要4位的二进制空间，则9个元素总共需要<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>4</mn><mo>∗</mo><mn>9</mn><mo>=</mo><mn>36</mn></mrow><annotation encoding="application/x-tex">4 * 9 = 36</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">4</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">9</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">3</span><span class="mord">6</span></span></span></span>位的二进制数来表示一个状态，故我们需要长整型long来进行表示</p>
 <p>对于上图其十进制对应状态表达为1 4 2 8 0 3 7 6 5<br>
 二进制表达为 0001 0100 0010 1000 0000 0011 0111 0110 0101，记为一个32位的整型</p>
-<p>对应A*算法，其本质是一个贪心算法，我们维护一个优先队列pq，每次取出F最小的节点并对其进行拓展，每次取出的节点由贪心可知应为最优解，拓展过程中记得去重</p>
 <p><img src="https://rayzhang13.github.io/post-images/1622278983736.png" alt="" loading="lazy"><br>
 代码如下：</p>
 <pre><code class="language-java">import java.util.Arrays;

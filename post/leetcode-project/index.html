@@ -9,7 +9,7 @@
 <meta name="description" content="Everything&#39;s gonna be just fine.">
 <meta name="theme-color" content="#000">
 <title>Leetcode刷题计划 | Ray&#39;s Blog</title>
-<link rel="shortcut icon" href="/favicon.ico?v=1622284901848">
+<link rel="shortcut icon" href="/favicon.ico?v=1622286477608">
 <link rel="stylesheet" href="/media/css/pisces.css">
 <link rel="stylesheet" href="/media/fonts/font-awesome.css">
 <link
@@ -929,6 +929,14 @@ F - 决策的总代价&lt;br&gt;
 G - 从开始到决策时刻所花费的真实代价&lt;br&gt;
 H - 从决策时刻到目标的预估代价&lt;/p&gt;
 &lt;p&gt;其中G值是一个真实的代价，也就是从算法流程一开始到进行这个决策的时候，一共花费的代价。H值是一个预估的代价。在极端情况下，如果H是常量0，这个算法退化成广度优先搜索算法，即按照顺序的依次扩充每个节点。如果G是常量，这个算法退化成贪心算法，即每次扩充可以使下一次最优的节点。每次进行决策的时候，A*算法选择遍历所有当前可能的决策，并执行使F最大的决策。&lt;/p&gt;
+&lt;p&gt;open表：先能够简单认为是一个未搜索节点的表&lt;br&gt;
+close表：先能够简单认为是一个已完成搜索的节点的表（即已经将下一个状态放入open表内）&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;规则一：对于新添加的节点S（open表和close表中均没有这个状态），S直接添加到open表中&lt;/li&gt;
+&lt;li&gt;规则二：对于已经添加的节点S（open表或者close表中已经有这个状态），若在open表中，与原来的状态S0​的f(n)比较，取最小的一个。若在close表中，那就分两种状况，第一种,close表中的该状态S0​的f(n)大于S的，不作修改；第二种S0​的f(n)小于S的,那就要须要将close表中S0​的f(n)更新，同时将该状态移入到open表中。&lt;/li&gt;
+&lt;li&gt;规则三：下一个搜索节点的选择问题，选取open表中f(n)的值最小的状态做为下一个待搜索节点&lt;/li&gt;
+&lt;li&gt;规则四：每次须要将带搜索的节点下一个全部的状态按照规则一二更新open表,close表，搜索完该节点后，移到close表中。&lt;/li&gt;
+&lt;/ul&gt;
 &lt;h2 id=&#34;策略&#34;&gt;策略&lt;/h2&gt;
 &lt;p&gt;我们定义从开始状态执行的总步数为真实代价G，而当前状态与最终结果的格数差异我们记为H即从决策时刻到目标的预估代价。例如上图所示中的初始状态与最终状态之间相距了5个位置，即&lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mi&gt;H&lt;/mi&gt;&lt;mo&gt;=&lt;/mo&gt;&lt;mn&gt;5&lt;/mn&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;H = 5&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.68333em;vertical-align:0em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34; style=&#34;margin-right:0.08125em;&#34;&gt;H&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.2777777777777778em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mrel&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.2777777777777778em;&#34;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.64444em;vertical-align:0em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;5&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/p&gt;
 &lt;h1 id=&#34;代码解决&#34;&gt;代码解决&lt;/h1&gt;
@@ -939,7 +947,6 @@ H - 从决策时刻到目标的预估代价&lt;/p&gt;
 而最大8的极端情况下其二进制表达为8&lt;sub&gt;D&lt;/sub&gt; = (1000)&lt;sub&gt;B&lt;/sub&gt;，需要4位的二进制空间，则9个元素总共需要&lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mn&gt;4&lt;/mn&gt;&lt;mo&gt;∗&lt;/mo&gt;&lt;mn&gt;9&lt;/mn&gt;&lt;mo&gt;=&lt;/mo&gt;&lt;mn&gt;36&lt;/mn&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;4 * 9 = 36&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.64444em;vertical-align:0em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;4&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.2222222222222222em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mbin&#34;&gt;∗&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.2222222222222222em;&#34;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.64444em;vertical-align:0em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;9&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.2777777777777778em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mrel&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.2777777777777778em;&#34;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.64444em;vertical-align:0em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;3&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;6&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;位的二进制数来表示一个状态，故我们需要长整型long来进行表示&lt;/p&gt;
 &lt;p&gt;对于上图其十进制对应状态表达为1 4 2 8 0 3 7 6 5&lt;br&gt;
 二进制表达为 0001 0100 0010 1000 0000 0011 0111 0110 0101，记为一个32位的整型&lt;/p&gt;
-&lt;p&gt;对应A*算法，其本质是一个贪心算法，我们维护一个优先队列pq，每次取出F最小的节点并对其进行拓展，每次取出的节点由贪心可知应为最优解，拓展过程中记得去重&lt;/p&gt;
 &lt;p&gt;&lt;img src=&#34;https://rayzhang13.github.io/post-images/1622278983736.png&#34; alt=&#34;&#34; loading=&#34;lazy&#34;&gt;&lt;br&gt;
 代码如下：&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;import java.util.Arrays;
