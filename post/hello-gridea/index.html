@@ -9,7 +9,7 @@
 <meta name="description" content="Everything&#39;s gonna be just fine.">
 <meta name="theme-color" content="#000">
 <title>Hello Gridea | Ray&#39;s Blog</title>
-<link rel="shortcut icon" href="/favicon.ico?v=1622371071698">
+<link rel="shortcut icon" href="/favicon.ico?v=1622371262791">
 <link rel="stylesheet" href="/media/css/pisces.css">
 <link rel="stylesheet" href="/media/fonts/font-awesome.css">
 <link
@@ -1449,7 +1449,7 @@ tasks.length == m&lt;br&gt;
 &lt;p&gt;提交WA：&lt;br&gt;
 &lt;img src=&#34;https://rayzhang13.github.io/post-images/1622370942485.png&#34; alt=&#34;&#34; loading=&#34;lazy&#34;&gt;&lt;br&gt;
 原因：根据 IEEE 754 标准，浮点数在计算机中存储的精度是有限的，而本题中我们不可避免的会使用「浮点数运算」以及「向上取整」运算，如果强行忽略产生的计算误差，会得到错误的结果。&lt;/p&gt;
-&lt;p&gt;折中解决办法：每一步先暂时不做除法，等到最后一步再做除法&lt;br&gt;
+&lt;p&gt;折中解决办法：每一步先暂时不做除法，尽量用乘法代替&lt;br&gt;
 原理类似：&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;class Solution {
     public int minSkips(int[] dist, int speed, int hoursBefore) {

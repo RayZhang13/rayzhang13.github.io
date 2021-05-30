@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://rayzhang13.github.io</id>
     <title>Ray&apos;s Blog</title>
-    <updated>2021-05-30T10:38:16.856Z</updated>
+    <updated>2021-05-30T10:41:05.084Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://rayzhang13.github.io"/>
     <link rel="self" href="https://rayzhang13.github.io/atom.xml"/>
@@ -296,7 +296,7 @@ tasks.length == m<br>
 <p>提交WA：<br>
 <img src="https://rayzhang13.github.io/post-images/1622370942485.png" alt="" loading="lazy"><br>
 原因：根据 IEEE 754 标准，浮点数在计算机中存储的精度是有限的，而本题中我们不可避免的会使用「浮点数运算」以及「向上取整」运算，如果强行忽略产生的计算误差，会得到错误的结果。</p>
-<p>折中解决办法：每一步先暂时不做除法，等到最后一步再做除法<br>
+<p>折中解决办法：每一步先暂时不做除法，尽量用乘法代替<br>
 原理类似：</p>
 <pre><code class="language-java">class Solution {
     public int minSkips(int[] dist, int speed, int hoursBefore) {
