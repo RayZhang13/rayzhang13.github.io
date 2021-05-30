@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://rayzhang13.github.io</id>
     <title>Ray&apos;s Blog</title>
-    <updated>2021-05-30T17:07:17.570Z</updated>
+    <updated>2021-05-30T17:14:33.443Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://rayzhang13.github.io"/>
     <link rel="self" href="https://rayzhang13.github.io/atom.xml"/>
@@ -189,12 +189,12 @@ tasks.length == m<br>
         PriorityQueue&lt;int[]&gt; avail = new PriorityQueue&lt;&gt;((o1, o2) -&gt; (o1[0] != o2[0] ? o1[0] - o2[0]: o1[1] - o2[1]));
         PriorityQueue&lt;int[]&gt; occupied = new PriorityQueue&lt;&gt;((o1, o2) -&gt; o1[1] - o2[1]);
         for(int i = 0; i &lt; servers.length; i++){
-            avail.offer(new int[]{servers[i], i});  //填充可用列表
+            avail.offer(new int[]{servers[i], i});  //全部服务器加入可用队列
         }
         int len = tasks.length;
         int[] res = new int[len];
         for(int i = 0; i &lt; len; i++){
-            task.offer(new int[]{i, tasks[i]});  //全部服务器加入可用队列
+            task.offer(new int[]{i, tasks[i]});  //将i时刻任务加入任务队列
             while(!occupied.isEmpty() &amp;&amp; occupied.peek()[1] == i){  
                 //将接触占用的服务器从occupied中全部出队，并加入avail中
                 int num = occupied.poll()[0];

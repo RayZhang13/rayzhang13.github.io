@@ -9,7 +9,7 @@
 <meta name="description" content="Everything&#39;s gonna be just fine.">
 <meta name="theme-color" content="#000">
 <title>Leetcode Weekly Contest Round 243 | Ray&#39;s Blog</title>
-<link rel="shortcut icon" href="/favicon.ico?v=1622393935371">
+<link rel="shortcut icon" href="/favicon.ico?v=1622394871309">
 <link rel="stylesheet" href="/media/css/pisces.css">
 <link rel="stylesheet" href="/media/fonts/font-awesome.css">
 <link
@@ -576,7 +576,7 @@
     <span class="meta-item">
       <span class="post-meta-divider">|</span>
       <i class="fa fa-file-word-o"></i>
-      <span>3714<span class="pc-show language" data-lan="words">字数</span></span>
+      <span>3720<span class="pc-show language" data-lan="words">字数</span></span>
     </span>
     
     
@@ -760,12 +760,12 @@ tasks.length == m<br>
         PriorityQueue&lt;int[]&gt; avail = new PriorityQueue&lt;&gt;((o1, o2) -&gt; (o1[0] != o2[0] ? o1[0] - o2[0]: o1[1] - o2[1]));
         PriorityQueue&lt;int[]&gt; occupied = new PriorityQueue&lt;&gt;((o1, o2) -&gt; o1[1] - o2[1]);
         for(int i = 0; i &lt; servers.length; i++){
-            avail.offer(new int[]{servers[i], i});  //填充可用列表
+            avail.offer(new int[]{servers[i], i});  //全部服务器加入可用队列
         }
         int len = tasks.length;
         int[] res = new int[len];
         for(int i = 0; i &lt; len; i++){
-            task.offer(new int[]{i, tasks[i]});  //全部服务器加入可用队列
+            task.offer(new int[]{i, tasks[i]});  //将i时刻任务加入任务队列
             while(!occupied.isEmpty() &amp;&amp; occupied.peek()[1] == i){  
                 //将接触占用的服务器从occupied中全部出队，并加入avail中
                 int num = occupied.poll()[0];
@@ -1646,12 +1646,12 @@ tasks.length == m&lt;br&gt;
         PriorityQueue&amp;lt;int[]&amp;gt; avail = new PriorityQueue&amp;lt;&amp;gt;((o1, o2) -&amp;gt; (o1[0] != o2[0] ? o1[0] - o2[0]: o1[1] - o2[1]));
         PriorityQueue&amp;lt;int[]&amp;gt; occupied = new PriorityQueue&amp;lt;&amp;gt;((o1, o2) -&amp;gt; o1[1] - o2[1]);
         for(int i = 0; i &amp;lt; servers.length; i++){
-            avail.offer(new int[]{servers[i], i});  //填充可用列表
+            avail.offer(new int[]{servers[i], i});  //全部服务器加入可用队列
         }
         int len = tasks.length;
         int[] res = new int[len];
         for(int i = 0; i &amp;lt; len; i++){
-            task.offer(new int[]{i, tasks[i]});  //全部服务器加入可用队列
+            task.offer(new int[]{i, tasks[i]});  //将i时刻任务加入任务队列
             while(!occupied.isEmpty() &amp;amp;&amp;amp; occupied.peek()[1] == i){  
                 //将接触占用的服务器从occupied中全部出队，并加入avail中
                 int num = occupied.poll()[0];
