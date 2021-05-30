@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://rayzhang13.github.io</id>
     <title>Ray&apos;s Blog</title>
-    <updated>2021-05-30T16:14:27.166Z</updated>
+    <updated>2021-05-30T16:31:19.028Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://rayzhang13.github.io"/>
     <link rel="self" href="https://rayzhang13.github.io/atom.xml"/>
@@ -16,7 +16,12 @@
         <link href="https://rayzhang13.github.io/post/leetcode-weekly-contest-round-243/">
         </link>
         <updated>2021-05-30T09:17:37.000Z</updated>
-        <content type="html"><![CDATA[<p>头晕没参加，但这并不影响我事后插题～</p>
+        <summary type="html"><![CDATA[<p>头晕没参加，但这并不影响我事后插题～<br>
+有几道题目还是有亿点点麻烦的</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>头晕没参加，但这并不影响我事后插题～<br>
+有几道题目还是有亿点点麻烦的</p>
+<!-- more -->
 <h1 id="t1-5772-检查某单词是否等于两单词之和">T1 <a href="https://leetcode-cn.com/problems/check-if-word-equals-summation-of-two-words/">5772. 检查某单词是否等于两单词之和</a></h1>
 <h2 id="题目">题目</h2>
 <p>字母的 <strong>字母值</strong> 取决于字母在字母表中的位置，从 <strong>0 开始</strong> 计数。即，'a' -&gt; 0、'b' -&gt; 1、'c' -&gt; 2，以此类推。<br>
@@ -327,8 +332,13 @@ tasks.length == m<br>
         <link href="https://rayzhang13.github.io/post/leetcode-bio-weekly-contest-round-53/">
         </link>
         <updated>2021-05-30T02:58:05.000Z</updated>
+        <summary type="html"><![CDATA[<figure data-type="image" tabindex="1"><img src="https://rayzhang13.github.io/post-images/1622349556585.png" alt="" loading="lazy"></figure>
+<center>53场双周赛成绩~</center>
+还是有点小遗憾，脑子抽了T3没肝出来]]></summary>
         <content type="html"><![CDATA[<figure data-type="image" tabindex="1"><img src="https://rayzhang13.github.io/post-images/1622349556585.png" alt="" loading="lazy"></figure>
 <center>53场双周赛成绩~</center>
+还是有点小遗憾，脑子抽了T3没肝出来
+<!-- more -->
 <h1 id="t1-5754-长度为三且各字符不同的子字符串">T1 <a href="https://leetcode-cn.com/problems/substrings-of-size-three-with-distinct-characters/">5754. 长度为三且各字符不同的子字符串</a></h1>
 <h2 id="题目">题目</h2>
 <p>如果一个字符串不含有任何重复字符，我们称这个字符串为<strong>好</strong>字符串。<br>
@@ -587,7 +597,11 @@ n == nums2.length<br>
         <link href="https://rayzhang13.github.io/post/eight-digit-maze/">
         </link>
         <updated>2021-05-29T08:24:46.000Z</updated>
-        <content type="html"><![CDATA[<h1 id="介绍">介绍</h1>
+        <summary type="html"><![CDATA[<p>八数码问题是一种典型的路径搜索问题搜索，本文使用A*算法对该问题进行求解</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>八数码问题是一种典型的路径搜索问题搜索，本文使用A*算法对该问题进行求解</p>
+<!-- more -->
+<h1 id="介绍">介绍</h1>
 <h2 id="八数码问题">八数码问题</h2>
 <p>八数码问题也称为九宫问题。在3×3的棋盘，摆有八个棋子，每个棋子上标有1至8的某一数字，不同棋子上标的数字不相同。棋盘上还有一个空格，与空格相邻的棋子可以移到空格中。要求解决的问题是：给出一个初始状态和一个目标状态，找出一种从初始转变成目标状态的移动棋子步数最少的移动步骤。<br>
 所谓问题的一个状态就是棋子在棋盘上的一种摆法。棋子移动后，状态就会发生改变。解八数码问题实际上就是找出从初始状态到达目标状态所经过的一系列中间过渡状态。<br>
@@ -759,7 +773,11 @@ Process finished with exit code 0
         <link href="https://rayzhang13.github.io/post/hanoi-problem/">
         </link>
         <updated>2021-05-29T07:49:01.000Z</updated>
-        <content type="html"><![CDATA[<h1 id="起源">起源</h1>
+        <summary type="html"><![CDATA[<p>Hanoi问题是经典递归问题，本文将描述Hanoi问题的起源和解法原理</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>Hanoi问题是经典递归问题，本文将描述Hanoi问题的起源和解法原理</p>
+<!-- more -->
+<h1 id="起源">起源</h1>
 <p>最早发明这个问题的人是法国数学家爱德华·卢卡斯。</p>
 <p>传说越南河内某间寺院有三根银棒，上串 64 个金盘。寺院里的僧侣依照一个古老的预言，以上述规则移动这些盘子；预言说当这些盘子移动完毕，世界就会灭亡。这个传说叫做梵天寺之塔问题（Tower of Brahma puzzle）。但不知道是卢卡斯自创的这个传说，还是他受他人启发。<br>
 若传说属实，僧侣们需要<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mn>2</mn><mn>64</mn></msup><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">2^{64} - 1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.897438em;vertical-align:-0.08333em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">6</span><span class="mord mtight">4</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span>步才能完成这个任务；若他们每秒可完成一个盘子的移动，就需要 5849 亿年才能完成。整个宇宙现在也不过 137 亿年。</p>
@@ -806,12 +824,18 @@ Process finished with exit code 0
         <link href="https://rayzhang13.github.io/post/leetcode-project/">
         </link>
         <updated>2021-05-29T07:02:29.000Z</updated>
-        <content type="html"><![CDATA[<p>这是菜鸡的主页<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>⟹</mo></mrow><annotation encoding="application/x-tex">\Longrightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.549em;vertical-align:-0.024em;"></span><span class="mrel">⟹</span></span></span></span>  <a href="https://leetcode-cn.com/u/chmod-r-000-e/">https://leetcode-cn.com/u/chmod-r-000-e/</a><br>
-<img src="https://rayzhang13.github.io/post-images/1622271963578.png" alt="" loading="lazy"></p>
-<p>从大二下坚持下也快有一年了，期间经历了风风雨雨<br>
-可惜我就只顾着刷题了，也没想着做点项目啥的，基础也不扎实，Java写了个寂寞</p>
-<p>所以刷题也要适度哦，还有很多别的事情没有完成，不要把刷题当作逃避的借口<br>
+        <summary type="html"><![CDATA[<p>从大二下坚持下也快有一年了，期间经历了风风雨雨<br>
+可惜我就只顾着刷题了，也没想着做点项目啥的，基础也不扎实，Java写了个寂寞<br>
+所以刷题也要适度哦，还有很多别的事情没有完成，不要把刷题当作逃避的借口<br>
 万事开头难，共勉！</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>从大二下坚持下也快有一年了，期间经历了风风雨雨<br>
+可惜我就只顾着刷题了，也没想着做点项目啥的，基础也不扎实，Java写了个寂寞<br>
+所以刷题也要适度哦，还有很多别的事情没有完成，不要把刷题当作逃避的借口<br>
+万事开头难，共勉！</p>
+<!-- more -->
+<p>这是菜鸡的主页<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>⟹</mo></mrow><annotation encoding="application/x-tex">\Longrightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.549em;vertical-align:-0.024em;"></span><span class="mrel">⟹</span></span></span></span>  <a href="https://leetcode-cn.com/u/chmod-r-000-e/">https://leetcode-cn.com/u/chmod-r-000-e/</a><br>
+<img src="https://rayzhang13.github.io/post-images/1622271963578.png" alt="" loading="lazy"></p>
 <figure data-type="image" tabindex="1"><img src="https://rayzhang13.github.io/post-images/1622390983063.png" alt="" loading="lazy"></figure>
 ]]></content>
     </entry>
@@ -821,9 +845,12 @@ Process finished with exit code 0
         <link href="https://rayzhang13.github.io/post/BinarySearchOccasions/">
         </link>
         <updated>2021-05-28T14:47:13.000Z</updated>
-        <content type="html"><![CDATA[<p>我们都知道对于一个单调数组，对其进行二分查找的复杂度一般为O(log N)<br>
-通过控制上下界lo和hi不断缩小范围得到<br>
-本文将探讨二分搜索中的几种情况</p>
+        <summary type="html"><![CDATA[<p>二分问题的边界在很久以来一直是我的一个难以言表的痛点，经常一debug就是半天，这下仔细来分析一下二分查找的几种情况</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>二分问题的边界在很久以来一直是我的一个难以言表的痛点，经常一debug就是半天，这下仔细来分析一下二分查找的几种情况</p>
+<!-- more -->
+<p>我们都知道对于一个单调数组，对其进行二分查找的复杂度一般为O(log N)<br>
+通过控制上下界lo和hi不断缩小范围得到</p>
 <h1 id="二分查找模版">二分查找模版</h1>
 <h2 id="普通二分查找找到目标target即可">普通二分查找（找到目标target即可）</h2>
 <pre><code class="language-Java">public class BinarySearch {
