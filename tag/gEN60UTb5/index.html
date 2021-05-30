@@ -9,7 +9,7 @@
 <meta name="description" content="Everything&#39;s gonna be just fine.">
 <meta name="theme-color" content="#000">
 <title>Ray&#39;s Blog</title>
-<link rel="shortcut icon" href="/favicon.ico?v=1622350843932">
+<link rel="shortcut icon" href="/favicon.ico?v=1622351193236">
 <link rel="stylesheet" href="/media/css/pisces.css">
 <link rel="stylesheet" href="/media/fonts/font-awesome.css">
 <link
@@ -714,44 +714,44 @@ n == grid[i].length&lt;br&gt;
 &lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;class Solution {
     public int[] getBiggestThree(int[][] grid) {
         int mm = grid.length;
-		int nn = grid[0].length;
-		List&amp;lt;Integer&amp;gt;list = new ArrayList();
-		int cur = 0;
-		//1 3 5 7 9
-		//i表示第几层菱形，100*100的矩形最大可以包含50层菱形
-		//xx yy表示第i层菱形的中间那个位置
-		for(int i=1;i&amp;lt;=50;i++) {
-			for(int x=i-1;x&amp;lt;mm-i+1;x++) {
-				for(int y=i-1;y&amp;lt;nn-i+1;y++) {
-					cur = 0;
-					for(int xx = x-i+1;xx&amp;lt;=x+i-1;xx++) {
-						cur+=grid[xx][y-((i-1)-Math.abs(xx-x))];
-						if((i-1)-Math.abs(xx-x)!=0) {
-							cur+=grid[xx][y+((i-1)-Math.abs(xx-x))];
-						}
-					}
-					list.add(cur);
-				}
-			}
-		}
+        int nn = grid[0].length;
+        List&amp;lt;Integer&amp;gt; list = new ArrayList();
+        int cur = 0;
+        //1 3 5 7 9
+        //i表示第几层菱形，100*100的矩形最大可以包含50层菱形
+        //xx yy表示第i层菱形的中间那个位置
+        for (int i = 1; i &amp;lt;= 50; i++) {
+            for (int x = i - 1; x &amp;lt; mm - i + 1; x++) {
+                for (int y = i - 1; y &amp;lt; nn - i + 1; y++) {
+                    cur = 0;
+                    for (int xx = x - i + 1; xx &amp;lt;= x + i - 1; xx++) {
+                        cur += grid[xx][y - ((i - 1) - Math.abs(xx - x))];
+                        if ((i - 1) - Math.abs(xx - x) != 0) {
+                            cur += grid[xx][y + ((i - 1) - Math.abs(xx - x))];
+                        }
+                    }
+                    list.add(cur);
+                }
+            }
+        }
         //去重
         HashSet set = new HashSet(list);
-		list.clear();        
+        list.clear();
         list.addAll(set);
-		Collections.sort(list);
+        Collections.sort(list);
 
-		int ans[];
-		if(list.size()&amp;gt;=3) {
-			ans = new int[3];
-			ans[0]=list.get(list.size()-1);
-			ans[1]=list.get(list.size()-2);
-			ans[2]=list.get(list.size()-3);
-		}else {
-			ans = new int[list.size()];
-			for(int i=0;i&amp;lt;list.size();i++) {
-				ans[i]=list.get(list.size()-i-1);
-			}
-		}
+        int ans[];
+        if (list.size() &amp;gt;= 3) {
+            ans = new int[3];
+            ans[0] = list.get(list.size() - 1);
+            ans[1] = list.get(list.size() - 2);
+            ans[2] = list.get(list.size() - 3);
+        } else {
+            ans = new int[list.size()];
+            for (int i = 0; i &amp;lt; list.size(); i++) {
+                ans[i] = list.get(list.size() - i - 1);
+            }
+        }
         return ans;
     }
 }
