@@ -9,7 +9,7 @@
 <meta name="description" content="Everything&#39;s gonna be just fine.">
 <meta name="theme-color" content="#000">
 <title>Leetcode Bio-Weekly Contest Round 53 | Ray&#39;s Blog</title>
-<link rel="shortcut icon" href="/favicon.ico?v=1622394871309">
+<link rel="shortcut icon" href="/favicon.ico?v=1622395035596">
 <link rel="stylesheet" href="/media/css/pisces.css">
 <link rel="stylesheet" href="/media/fonts/font-awesome.css">
 <link
@@ -1606,7 +1606,7 @@ tasks.length == m&lt;br&gt;
         for(int i = 0; i &amp;lt; len; i++){
             task.offer(new int[]{i, tasks[i]});  //将i时刻任务加入任务队列
             while(!occupied.isEmpty() &amp;amp;&amp;amp; occupied.peek()[1] == i){  
-                //将接触占用的服务器从occupied中全部出队，并加入avail中
+                //将解除占用的服务器从occupied中全部出队，并加入avail中
                 int num = occupied.poll()[0];
                 avail.offer(new int[]{servers[num], num});
             }
