@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://rayzhang13.github.io</id>
     <title>Ray&apos;s Blog</title>
-    <updated>2021-05-30T17:28:17.790Z</updated>
+    <updated>2021-05-30T23:21:49.720Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://rayzhang13.github.io"/>
     <link rel="self" href="https://rayzhang13.github.io/atom.xml"/>
@@ -378,6 +378,32 @@ tasks.length == m<br>
             }
         }
         return n;
+    }
+}
+</code></pre>
+<p>大聪明做法：如果子字符串的长度继续增加，可以考虑滑动窗口，当然每次遍历cnt数组还是有开销的</p>
+<pre><code class="language-java">class Solution {
+    public int countGoodSubstrings(String s) {
+        int len = s.length();
+        if(len &lt; 3) return 0;
+        int res = 0;
+        int[] cnt = new int[26];
+        for(int i = 0; i &lt; 3; i++){
+            cnt[(int)(s.charAt(i) - 'a')]++;
+        }
+        for(int i = 0; i &lt; len - 3; i++){
+            if(isValid(cnt)) res++;
+            cnt[(int)(s.charAt(i) - 'a')]--;
+            cnt[(int)(s.charAt(i + 3) - 'a')]++;
+        }
+        if(isValid(cnt)) res++;
+        return res;
+    }
+    public boolean isValid(int[] cnt){
+        for(int x: cnt){
+            if(x &gt; 1) return false;
+        }
+        return true;
     }
 }
 </code></pre>

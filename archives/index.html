@@ -9,7 +9,7 @@
 <meta name="description" content="Everything&#39;s gonna be just fine.">
 <meta name="theme-color" content="#000">
 <title>Ray&#39;s Blog</title>
-<link rel="shortcut icon" href="/favicon.ico?v=1622395690433">
+<link rel="shortcut icon" href="/favicon.ico?v=1622416907062">
 <link rel="stylesheet" href="/media/css/pisces.css">
 <link rel="stylesheet" href="/media/fonts/font-awesome.css">
 <link
@@ -989,6 +989,32 @@ tasks.length == m&lt;br&gt;
             }
         }
         return n;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;大聪明做法：如果子字符串的长度继续增加，可以考虑滑动窗口，当然每次遍历cnt数组还是有开销的&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;class Solution {
+    public int countGoodSubstrings(String s) {
+        int len = s.length();
+        if(len &amp;lt; 3) return 0;
+        int res = 0;
+        int[] cnt = new int[26];
+        for(int i = 0; i &amp;lt; 3; i++){
+            cnt[(int)(s.charAt(i) - &#39;a&#39;)]++;
+        }
+        for(int i = 0; i &amp;lt; len - 3; i++){
+            if(isValid(cnt)) res++;
+            cnt[(int)(s.charAt(i) - &#39;a&#39;)]--;
+            cnt[(int)(s.charAt(i + 3) - &#39;a&#39;)]++;
+        }
+        if(isValid(cnt)) res++;
+        return res;
+    }
+    public boolean isValid(int[] cnt){
+        for(int x: cnt){
+            if(x &amp;gt; 1) return false;
+        }
+        return true;
     }
 }
 &lt;/code&gt;&lt;/pre&gt;
