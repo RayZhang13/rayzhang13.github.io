@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://rayzhang13.github.io</id>
     <title>Ray&apos;s Blog</title>
-    <updated>2021-05-30T16:09:47.698Z</updated>
+    <updated>2021-05-30T16:14:27.166Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://rayzhang13.github.io"/>
     <link rel="self" href="https://rayzhang13.github.io/atom.xml"/>
@@ -808,11 +808,11 @@ Process finished with exit code 0
         <updated>2021-05-29T07:02:29.000Z</updated>
         <content type="html"><![CDATA[<p>这是菜鸡的主页<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>⟹</mo></mrow><annotation encoding="application/x-tex">\Longrightarrow</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.549em;vertical-align:-0.024em;"></span><span class="mrel">⟹</span></span></span></span>  <a href="https://leetcode-cn.com/u/chmod-r-000-e/">https://leetcode-cn.com/u/chmod-r-000-e/</a><br>
 <img src="https://rayzhang13.github.io/post-images/1622271963578.png" alt="" loading="lazy"></p>
-<figure data-type="image" tabindex="1"><img src="https://rayzhang13.github.io/post-images/1622390983063.png" alt="" loading="lazy"></figure>
 <p>从大二下坚持下也快有一年了，期间经历了风风雨雨<br>
 可惜我就只顾着刷题了，也没想着做点项目啥的，基础也不扎实，Java写了个寂寞</p>
 <p>所以刷题也要适度哦，还有很多别的事情没有完成，不要把刷题当作逃避的借口<br>
 万事开头难，共勉！</p>
+<figure data-type="image" tabindex="1"><img src="https://rayzhang13.github.io/post-images/1622390983063.png" alt="" loading="lazy"></figure>
 ]]></content>
     </entry>
     <entry>
