@@ -9,7 +9,7 @@
 <meta name="description" content="Everything&#39;s gonna be just fine.">
 <meta name="theme-color" content="#000">
 <title>Ray&#39;s Blog</title>
-<link rel="shortcut icon" href="/favicon.ico?v=1622443659645">
+<link rel="shortcut icon" href="/favicon.ico?v=1622446294498">
 <link rel="stylesheet" href="/media/css/pisces.css">
 <link rel="stylesheet" href="/media/fonts/font-awesome.css">
 <link
@@ -635,8 +635,8 @@
 
 public class User {
     String name;
-    int id;
-    public User(String name, int id) {
+    Integer id;
+    public User(String name, Integer id) {
         System.out.println(&amp;quot;调用有参构造&amp;quot;);
         this.name = name;
         this.id = id;
@@ -644,7 +644,7 @@ public class User {
     public String getName() {
         return name;
     }
-    public void setId(int id) {
+    public void setId(Integer id) {
         System.out.println(&amp;quot;调用setId&amp;quot;);
         this.id = id;
     }
@@ -659,13 +659,14 @@ public class User {
                 &amp;quot;, id=&amp;quot; + id +
                 &#39;}&#39;;
     }
-    public int getId() {
+    public Integer getId() {
         return id;
     }
     public User() {
         System.out.println(&amp;quot;调用无参构造&amp;quot;);
     }
 }
+
 &lt;/code&gt;&lt;/pre&gt;
 &lt;ol start=&#34;3&#34;&gt;
 &lt;li&gt;Resource目录下创建配置文件 bean.xml&lt;/li&gt;
@@ -725,10 +726,22 @@ Process finished with exit code 0
 &lt;/ol&gt;
 &lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;User user = applicationContext.getBean(&amp;quot;User&amp;quot;, User.class);
 &lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;beanfactory和applicationcontext区别&#34;&gt;BeanFactory和ApplicationContext区别&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;BeanFactory和ApplicationContext是Spring的两大核心接口，都可以当做Spring的容器。其中ApplicationContext是BeanFactory的子接口, 包含 BeanFactory 的所有特性,它的主要功能是支持大型的业务应用的创建。&lt;/li&gt;
+&lt;li&gt;BeanFactroy采用的是&lt;font color=#DC143C&gt;&lt;b&gt;延迟加载形式来注入Bean&lt;/b&gt;&lt;/font&gt;的，&lt;font color=#DC143C&gt;&lt;b&gt;即只有在使用到某个Bean时(调用getBean())，才对该Bean进行加载实例化&lt;/b&gt;&lt;/font&gt;。这样，我们就不能发现一些存在的Spring的配置问题。如果Bean的某一个属性没有注入，BeanFacotry加载后，直至第一次使用调用getBean方法才会抛出异常。&lt;/li&gt;
+&lt;li&gt;ApplicationContext，它是&lt;font color=#DC143C&gt;&lt;b&gt;在容器启动时，一次性创建了所有的Bean&lt;/b&gt;&lt;/font&gt;。这样，在容器启动时，我们就可以发现Spring中存在的配置错误，这样有利于检查所依赖属性是否注入。 ApplicationContext启动后预载入所有的单实例Bean，通过预载入单实例bean ,确保当你需要的时候，你就不用等待，因为它们已经创建好了。它还可以为Bean配置lazy-init=true来让Bean延迟实例化；（饿汉式加载？）&lt;/li&gt;
+&lt;li&gt;相对于基本的BeanFactory，ApplicationContext 唯一的不足是占用内存空间。当应用程序配置Bean较多时，程序启动较慢。&lt;/li&gt;
+&lt;li&gt;BeanFactory通常以编程的方式被创建，ApplicationContext还能以声明的方式创建，如使用ContextLoader。&lt;/li&gt;
+&lt;li&gt;BeanFactory和ApplicationContext都支持BeanPostProcessor、BeanFactoryPostProcessor（后置处理器）的使用，但两者之间的区别是：BeanFactory需要手动注册，而ApplicationContext则是自动注册。&lt;/li&gt;
+&lt;/ul&gt;
 &lt;h2 id=&#34;ioc创建对象方式&#34;&gt;IoC创建对象方式&lt;/h2&gt;
 &lt;ol&gt;
-&lt;li&gt;默认使用无参构造，然后根据bean中设置的property属性调用对应的Setter方法。&lt;/li&gt;
-&lt;li&gt;可以采用constructor-arg进行下标赋值
+&lt;li&gt;
+&lt;p&gt;默认使用无参构造，然后根据bean中设置的property属性调用对应的Setter方法。&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;可以采用constructor-arg进行下标赋值&lt;/p&gt;
 &lt;ol&gt;
 &lt;li&gt;下标赋值&lt;/li&gt;
 &lt;/ol&gt;
@@ -743,7 +756,51 @@ Process finished with exit code 0
     &amp;lt;/bean&amp;gt;
 &amp;lt;/beans&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
-运行结果：&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;/Users/ray/Library/Java/JavaVirtualMachines/openjdk-15.0.2/Contents/Home/bin/java -javaagent:/Users/ray/Library/Application Support/JetBrains/Toolbox/apps/IDEA-U/ch-0/211.7142.45/IntelliJ IDEA.app/Contents/lib/idea_rt.jar=61025:/Users/ray/Library/Application Support/JetBrains/Toolbox/apps/IDEA-U/ch-0/211.7142.45/IntelliJ IDEA.app/Contents/bin -Dfile.encoding=UTF-8 -classpath /Users/ray/Downloads/Spring/target/test-classes:/Users/ray/Downloads/Spring/target/classes:/Users/ray/.m2/repository/org/springframework/spring-context/5.2.12.RELEASE/spring-context-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-aop/5.2.12.RELEASE/spring-aop-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-beans/5.2.12.RELEASE/spring-beans-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-core/5.2.12.RELEASE/spring-core-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-jcl/5.2.12.RELEASE/spring-jcl-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-expression/5.2.12.RELEASE/spring-expression-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/junit/junit/4.12/junit-4.12.jar:/Users/ray/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar Test
+&lt;p&gt;运行结果：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;/Users/ray/Library/Java/JavaVirtualMachines/openjdk-15.0.2/Contents/Home/bin/java -javaagent:/Users/ray/Library/Application Support/JetBrains/Toolbox/apps/IDEA-U/ch-0/211.7142.45/IntelliJ IDEA.app/Contents/lib/idea_rt.jar=61025:/Users/ray/Library/Application Support/JetBrains/Toolbox/apps/IDEA-U/ch-0/211.7142.45/IntelliJ IDEA.app/Contents/bin -Dfile.encoding=UTF-8 -classpath /Users/ray/Downloads/Spring/target/test-classes:/Users/ray/Downloads/Spring/target/classes:/Users/ray/.m2/repository/org/springframework/spring-context/5.2.12.RELEASE/spring-context-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-aop/5.2.12.RELEASE/spring-aop-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-beans/5.2.12.RELEASE/spring-beans-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-core/5.2.12.RELEASE/spring-core-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-jcl/5.2.12.RELEASE/spring-jcl-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-expression/5.2.12.RELEASE/spring-expression-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/junit/junit/4.12/junit-4.12.jar:/Users/ray/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar Test
+调用有参构造
+User{name=&#39;Ray&#39;, id=123}
+
+Process finished with exit code 0
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ol&gt;
+&lt;li&gt;类型赋值&lt;br&gt;
+根据args类型进行赋值（不建议使用）&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code class=&#34;language-xml&#34;&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt;
+&amp;lt;beans xmlns=&amp;quot;http://www.springframework.org/schema/beans&amp;quot;
+        xmlns:xsi=&amp;quot;http://www.w3.org/2001/XMLSchema-instance&amp;quot;
+        xsi:schemaLocation=&amp;quot;http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd&amp;quot;&amp;gt;
+    &amp;lt;bean id=&amp;quot;User&amp;quot; class=&amp;quot;com.ray.pojo.User&amp;quot;&amp;gt;
+        &amp;lt;constructor-arg type=&amp;quot;java.lang.String&amp;quot; value=&amp;quot;Ray&amp;quot;/&amp;gt;
+        &amp;lt;constructor-arg type=&amp;quot;java.lang.Integer&amp;quot; value=&amp;quot;123&amp;quot;/&amp;gt;
+    &amp;lt;/bean&amp;gt;
+&amp;lt;/beans&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;运行结果：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;/Users/ray/Library/Java/JavaVirtualMachines/openjdk-15.0.2/Contents/Home/bin/java -javaagent:/Users/ray/Library/Application Support/JetBrains/Toolbox/apps/IDEA-U/ch-0/211.7142.45/IntelliJ IDEA.app/Contents/lib/idea_rt.jar=51746:/Users/ray/Library/Application Support/JetBrains/Toolbox/apps/IDEA-U/ch-0/211.7142.45/IntelliJ IDEA.app/Contents/bin -Dfile.encoding=UTF-8 -classpath /Users/ray/Downloads/Spring/target/test-classes:/Users/ray/Downloads/Spring/target/classes:/Users/ray/.m2/repository/org/springframework/spring-context/5.2.12.RELEASE/spring-context-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-aop/5.2.12.RELEASE/spring-aop-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-beans/5.2.12.RELEASE/spring-beans-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-core/5.2.12.RELEASE/spring-core-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-jcl/5.2.12.RELEASE/spring-jcl-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-expression/5.2.12.RELEASE/spring-expression-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/junit/junit/4.12/junit-4.12.jar:/Users/ray/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar Test
+调用有参构造
+User{name=&#39;Ray&#39;, id=123}
+
+Process finished with exit code 0
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ol&gt;
+&lt;li&gt;参数名赋值&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code class=&#34;language-xml&#34;&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt;
+&amp;lt;beans xmlns=&amp;quot;http://www.springframework.org/schema/beans&amp;quot;
+        xmlns:xsi=&amp;quot;http://www.w3.org/2001/XMLSchema-instance&amp;quot;
+        xsi:schemaLocation=&amp;quot;http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd&amp;quot;&amp;gt;
+    &amp;lt;bean id=&amp;quot;User&amp;quot; class=&amp;quot;com.ray.pojo.User&amp;quot;&amp;gt;
+        &amp;lt;constructor-arg name=&amp;quot;name&amp;quot; value=&amp;quot;Ray&amp;quot;/&amp;gt;
+        &amp;lt;constructor-arg name=&amp;quot;id&amp;quot; value=&amp;quot;123&amp;quot;/&amp;gt;
+    &amp;lt;/bean&amp;gt;
+&amp;lt;/beans&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;运行结果：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;/Users/ray/Library/Java/JavaVirtualMachines/openjdk-15.0.2/Contents/Home/bin/java -javaagent:/Users/ray/Library/Application Support/JetBrains/Toolbox/apps/IDEA-U/ch-0/211.7142.45/IntelliJ IDEA.app/Contents/lib/idea_rt.jar=53590:/Users/ray/Library/Application Support/JetBrains/Toolbox/apps/IDEA-U/ch-0/211.7142.45/IntelliJ IDEA.app/Contents/bin -Dfile.encoding=UTF-8 -classpath /Users/ray/Downloads/Spring/target/test-classes:/Users/ray/Downloads/Spring/target/classes:/Users/ray/.m2/repository/org/springframework/spring-context/5.2.12.RELEASE/spring-context-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-aop/5.2.12.RELEASE/spring-aop-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-beans/5.2.12.RELEASE/spring-beans-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-core/5.2.12.RELEASE/spring-core-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-jcl/5.2.12.RELEASE/spring-jcl-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-expression/5.2.12.RELEASE/spring-expression-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/junit/junit/4.12/junit-4.12.jar:/Users/ray/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar Test
 调用有参构造
 User{name=&#39;Ray&#39;, id=123}
 
