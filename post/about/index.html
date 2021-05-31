@@ -9,7 +9,7 @@
 <meta name="description" content="Everything&#39;s gonna be just fine.">
 <meta name="theme-color" content="#000">
 <title>关于 | Ray&#39;s Blog</title>
-<link rel="shortcut icon" href="/favicon.ico?v=1622416907062">
+<link rel="shortcut icon" href="/favicon.ico?v=1622443087451">
 <link rel="stylesheet" href="/media/css/pisces.css">
 <link rel="stylesheet" href="/media/fonts/font-awesome.css">
 <link
@@ -211,7 +211,7 @@
     <div class="sidebar-item-box">
       <a href="/archives/">
         
-        <span class="site-item-stat-count">6</span>
+        <span class="site-item-stat-count">7</span>
         <span class="site-item-stat-name language" data-lan="article">文章</span>
       </a>
     </div>
@@ -1117,6 +1117,161 @@
       <hr>
     </div>
     <div class="result" id="result">
+      
+      <div class="item">
+        <a class="result-title" style="opacity: 0;" href="https://rayzhang13.github.io/post/spring-xue-xi-bi-ji/"" data-c="
+          &lt;p&gt;Spring之前学的太仓促了，现在来总结一下&lt;br&gt;
+&lt;a href=&#34;https://docs.spring.io/spring-framework/docs/current/reference/html/index.html&#34;&gt;Spring Framework Documentation&lt;/a&gt;&lt;/p&gt;
+&lt;!-- more --&gt;
+&lt;h1 id=&#34;简介&#34;&gt;简介&lt;/h1&gt;
+&lt;p&gt;Spring是一个开源框架，Spring是于2003 年兴起的一个轻量级的Java 开发框架，由Rod Johnson 在其著作Expert One-On-One J2EE Development and Design中阐述的部分理念和原型衍生而来。它是为了解决企业应用开发的复杂性而创建的。框架的主要优势之一就是其分层架构，分层架构允许使用者选择使用哪一个组件，同时为 J2EE 应用程序开发提供集成的框架。Spring使用基本的JavaBean来完成以前只可能由EJB完成的事情。然而，Spring的用途不仅限于服务器端的开发。从简单性、可测试性和松耦合的角度而言，任何Java应用都可以从Spring中受益。Spring的核心是控制反转（IoC）和面向切面（AOP）。&lt;br&gt;
+&lt;strong&gt;简单来说，Spring是一个分层的JavaSE/EE full-stack(一站式) 轻量级开源框架。&lt;/strong&gt;&lt;/p&gt;
+&lt;h1 id=&#34;spring-ioc&#34;&gt;Spring IoC&lt;/h1&gt;
+&lt;h2 id=&#34;quick-start&#34;&gt;Quick Start&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;Maven pom.xml依赖配置如下&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code class=&#34;language-xml&#34;&gt;&amp;lt;packaging&amp;gt;jar&amp;lt;/packaging&amp;gt;
+&amp;lt;dependencies&amp;gt;
+        &amp;lt;!--导入Spring相关jar包--&amp;gt;
+        &amp;lt;dependency&amp;gt;
+            &amp;lt;groupId&amp;gt;org.springframework&amp;lt;/groupId&amp;gt;
+            &amp;lt;artifactId&amp;gt;spring-context&amp;lt;/artifactId&amp;gt;
+            &amp;lt;version&amp;gt;5.2.12.RELEASE&amp;lt;/version&amp;gt;
+        &amp;lt;/dependency&amp;gt;
+        &amp;lt;!--导入测试相关jar包--&amp;gt;
+        &amp;lt;dependency&amp;gt;
+            &amp;lt;groupId&amp;gt;junit&amp;lt;/groupId&amp;gt;
+            &amp;lt;artifactId&amp;gt;junit&amp;lt;/artifactId&amp;gt;
+            &amp;lt;version&amp;gt;4.12&amp;lt;/version&amp;gt;
+        &amp;lt;/dependency&amp;gt;
+&amp;lt;/dependencies&amp;gt; 
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;创建实体类&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;package com.ray.pojo;
+
+public class User {
+    String name;
+    int id;
+    public User(String name, int id) {
+        System.out.println(&amp;quot;调用有参构造&amp;quot;);
+        this.name = name;
+        this.id = id;
+    }
+    public String getName() {
+        return name;
+    }
+    public void setId(int id) {
+        System.out.println(&amp;quot;调用setId&amp;quot;);
+        this.id = id;
+    }
+    public void setName(String name) {
+        System.out.println(&amp;quot;调用setName&amp;quot;);
+        this.name = name;
+    }
+    @Override
+    public String toString() {
+        return &amp;quot;User{&amp;quot; +
+                &amp;quot;name=&#39;&amp;quot; + name + &#39;\&#39;&#39; +
+                &amp;quot;, id=&amp;quot; + id +
+                &#39;}&#39;;
+    }
+    public int getId() {
+        return id;
+    }
+    public User() {
+        System.out.println(&amp;quot;调用无参构造&amp;quot;);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ol start=&#34;3&#34;&gt;
+&lt;li&gt;Resource目录下创建配置文件 bean.xml&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code class=&#34;language-xml&#34;&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt;
+&amp;lt;beans xmlns=&amp;quot;http://www.springframework.org/schema/beans&amp;quot;
+           xmlns:xsi=&amp;quot;http://www.w3.org/2001/XMLSchema-instance&amp;quot;
+           xsi:schemaLocation=&amp;quot;http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd&amp;quot;&amp;gt;
+        &amp;lt;bean id=&amp;quot;User&amp;quot; class=&amp;quot;com.ray.pojo.User&amp;quot;&amp;gt;
+        &amp;lt;property name=&amp;quot;name&amp;quot; value=&amp;quot;Ray&amp;quot;/&amp;gt;
+        &amp;lt;property name=&amp;quot;id&amp;quot; value=&amp;quot;123&amp;quot;/&amp;gt;
+    &amp;lt;/bean&amp;gt;
+&amp;lt;/beans&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;需要注意的是property设置时对应类中的Setter方法，若无对应Setter方法则会发生报错&lt;/p&gt;
+&lt;ol start=&#34;4&#34;&gt;
+&lt;li&gt;测试类调用&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;import com.ray.pojo.User;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+public class Test {
+    public static void main(String[] args) {
+        ApplicationContext applicationContext = new ClassPathXmlApplicationContext(&amp;quot;bean.xml&amp;quot;);
+        //User user = (User)applicationContext.getBean(&amp;quot;user&amp;quot;);
+        User user = applicationContext.getBean(&amp;quot;User&amp;quot;, User.class);
+        System.out.println(user);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;结果：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;/Users/ray/Library/Java/JavaVirtualMachines/openjdk-15.0.2/Contents/Home/bin/java -javaagent:/Users/ray/Library/Application Support/JetBrains/Toolbox/apps/IDEA-U/ch-0/211.7142.45/IntelliJ IDEA.app/Contents/lib/idea_rt.jar=58760:/Users/ray/Library/Application Support/JetBrains/Toolbox/apps/IDEA-U/ch-0/211.7142.45/IntelliJ IDEA.app/Contents/bin -Dfile.encoding=UTF-8 -classpath /Users/ray/Downloads/Spring/target/test-classes:/Users/ray/Downloads/Spring/target/classes:/Users/ray/.m2/repository/org/springframework/spring-context/5.2.12.RELEASE/spring-context-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-aop/5.2.12.RELEASE/spring-aop-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-beans/5.2.12.RELEASE/spring-beans-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-core/5.2.12.RELEASE/spring-core-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-jcl/5.2.12.RELEASE/spring-jcl-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-expression/5.2.12.RELEASE/spring-expression-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/junit/junit/4.12/junit-4.12.jar:/Users/ray/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar Test
+调用无参构造
+调用setName
+调用setId
+User{name=&#39;Ray&#39;, id=123}
+
+Process finished with exit code 0
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;ioc获取bean方式&#34;&gt;IoC获取bean方式&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;根据 id 获取&lt;br&gt;
+根据bean.xml中配置的bean的唯一标识id进行查找&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;User user = (User)applicationContext.getBean(&amp;quot;user&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;通过 bean 类型获取&lt;br&gt;
+如果同一个类型的bean在xml文件中配置了多个，则获取时会抛出异常，所以&lt;strong&gt;同一个类型的bean在容器中必须是唯一的&lt;/strong&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;User user = ioc.getBean(User.class);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ol start=&#34;3&#34;&gt;
+&lt;li&gt;指定bean的 id 值和类型&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;User user = applicationContext.getBean(&amp;quot;User&amp;quot;, User.class);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;ioc创建对象方式&#34;&gt;IoC创建对象方式&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;默认使用无参构造，然后根据bean中设置的property属性调用对应的Setter方法。&lt;/li&gt;
+&lt;li&gt;可以采用constructor-arg进行下标赋值
+&lt;ol&gt;
+&lt;li&gt;下标赋值&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code class=&#34;language-xml&#34;&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt;
+&amp;lt;beans xmlns=&amp;quot;http://www.springframework.org/schema/beans&amp;quot;
+           xmlns:xsi=&amp;quot;http://www.w3.org/2001/XMLSchema-instance&amp;quot;
+           xsi:schemaLocation=&amp;quot;http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd&amp;quot;&amp;gt;
+&amp;lt;bean id=&amp;quot;User&amp;quot; class=&amp;quot;com.ray.pojo.User&amp;quot;&amp;gt;
+    &amp;lt;constructor-arg index=&amp;quot;0&amp;quot; value=&amp;quot;Ray&amp;quot;/&amp;gt;
+    &amp;lt;constructor-arg index=&amp;quot;1&amp;quot; value=&amp;quot;123&amp;quot;/&amp;gt;
+&amp;lt;/bean&amp;gt;
+&amp;lt;/beans&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+运行结果：&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;/Users/ray/Library/Java/JavaVirtualMachines/openjdk-15.0.2/Contents/Home/bin/java -javaagent:/Users/ray/Library/Application Support/JetBrains/Toolbox/apps/IDEA-U/ch-0/211.7142.45/IntelliJ IDEA.app/Contents/lib/idea_rt.jar=61025:/Users/ray/Library/Application Support/JetBrains/Toolbox/apps/IDEA-U/ch-0/211.7142.45/IntelliJ IDEA.app/Contents/bin -Dfile.encoding=UTF-8 -classpath /Users/ray/Downloads/Spring/target/test-classes:/Users/ray/Downloads/Spring/target/classes:/Users/ray/.m2/repository/org/springframework/spring-context/5.2.12.RELEASE/spring-context-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-aop/5.2.12.RELEASE/spring-aop-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-beans/5.2.12.RELEASE/spring-beans-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-core/5.2.12.RELEASE/spring-core-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-jcl/5.2.12.RELEASE/spring-jcl-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-expression/5.2.12.RELEASE/spring-expression-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/junit/junit/4.12/junit-4.12.jar:/Users/ray/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar Test
+调用有参构造
+User{name=&#39;Ray&#39;, id=123}
+
+Process finished with exit code 0
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+">Spring 学习笔记</a>
+      </div>
       
       <div class="item">
         <a class="result-title" style="opacity: 0;" href="https://rayzhang13.github.io/post/leetcode-weekly-contest-round-243/"" data-c="

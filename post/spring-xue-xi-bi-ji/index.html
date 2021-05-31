@@ -8,7 +8,7 @@
 <meta name="keywords" content="Ray&#39;s Blog">
 <meta name="description" content="Everything&#39;s gonna be just fine.">
 <meta name="theme-color" content="#000">
-<title>Hanoi问题 | Ray&#39;s Blog</title>
+<title>Spring 学习笔记 | Ray&#39;s Blog</title>
 <link rel="shortcut icon" href="/favicon.ico?v=1622443087451">
 <link rel="stylesheet" href="/media/css/pisces.css">
 <link rel="stylesheet" href="/media/fonts/font-awesome.css">
@@ -38,8 +38,8 @@
 
 
 
-  <meta name="description" content="Hanoi问题" />
-  <meta name="keywords" content="Algorithms" />
+  <meta name="description" content="Spring 学习笔记" />
+  <meta name="keywords" content="" />
 </head>
 
 <body>
@@ -254,9 +254,14 @@
   <div class="toc-wrapper auto-number auto"
     id="toc_wrapper">
     <ul class="markdownIt-TOC">
-<li><a href="#%E8%B5%B7%E6%BA%90">起源</a></li>
-<li><a href="#%E6%B1%82%E8%A7%A3%E6%80%9D%E6%83%B3">求解思想</a></li>
-<li><a href="#%E9%80%92%E5%BD%92%E8%A7%A3">递归解</a></li>
+<li><a href="#%E7%AE%80%E4%BB%8B">简介</a></li>
+<li><a href="#spring-ioc">Spring IoC</a>
+<ul>
+<li><a href="#quick-start">Quick Start</a></li>
+<li><a href="#ioc%E8%8E%B7%E5%8F%96bean%E6%96%B9%E5%BC%8F">IoC获取bean方式</a></li>
+<li><a href="#ioc%E5%88%9B%E5%BB%BA%E5%AF%B9%E8%B1%A1%E6%96%B9%E5%BC%8F">IoC创建对象方式</a></li>
+</ul>
+</li>
 </ul>
 
   </div>
@@ -522,8 +527,8 @@
           <div class="section bg-color post post-page">
             <section class="post-header">
   <h1 class="post-title">
-    <a class="post-title-link" href="https://rayzhang13.github.io/post/hanoi-problem/">
-      Hanoi问题
+    <a class="post-title-link" href="https://rayzhang13.github.io/post/spring-xue-xi-bi-ji/">
+      Spring 学习笔记
     </a>
   </h1>
   <div class="post-meta">
@@ -531,36 +536,23 @@
     <span class="meta-item pc-show">
       <i class="fa fa-calendar-o"></i>
       <span class="language" data-lan="publish">发布于</span>
-      <span class="publish-time" data-t="2021-05-29 15:49:01">2021-05-29</span>
+      <span class="publish-time" data-t="2021-05-31 13:21:07">2021-05-31</span>
       <span class="post-meta-divider pc-show">|</span>
     </span>
     
     <span class="meta-item">
-      <i class="fa fa-folder-o"></i>
-      <span class="pc-show language" data-lan="category-in">分类于</span>
-      
-      
-      <a href="https://rayzhang13.github.io/tag/d9PF19SZ6/">
-        <span>Algorithms</span>
-      </a>
-      
-      
-    </span>
-    <span class="post-meta-divider">|</span>
-    
-    <span class="meta-item">
       <i class="fa fa-clock-o"></i>
-      <span>3<span class="language" data-lan="minute">分钟</span></span>
+      <span>8<span class="language" data-lan="minute">分钟</span></span>
     </span>
     <span class="meta-item">
       <span class="post-meta-divider">|</span>
       <i class="fa fa-file-word-o"></i>
-      <span>664<span class="pc-show language" data-lan="words">字数</span></span>
+      <span>1406<span class="pc-show language" data-lan="words">字数</span></span>
     </span>
     
     
     
-    <span id="/post/hanoi-problem/" data-flag-title="Hanoi问题" class="meta-item pc-show leancloud_visitors">
+    <span id="/post/spring-xue-xi-bi-ji/" data-flag-title="Spring 学习笔记" class="meta-item pc-show leancloud_visitors">
       <span class="post-meta-divider">|</span>
       <i class="fa fa-eye"></i>
       <span><span class="language" data-lan="view">浏览量</span>：<span class="leancloud-visitors-count"></span></span>
@@ -569,47 +561,156 @@
   </div>
 </section>
             <div class="post-body next-md-body" id="post_body">
-              <p>Hanoi问题是经典递归问题，本文将描述Hanoi问题的起源和解法原理</p>
+              <p>Spring之前学的太仓促了，现在来总结一下<br>
+<a href="https://docs.spring.io/spring-framework/docs/current/reference/html/index.html">Spring Framework Documentation</a></p>
 <!-- more -->
-<h1 id="起源">起源</h1>
-<p>最早发明这个问题的人是法国数学家爱德华·卢卡斯。</p>
-<p>传说越南河内某间寺院有三根银棒，上串 64 个金盘。寺院里的僧侣依照一个古老的预言，以上述规则移动这些盘子；预言说当这些盘子移动完毕，世界就会灭亡。这个传说叫做梵天寺之塔问题（Tower of Brahma puzzle）。但不知道是卢卡斯自创的这个传说，还是他受他人启发。<br>
-若传说属实，僧侣们需要<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mn>2</mn><mn>64</mn></msup><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">2^{64} - 1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.897438em;vertical-align:-0.08333em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">6</span><span class="mord mtight">4</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span>步才能完成这个任务；若他们每秒可完成一个盘子的移动，就需要 5849 亿年才能完成。整个宇宙现在也不过 137 亿年。</p>
-<p>这个传说有若干变体：寺院换成修道院、僧侣换成修士等等。寺院的地点众说纷纭，其中一说是位于越南的河内，所以被命名为“河内塔”。另外亦有“金盘是创世时所造”、“僧侣们每天移动一盘”之类的背景设定。</p>
-<h1 id="求解思想">求解思想</h1>
-<p><img src="https://rayzhang13.github.io/post-images/1622275695419.jpg" alt="" loading="lazy"><br>
-解法的基本思想是递归。假设有 A、B、C 三个塔，A 塔有<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>N</mi></mrow><annotation encoding="application/x-tex">N</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.10903em;">N</span></span></span></span>块盘，目标是把这些盘全部移到 C 塔。那么先把 A 塔顶部的<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>N</mi><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">N - 1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.76666em;vertical-align:-0.08333em;"></span><span class="mord mathdefault" style="margin-right:0.10903em;">N</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span>块盘移动到 B 塔，再把 A 塔剩下的大盘移到 C，最后把 B 塔的 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>N</mi><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">N - 1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.76666em;vertical-align:-0.08333em;"></span><span class="mord mathdefault" style="margin-right:0.10903em;">N</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span>块盘移到 C。<br>
-<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>f</mi><mo>(</mo><mi>n</mi><mo>)</mo><mo>=</mo><mi>f</mi><mo>(</mo><mi>n</mi><mo>−</mo><mn>1</mn><mo>)</mo><mo>∗</mo><mn>2</mn><mo>+</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">f(n) = f(n - 1) * 2 + 1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathdefault">n</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathdefault">n</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">2</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span><br>
-复杂度应为<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mn>2</mn><mi>n</mi></msup><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">2^n - 1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.747722em;vertical-align:-0.08333em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.664392em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">n</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span></p>
-<p>如此递归地使用下去, 就可以求解。</p>
-<h1 id="递归解">递归解</h1>
-<p>盘子自上到下编号依次为1、2、3 ..... n</p>
-<pre><code class="language-java">public class Main {
-    public void hanoi(int n, char a, char b, char c){       //目标操作a-&gt;c, 中间变量b
-        if(n == 1) System.out.println(&quot;1th plate: &quot; + a + &quot;-&gt;&quot; + c);
-        else{
-            hanoi(n - 1, a, c, b); //现将1~ n-1从a移到b
-            System.out.println(n + &quot;th plate: &quot; + a + &quot;-&gt;&quot; + c); //将n移到c
-            hanoi(n - 1, b, a, c); //将1~ n-1从b移到c
-        }
+<h1 id="简介">简介</h1>
+<p>Spring是一个开源框架，Spring是于2003 年兴起的一个轻量级的Java 开发框架，由Rod Johnson 在其著作Expert One-On-One J2EE Development and Design中阐述的部分理念和原型衍生而来。它是为了解决企业应用开发的复杂性而创建的。框架的主要优势之一就是其分层架构，分层架构允许使用者选择使用哪一个组件，同时为 J2EE 应用程序开发提供集成的框架。Spring使用基本的JavaBean来完成以前只可能由EJB完成的事情。然而，Spring的用途不仅限于服务器端的开发。从简单性、可测试性和松耦合的角度而言，任何Java应用都可以从Spring中受益。Spring的核心是控制反转（IoC）和面向切面（AOP）。<br>
+<strong>简单来说，Spring是一个分层的JavaSE/EE full-stack(一站式) 轻量级开源框架。</strong></p>
+<h1 id="spring-ioc">Spring IoC</h1>
+<h2 id="quick-start">Quick Start</h2>
+<ol>
+<li>Maven pom.xml依赖配置如下</li>
+</ol>
+<pre><code class="language-xml">&lt;packaging&gt;jar&lt;/packaging&gt;
+&lt;dependencies&gt;
+        &lt;!--导入Spring相关jar包--&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;org.springframework&lt;/groupId&gt;
+            &lt;artifactId&gt;spring-context&lt;/artifactId&gt;
+            &lt;version&gt;5.2.12.RELEASE&lt;/version&gt;
+        &lt;/dependency&gt;
+        &lt;!--导入测试相关jar包--&gt;
+        &lt;dependency&gt;
+            &lt;groupId&gt;junit&lt;/groupId&gt;
+            &lt;artifactId&gt;junit&lt;/artifactId&gt;
+            &lt;version&gt;4.12&lt;/version&gt;
+        &lt;/dependency&gt;
+&lt;/dependencies&gt; 
+</code></pre>
+<ol start="2">
+<li>创建实体类</li>
+</ol>
+<pre><code class="language-java">package com.ray.pojo;
+
+public class User {
+    String name;
+    int id;
+    public User(String name, int id) {
+        System.out.println(&quot;调用有参构造&quot;);
+        this.name = name;
+        this.id = id;
     }
-    public static void main(String[] args) {
-        new Main().hanoi(3, 'a', 'b', 'c');
+    public String getName() {
+        return name;
+    }
+    public void setId(int id) {
+        System.out.println(&quot;调用setId&quot;);
+        this.id = id;
+    }
+    public void setName(String name) {
+        System.out.println(&quot;调用setName&quot;);
+        this.name = name;
+    }
+    @Override
+    public String toString() {
+        return &quot;User{&quot; +
+                &quot;name='&quot; + name + '\'' +
+                &quot;, id=&quot; + id +
+                '}';
+    }
+    public int getId() {
+        return id;
+    }
+    public User() {
+        System.out.println(&quot;调用无参构造&quot;);
     }
 }
 </code></pre>
-<p>运行结果：</p>
-<pre><code class="language-bash">/Users/ray/Library/Java/JavaVirtualMachines/openjdk-15.0.2/Contents/Home/bin/java -javaagent:/Users/ray/Library/Application Support/JetBrains/Toolbox/apps/IDEA-U/ch-0/211.7142.45/IntelliJ IDEA.app/Contents/lib/idea_rt.jar=63346:/Users/ray/Library/Application Support/JetBrains/Toolbox/apps/IDEA-U/ch-0/211.7142.45/IntelliJ IDEA.app/Contents/bin -Dfile.encoding=UTF-8 -classpath /Users/ray/IdeaProjects/oj/out/production/oj com.company.Main
-1th plate: a-&gt;c
-2th plate: a-&gt;b
-1th plate: c-&gt;b
-3th plate: a-&gt;c
-1th plate: b-&gt;a
-2th plate: b-&gt;c
-1th plate: a-&gt;c
+<ol start="3">
+<li>Resource目录下创建配置文件 bean.xml</li>
+</ol>
+<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
+           xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+           xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd&quot;&gt;
+        &lt;bean id=&quot;User&quot; class=&quot;com.ray.pojo.User&quot;&gt;
+        &lt;property name=&quot;name&quot; value=&quot;Ray&quot;/&gt;
+        &lt;property name=&quot;id&quot; value=&quot;123&quot;/&gt;
+    &lt;/bean&gt;
+&lt;/beans&gt;
+</code></pre>
+<p>需要注意的是property设置时对应类中的Setter方法，若无对应Setter方法则会发生报错</p>
+<ol start="4">
+<li>测试类调用</li>
+</ol>
+<pre><code class="language-java">import com.ray.pojo.User;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+public class Test {
+    public static void main(String[] args) {
+        ApplicationContext applicationContext = new ClassPathXmlApplicationContext(&quot;bean.xml&quot;);
+        //User user = (User)applicationContext.getBean(&quot;user&quot;);
+        User user = applicationContext.getBean(&quot;User&quot;, User.class);
+        System.out.println(user);
+    }
+}
+</code></pre>
+<p>结果：</p>
+<pre><code class="language-bash">/Users/ray/Library/Java/JavaVirtualMachines/openjdk-15.0.2/Contents/Home/bin/java -javaagent:/Users/ray/Library/Application Support/JetBrains/Toolbox/apps/IDEA-U/ch-0/211.7142.45/IntelliJ IDEA.app/Contents/lib/idea_rt.jar=58760:/Users/ray/Library/Application Support/JetBrains/Toolbox/apps/IDEA-U/ch-0/211.7142.45/IntelliJ IDEA.app/Contents/bin -Dfile.encoding=UTF-8 -classpath /Users/ray/Downloads/Spring/target/test-classes:/Users/ray/Downloads/Spring/target/classes:/Users/ray/.m2/repository/org/springframework/spring-context/5.2.12.RELEASE/spring-context-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-aop/5.2.12.RELEASE/spring-aop-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-beans/5.2.12.RELEASE/spring-beans-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-core/5.2.12.RELEASE/spring-core-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-jcl/5.2.12.RELEASE/spring-jcl-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-expression/5.2.12.RELEASE/spring-expression-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/junit/junit/4.12/junit-4.12.jar:/Users/ray/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar Test
+调用无参构造
+调用setName
+调用setId
+User{name='Ray', id=123}
 
 Process finished with exit code 0
 </code></pre>
+<h2 id="ioc获取bean方式">IoC获取bean方式</h2>
+<ol>
+<li>根据 id 获取<br>
+根据bean.xml中配置的bean的唯一标识id进行查找</li>
+</ol>
+<pre><code class="language-java">User user = (User)applicationContext.getBean(&quot;user&quot;)
+</code></pre>
+<ol start="2">
+<li>通过 bean 类型获取<br>
+如果同一个类型的bean在xml文件中配置了多个，则获取时会抛出异常，所以<strong>同一个类型的bean在容器中必须是唯一的</strong></li>
+</ol>
+<pre><code class="language-java">User user = ioc.getBean(User.class);
+</code></pre>
+<ol start="3">
+<li>指定bean的 id 值和类型</li>
+</ol>
+<pre><code class="language-java">User user = applicationContext.getBean(&quot;User&quot;, User.class);
+</code></pre>
+<h2 id="ioc创建对象方式">IoC创建对象方式</h2>
+<ol>
+<li>默认使用无参构造，然后根据bean中设置的property属性调用对应的Setter方法。</li>
+<li>可以采用constructor-arg进行下标赋值
+<ol>
+<li>下标赋值</li>
+</ol>
+<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
+           xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+           xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans
+           http://www.springframework.org/schema/beans/spring-beans.xsd&quot;&gt;
+&lt;bean id=&quot;User&quot; class=&quot;com.ray.pojo.User&quot;&gt;
+    &lt;constructor-arg index=&quot;0&quot; value=&quot;Ray&quot;/&gt;
+    &lt;constructor-arg index=&quot;1&quot; value=&quot;123&quot;/&gt;
+&lt;/bean&gt;
+&lt;/beans&gt;
+</code></pre>
+运行结果：<pre><code class="language-bash">/Users/ray/Library/Java/JavaVirtualMachines/openjdk-15.0.2/Contents/Home/bin/java -javaagent:/Users/ray/Library/Application Support/JetBrains/Toolbox/apps/IDEA-U/ch-0/211.7142.45/IntelliJ IDEA.app/Contents/lib/idea_rt.jar=61025:/Users/ray/Library/Application Support/JetBrains/Toolbox/apps/IDEA-U/ch-0/211.7142.45/IntelliJ IDEA.app/Contents/bin -Dfile.encoding=UTF-8 -classpath /Users/ray/Downloads/Spring/target/test-classes:/Users/ray/Downloads/Spring/target/classes:/Users/ray/.m2/repository/org/springframework/spring-context/5.2.12.RELEASE/spring-context-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-aop/5.2.12.RELEASE/spring-aop-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-beans/5.2.12.RELEASE/spring-beans-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-core/5.2.12.RELEASE/spring-core-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-jcl/5.2.12.RELEASE/spring-jcl-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-expression/5.2.12.RELEASE/spring-expression-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/junit/junit/4.12/junit-4.12.jar:/Users/ray/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar Test
+调用有参构造
+User{name='Ray', id=123}
+
+Process finished with exit code 0
+</code></pre>
+</li>
+</ol>
 
             </div>
             
@@ -622,7 +723,7 @@ Process finished with exit code 0
     </li>
     <li class="post-copyright-link">
       <strong class="language" data-lan="link">本文链接：</strong>
-      <a href="https://rayzhang13.github.io/post/hanoi-problem/" title="Hanoi问题">https://rayzhang13.github.io/post/hanoi-problem/</a>
+      <a href="https://rayzhang13.github.io/post/spring-xue-xi-bi-ji/" title="Spring 学习笔记">https://rayzhang13.github.io/post/spring-xue-xi-bi-ji/</a>
     </li>
     <li class="post-copyright-license">
       <strong class="language" data-lan="copyright">版权声明： </strong>
@@ -631,21 +732,15 @@ Process finished with exit code 0
   </ul>
   <div class="tags">
     
-      <a href="https://rayzhang13.github.io/tag/d9PF19SZ6/"># Algorithms</a>
-    
   </div>
   <div class="nav">
     <div class="nav-prev">
       
-        <i class="fa fa-chevron-left"></i>
-        <a class="nav-pc-next" title="A*算法解决八数码问题" href="https://rayzhang13.github.io/post/eight-digit-maze/">A*算法解决八数码问题</a class="nav-pc-next">
-        <a class="nav-mobile-prev" title="A*算法解决八数码问题" href="https://rayzhang13.github.io/post/eight-digit-maze/">上一篇</a>
-      
     </div>
     <div class="nav-next">
       
-        <a class="nav-pc-next" title="Leetcode刷题计划" href="https://rayzhang13.github.io/post/leetcode-project/">Leetcode刷题计划</a>
-        <a class="nav-mobile-next" title="Leetcode刷题计划" href="https://rayzhang13.github.io/post/leetcode-project/">下一篇</a>
+        <a class="nav-pc-next" title="Leetcode Weekly Contest Round 243" href="https://rayzhang13.github.io/post/leetcode-weekly-contest-round-243/">Leetcode Weekly Contest Round 243</a>
+        <a class="nav-mobile-next" title="Leetcode Weekly Contest Round 243" href="https://rayzhang13.github.io/post/leetcode-weekly-contest-round-243/">下一篇</a>
         <i class="fa fa-chevron-right"></i>
       
     </div>
