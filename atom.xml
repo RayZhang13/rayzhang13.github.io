@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://rayzhang13.github.io</id>
     <title>Ray&apos;s Blog</title>
-    <updated>2021-05-31T07:31:37.029Z</updated>
+    <updated>2021-05-31T13:45:33.501Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://rayzhang13.github.io"/>
     <link rel="self" href="https://rayzhang13.github.io/atom.xml"/>
@@ -137,7 +137,7 @@ Process finished with exit code 0
 <li>通过 bean 类型获取<br>
 如果同一个类型的bean在xml文件中配置了多个，则获取时会抛出异常，所以<strong>同一个类型的bean在容器中必须是唯一的</strong></li>
 </ol>
-<pre><code class="language-java">User user = ioc.getBean(User.class);
+<pre><code class="language-java">User user = applicationContext.getBean(User.class);
 </code></pre>
 <ol start="3">
 <li>指定bean的 id 值和类型</li>
@@ -160,9 +160,9 @@ Process finished with exit code 0
 </li>
 <li>
 <p>可以采用constructor-arg进行下标赋值</p>
-<ol>
+<ul>
 <li>下标赋值</li>
-</ol>
+</ul>
 <pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
 &lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
         xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
@@ -181,10 +181,10 @@ User{name='Ray', id=123}
 
 Process finished with exit code 0
 </code></pre>
-<ol>
+<ul>
 <li>类型赋值<br>
 根据args类型进行赋值（不建议使用）</li>
-</ol>
+</ul>
 <pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
 &lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
         xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
@@ -203,9 +203,9 @@ User{name='Ray', id=123}
 
 Process finished with exit code 0
 </code></pre>
-<ol>
+<ul>
 <li>参数名赋值</li>
-</ol>
+</ul>
 <pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
 &lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
         xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
