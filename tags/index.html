@@ -9,7 +9,7 @@
 <meta name="description" content="Everything&#39;s gonna be just fine.">
 <meta name="theme-color" content="#000">
 <title>Ray&#39;s Blog</title>
-<link rel="shortcut icon" href="/favicon.ico?v=1622443087451">
+<link rel="shortcut icon" href="/favicon.ico?v=1622443473168">
 <link rel="stylesheet" href="/media/css/pisces.css">
 <link rel="stylesheet" href="/media/fonts/font-awesome.css">
 <link
@@ -690,10 +690,10 @@ public class User {
 &lt;/ol&gt;
 &lt;pre&gt;&lt;code class=&#34;language-xml&#34;&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt;
 &amp;lt;beans xmlns=&amp;quot;http://www.springframework.org/schema/beans&amp;quot;
-           xmlns:xsi=&amp;quot;http://www.w3.org/2001/XMLSchema-instance&amp;quot;
-           xsi:schemaLocation=&amp;quot;http://www.springframework.org/schema/beans
-           http://www.springframework.org/schema/beans/spring-beans.xsd&amp;quot;&amp;gt;
-        &amp;lt;bean id=&amp;quot;User&amp;quot; class=&amp;quot;com.ray.pojo.User&amp;quot;&amp;gt;
+       xmlns:xsi=&amp;quot;http://www.w3.org/2001/XMLSchema-instance&amp;quot;
+       xsi:schemaLocation=&amp;quot;http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd&amp;quot;&amp;gt;
+    &amp;lt;bean id=&amp;quot;User&amp;quot; class=&amp;quot;com.ray.pojo.User&amp;quot;&amp;gt;
         &amp;lt;property name=&amp;quot;name&amp;quot; value=&amp;quot;Ray&amp;quot;/&amp;gt;
         &amp;lt;property name=&amp;quot;id&amp;quot; value=&amp;quot;123&amp;quot;/&amp;gt;
     &amp;lt;/bean&amp;gt;
@@ -752,13 +752,13 @@ Process finished with exit code 0
 &lt;/ol&gt;
 &lt;pre&gt;&lt;code class=&#34;language-xml&#34;&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt;
 &amp;lt;beans xmlns=&amp;quot;http://www.springframework.org/schema/beans&amp;quot;
-           xmlns:xsi=&amp;quot;http://www.w3.org/2001/XMLSchema-instance&amp;quot;
-           xsi:schemaLocation=&amp;quot;http://www.springframework.org/schema/beans
-           http://www.springframework.org/schema/beans/spring-beans.xsd&amp;quot;&amp;gt;
-&amp;lt;bean id=&amp;quot;User&amp;quot; class=&amp;quot;com.ray.pojo.User&amp;quot;&amp;gt;
-    &amp;lt;constructor-arg index=&amp;quot;0&amp;quot; value=&amp;quot;Ray&amp;quot;/&amp;gt;
-    &amp;lt;constructor-arg index=&amp;quot;1&amp;quot; value=&amp;quot;123&amp;quot;/&amp;gt;
-&amp;lt;/bean&amp;gt;
+        xmlns:xsi=&amp;quot;http://www.w3.org/2001/XMLSchema-instance&amp;quot;
+        xsi:schemaLocation=&amp;quot;http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd&amp;quot;&amp;gt;
+    &amp;lt;bean id=&amp;quot;User&amp;quot; class=&amp;quot;com.ray.pojo.User&amp;quot;&amp;gt;
+        &amp;lt;constructor-arg index=&amp;quot;0&amp;quot; value=&amp;quot;Ray&amp;quot;/&amp;gt;
+        &amp;lt;constructor-arg index=&amp;quot;1&amp;quot; value=&amp;quot;123&amp;quot;/&amp;gt;
+    &amp;lt;/bean&amp;gt;
 &amp;lt;/beans&amp;gt;
 &lt;/code&gt;&lt;/pre&gt;
 运行结果：&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;/Users/ray/Library/Java/JavaVirtualMachines/openjdk-15.0.2/Contents/Home/bin/java -javaagent:/Users/ray/Library/Application Support/JetBrains/Toolbox/apps/IDEA-U/ch-0/211.7142.45/IntelliJ IDEA.app/Contents/lib/idea_rt.jar=61025:/Users/ray/Library/Application Support/JetBrains/Toolbox/apps/IDEA-U/ch-0/211.7142.45/IntelliJ IDEA.app/Contents/bin -Dfile.encoding=UTF-8 -classpath /Users/ray/Downloads/Spring/target/test-classes:/Users/ray/Downloads/Spring/target/classes:/Users/ray/.m2/repository/org/springframework/spring-context/5.2.12.RELEASE/spring-context-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-aop/5.2.12.RELEASE/spring-aop-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-beans/5.2.12.RELEASE/spring-beans-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-core/5.2.12.RELEASE/spring-core-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-jcl/5.2.12.RELEASE/spring-jcl-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-expression/5.2.12.RELEASE/spring-expression-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/junit/junit/4.12/junit-4.12.jar:/Users/ray/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar Test
