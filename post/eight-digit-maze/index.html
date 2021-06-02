@@ -9,7 +9,7 @@
 <meta name="description" content="Everything&#39;s gonna be just fine.">
 <meta name="theme-color" content="#000">
 <title>A*算法解决八数码问题 | Ray&#39;s Blog</title>
-<link rel="shortcut icon" href="/favicon.ico?v=1622469000110">
+<link rel="shortcut icon" href="/favicon.ico?v=1622631179305">
 <link rel="stylesheet" href="/media/css/pisces.css">
 <link rel="stylesheet" href="/media/fonts/font-awesome.css">
 <link
@@ -1700,12 +1700,15 @@ tasks.length == m&lt;br&gt;
 &lt;li&gt;occupied作为占用列表，每次弹出最近时间内可以恢复使用的服务器，存储格式为{服务器下标，可用时间}&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;维护task队列作为任务队列，每次优先处理task内出队的任务，添加任务时也只应该对task队列操作&lt;/p&gt;
+&lt;p&gt;&lt;font color=#FF0000&gt;&lt;b&gt;可能的fst注意点（也可能只是我的paranoia）：&lt;/b&gt;&lt;br/&gt;&lt;/font&gt;&lt;br&gt;
+&lt;font color=#FF0000&gt;&lt;b&gt;若存在大量服务器排队，理论上说加入occupied队列服务器的弹出时间可能会超出Integer.MAX_VALUE，为了安全可以使用long[]数组进行存储&lt;/b&gt;&lt;br/&gt;&lt;/font&gt;&lt;/p&gt;
 &lt;p&gt;代码如下：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;class Solution {
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;
+class Solution {
     public int[] assignTasks(int[] servers, int[] tasks) {
         Queue&amp;lt;int[]&amp;gt; task = new ArrayDeque&amp;lt;&amp;gt;();
         PriorityQueue&amp;lt;int[]&amp;gt; avail = new PriorityQueue&amp;lt;&amp;gt;((o1, o2) -&amp;gt; (o1[0] != o2[0] ? o1[0] - o2[0]: o1[1] - o2[1]));
-        PriorityQueue&amp;lt;int[]&amp;gt; occupied = new PriorityQueue&amp;lt;&amp;gt;((o1, o2) -&amp;gt; o1[1] - o2[1]);
+        PriorityQueue&amp;lt;long[]&amp;gt; occupied = new PriorityQueue&amp;lt;&amp;gt;((o1, o2) -&amp;gt; o1[1] &amp;gt; o2[1]? 1: -1);
         for(int i = 0; i &amp;lt; servers.length; i++){
             avail.offer(new int[]{servers[i], i});  //全部服务器加入可用队列
         }
@@ -1715,31 +1718,31 @@ tasks.length == m&lt;br&gt;
             task.offer(new int[]{i, tasks[i]});  //将i时刻任务加入任务队列
             while(!occupied.isEmpty() &amp;amp;&amp;amp; occupied.peek()[1] == i){  
                 //将解除占用的服务器从occupied中全部出队，并加入avail中
-                int num = occupied.poll()[0];
+                int num = (int)occupied.poll()[0];
                 avail.offer(new int[]{servers[num], num});
             }
             while(!task.isEmpty() &amp;amp;&amp;amp; !avail.isEmpty()){
                 //清算task和avail数组，直到task全部清完或服务器不够用为止
                 int[] first = avail.poll();
                 int[] cur = task.poll();
-                occupied.offer(new int[]{first[1], i + cur[1]});
+                occupied.offer(new long[]{first[1], (long)i + (long)cur[1]});
                 res[cur[0]] = first[1];   //分配task任务，并将res数组对应标记
             }
         }
         //任务全部入队，task队列中可能还存在任务
         while(!task.isEmpty() &amp;amp;&amp;amp; !occupied.isEmpty()){
             //若while循环满足，则表示清算结束avail数组已空，task中仍有任务
-            int time = occupied.peek()[1]; //寻找occupied释放的下一个时间点
-            while(occupied.peek()[1] == time){
+            long time = occupied.peek()[1]; //寻找occupied释放的下一个时间点
+            while(!occupied.isEmpty() &amp;amp;&amp;amp; occupied.peek()[1] == time){
                 //将对应时间的占用服务器全部释放
-                int[] new_task = occupied.poll();
-                avail.add(new int[]{servers[new_task[0]], new_task[0]});
+                long[] new_task = occupied.poll();
+                avail.add(new int[]{servers[(int)new_task[0]], (int)new_task[0]});
             }
             while(!task.isEmpty() &amp;amp;&amp;amp; !avail.isEmpty()){
                 //对task和avail执行清算
                 int[] first = avail.poll();
                 int[] cur = task.poll();
-                occupied.offer(new int[]{first[1], time + cur[1]});
+                occupied.offer(new long[]{first[1], (long)time + (long)cur[1]});
                 res[cur[0]] = first[1];
             }
         }
