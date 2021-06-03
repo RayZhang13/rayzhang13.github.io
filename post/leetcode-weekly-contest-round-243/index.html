@@ -9,7 +9,7 @@
 <meta name="description" content="Everything&#39;s gonna be just fine.">
 <meta name="theme-color" content="#000">
 <title>Leetcode Weekly Contest Round 243 | Ray&#39;s Blog</title>
-<link rel="shortcut icon" href="/favicon.ico?v=1622631179305">
+<link rel="shortcut icon" href="/favicon.ico?v=1622688055940">
 <link rel="stylesheet" href="/media/css/pisces.css">
 <link rel="stylesheet" href="/media/fonts/font-awesome.css">
 <link
@@ -1690,6 +1690,127 @@ Process finished with exit code 0
 &lt;/code&gt;&lt;/pre&gt;
 &lt;/li&gt;
 &lt;/ol&gt;
+&lt;h2 id=&#34;bean的作用域&#34;&gt;Bean的作用域&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;singleton&lt;br&gt;
+在SpringIOC容器中仅存在唯一一个Bean实例，Bean以单实例的方式存在&lt;/li&gt;
+&lt;li&gt;prototype&lt;br&gt;
+每次调用getBean（）是都会返回一个新的实例&lt;/li&gt;
+&lt;li&gt;request（创建一个新的bean）&lt;br&gt;
+每次HTTP请求都会创建一个新的Bean，作用域仅适用于WebApplicationContext环境&lt;/li&gt;
+&lt;li&gt;session（一个会话中共享bean）&lt;br&gt;
+同一个HTTP Session 共享一个Bean，不同的HTTP Session 使用不同的Bean。该作用域适用于WebApplicationContext环境&lt;br&gt;
+示例：&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code class=&#34;language-xml&#34;&gt;&amp;lt;bean id=&amp;quot;User&amp;quot; class=&amp;quot;com.ray.pojo.User&amp;quot; scope=&amp;quot;singleton&amp;quot;&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;bean的生命周期&#34;&gt;Bean的生命周期&lt;/h2&gt;
+&lt;h3 id=&#34;四个阶段&#34;&gt;四个阶段&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;实例化 Instantiation&lt;/li&gt;
+&lt;li&gt;属性赋值 Populate&lt;/li&gt;
+&lt;li&gt;初始化 Initialization&lt;/li&gt;
+&lt;li&gt;销毁 Destruction&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;protected Object doCreateBean(String beanName, RootBeanDefinition mbd, @Nullable Object[] args) throws BeanCreationException {
+        BeanWrapper instanceWrapper = null;
+        if (mbd.isSingleton()) {
+            instanceWrapper = (BeanWrapper)this.factoryBeanInstanceCache.remove(beanName);
+        }
+
+        if (instanceWrapper == null) {
+            instanceWrapper = this.createBeanInstance(beanName, mbd, args);
+        }
+
+        Object bean = instanceWrapper.getWrappedInstance();
+        Class&amp;lt;?&amp;gt; beanType = instanceWrapper.getWrappedClass();
+        if (beanType != NullBean.class) {
+            mbd.resolvedTargetType = beanType;
+        }
+
+        synchronized(mbd.postProcessingLock) {
+            if (!mbd.postProcessed) {
+                try {
+                    this.applyMergedBeanDefinitionPostProcessors(mbd, beanType, beanName);
+                } catch (Throwable var17) {
+                    throw new BeanCreationException(mbd.getResourceDescription(), beanName, &amp;quot;Post-processing of merged bean definition failed&amp;quot;, var17);
+                }
+
+                mbd.postProcessed = true;
+            }
+        }
+
+        boolean earlySingletonExposure = mbd.isSingleton() &amp;amp;&amp;amp; this.allowCircularReferences &amp;amp;&amp;amp; this.isSingletonCurrentlyInCreation(beanName);
+        if (earlySingletonExposure) {
+            if (this.logger.isTraceEnabled()) {
+                this.logger.trace(&amp;quot;Eagerly caching bean &#39;&amp;quot; + beanName + &amp;quot;&#39; to allow for resolving potential circular references&amp;quot;);
+            }
+
+            this.addSingletonFactory(beanName, () -&amp;gt; {
+                return this.getEarlyBeanReference(beanName, mbd, bean);
+            });
+        }
+
+        Object exposedObject = bean;
+
+        try {
+            this.populateBean(beanName, mbd, instanceWrapper);
+            exposedObject = this.initializeBean(beanName, exposedObject, mbd);
+        } catch (Throwable var18) {
+            if (var18 instanceof BeanCreationException &amp;amp;&amp;amp; beanName.equals(((BeanCreationException)var18).getBeanName())) {
+                throw (BeanCreationException)var18;
+            }
+
+            throw new BeanCreationException(mbd.getResourceDescription(), beanName, &amp;quot;Initialization of bean failed&amp;quot;, var18);
+        }
+
+        if (earlySingletonExposure) {
+            Object earlySingletonReference = this.getSingleton(beanName, false);
+            if (earlySingletonReference != null) {
+                if (exposedObject == bean) {
+                    exposedObject = earlySingletonReference;
+                } else if (!this.allowRawInjectionDespiteWrapping &amp;amp;&amp;amp; this.hasDependentBean(beanName)) {
+                    String[] dependentBeans = this.getDependentBeans(beanName);
+                    Set&amp;lt;String&amp;gt; actualDependentBeans = new LinkedHashSet(dependentBeans.length);
+                    String[] var12 = dependentBeans;
+                    int var13 = dependentBeans.length;
+
+                    for(int var14 = 0; var14 &amp;lt; var13; ++var14) {
+                        String dependentBean = var12[var14];
+                        if (!this.removeSingletonIfCreatedForTypeCheckOnly(dependentBean)) {
+                            actualDependentBeans.add(dependentBean);
+                        }
+                    }
+
+                    if (!actualDependentBeans.isEmpty()) {
+                        throw new BeanCurrentlyInCreationException(beanName, &amp;quot;Bean with name &#39;&amp;quot; + beanName + &amp;quot;&#39; has been injected into other beans [&amp;quot; + StringUtils.collectionToCommaDelimitedString(actualDependentBeans) + &amp;quot;] in its raw version as part of a circular reference, but has eventually been wrapped. This means that said other beans do not use the final version of the bean. This is often the result of over-eager type matching - consider using &#39;getBeanNamesForType&#39; with the &#39;allowEagerInit&#39; flag turned off, for example.&amp;quot;);
+                    }
+                }
+            }
+        }
+
+        try {
+            this.registerDisposableBeanIfNecessary(beanName, bean, mbd);
+            return exposedObject;
+        } catch (BeanDefinitionValidationException var16) {
+            throw new BeanCreationException(mbd.getResourceDescription(), beanName, &amp;quot;Invalid destruction signature&amp;quot;, var16);
+        }
+    }
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;doCreateBean()方法中调用了以下三个方法&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;createBeanInstance() -&amp;gt; 实例化&lt;/li&gt;
+&lt;li&gt;populateBean() -&amp;gt; 属性赋值&lt;/li&gt;
+&lt;li&gt;initializeBean() -&amp;gt; 初始化&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;销毁是在ConfigurableApplicationContext#close()中使用的，是在容器关闭时调用的&lt;/p&gt;
+&lt;h3 id=&#34;拓展点&#34;&gt;拓展点&lt;/h3&gt;
+&lt;ul&gt;
+&lt;li&gt;影响多个Bean&lt;br&gt;
+&lt;img src=&#34;https://rayzhang13.github.io/post-images/1622680458805.webp&#34; alt=&#34;&#34; loading=&#34;lazy&#34;&gt;&lt;br&gt;
+后置处理器：InstantiationAwareBeanPostProcessor作用于实例化阶段的前后，BeanPostProcessor作用于初始化阶段的前后。正好和第一、第三个生命周期阶段对应。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;InstantiationAwareBeanPostProcessor实际上继承了BeanPostProcessor接口，严格意义上来看他们不是两兄弟，而是两父子。但是从生命周期角度我们重点关注其特有的对实例化阶段的影响&lt;/p&gt;
 ">Spring 学习笔记</a>
       </div>
       
