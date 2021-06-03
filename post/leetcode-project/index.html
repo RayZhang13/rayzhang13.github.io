@@ -9,7 +9,7 @@
 <meta name="description" content="Everything&#39;s gonna be just fine.">
 <meta name="theme-color" content="#000">
 <title>Leetcode刷题计划 | Ray&#39;s Blog</title>
-<link rel="shortcut icon" href="/favicon.ico?v=1622742213989">
+<link rel="shortcut icon" href="/favicon.ico?v=1622742799186">
 <link rel="stylesheet" href="/media/css/pisces.css">
 <link rel="stylesheet" href="/media/fonts/font-awesome.css">
 <link
@@ -1441,10 +1441,29 @@ public class Role {
 在配置文件中加入&lt;code&gt;&amp;lt;beans default-autowire=&amp;quot;byType&amp;quot;&amp;gt;&lt;/code&gt;&lt;/p&gt;
 &lt;h2 id=&#34;自动装配中的循环依赖&#34;&gt;自动装配中的循环依赖&lt;/h2&gt;
 &lt;p&gt;依赖注入稍不注意就会出现循环依赖：&lt;br&gt;
-Bean之间的依赖顺序： BeanA -&amp;gt; BeanB -&amp;gt; BeanA&lt;br&gt;
-即BeanA对象中引用了BeanB对象，而BeanB对象中又引用 了BeanA&lt;/p&gt;
+Bean之间的依赖顺序： BeanA -&amp;gt; BeanB -&amp;gt; BeanC -&amp;gt; Bean&lt;br&gt;
+即BeanA对象中引用了BeanB对象，而BeanB对象中又引用了BeanC，BeanC最终又引用了BeanA&lt;/p&gt;
 &lt;p&gt;&lt;font color=#DC143C&gt;&lt;b&gt;解决方法：递归，三级缓存&lt;/b&gt;&lt;/font&gt;&lt;br&gt;
 类似于执行图的深拷贝等类似的过程，无向图中我们使用&lt;code&gt;Map&amp;lt;Node, Node&amp;gt;&lt;/code&gt;的方式，在遍历未完成节点的同时将已经完成拷贝的节点用Map的形式标记出来，下次再连接时直接从Map中取即可（我们可以看做是二级缓存？）&lt;/p&gt;
+&lt;p&gt;下面是未解决循环依赖的常规步骤：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;实例化 A，此时 A 还未完成属性填充和初始化方法（@PostConstruct）的执行。&lt;/li&gt;
+&lt;li&gt;A 对象发现需要注入 B 对象，但是容器中并没有 B 对象（如果对象创建完成并且属性注入完成和执行完初始化方法就会放入容器中）。&lt;/li&gt;
+&lt;li&gt;实例化 B，此时 B 还未完成属性填充和初始化方法（@PostConstruct）的执行。&lt;/li&gt;
+&lt;li&gt;B 对象发现需要注入 C 对象，但是容器中并没有 C 对象。&lt;/li&gt;
+&lt;li&gt;实例化 C，此时 C 还未完成属性填充和初始化方法（@PostConstruct）的执行。&lt;/li&gt;
+&lt;li&gt;C 对象发现需要注入 A 对象，但是容器中并没有 A 对象。&lt;/li&gt;
+&lt;li&gt;重复步骤 1。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;我们很容易的能够看出常规的解决循环依赖的步骤在这里并不起作用&lt;/p&gt;
+&lt;p&gt;从而引入&lt;strong&gt;三级缓存&lt;/strong&gt;的概念&lt;/p&gt;
+&lt;h2 id=&#34;三级缓存&#34;&gt;三级缓存&lt;/h2&gt;
+&lt;p&gt;以下为三级缓存的对应作用&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;singletonObjects 一级缓存，存放完整的 Bean。&lt;/li&gt;
+&lt;li&gt;earlySingletonObjects 二级缓存，存放提前暴露的Bean，Bean 是不完整的，未完成属性注入和执行 init 方法。&lt;/li&gt;
+&lt;li&gt;singletonFactories 三级缓存，存放的是 Bean 工厂，主要是生产 Bean，存放到二级缓存中。&lt;/li&gt;
+&lt;/ul&gt;
 ">Spring 学习笔记（持续更新）</a>
       </div>
       
