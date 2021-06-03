@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://rayzhang13.github.io</id>
     <title>Ray&apos;s Blog</title>
-    <updated>2021-06-03T17:38:03.763Z</updated>
+    <updated>2021-06-03T17:43:36.837Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://rayzhang13.github.io"/>
     <link rel="self" href="https://rayzhang13.github.io/atom.xml"/>
@@ -15,7 +15,7 @@
         <id>https://rayzhang13.github.io/post/spring-notes/</id>
         <link href="https://rayzhang13.github.io/post/spring-notes/">
         </link>
-        <updated>2021-05-31T05:21:07.000Z</updated>
+        <updated>2021-06-03T16:00:00.000Z</updated>
         <summary type="html"><![CDATA[<p>Spring之前学的太仓促了，现在来总结一下<br>
 <a href="https://docs.spring.io/spring-framework/docs/current/reference/html/index.html">Spring Framework Documentation</a></p>
 ]]></summary>
@@ -345,7 +345,7 @@ Process finished with exit code 0
 后置处理器：InstantiationAwareBeanPostProcessor作用于实例化阶段的前后，BeanPostProcessor作用于初始化阶段的前后。正好和第一、第三个生命周期阶段对应。</p>
 <p>InstantiationAwareBeanPostProcessor实际上继承了BeanPostProcessor接口，严格意义上来看他们不是两兄弟，而是两父子。但是从生命周期角度我们重点关注其特有的对实例化阶段的影响</p>
 <h2 id="bean自动装配">Bean自动装配</h2>
-<h2 id="装配模式介绍">装配模式介绍</h2>
+<h3 id="装配模式介绍">装配模式介绍</h3>
 <p>Spring 容器可以在不使用<constructor-arg>和<property> 元素的情况下自动装配相互协作的 bean 之间的关系，这有助于减少编写一个大的基于 Spring 的应用程序的 XML 配置的数量。</p>
 <pre><code class="language-java">public interface AutowireCapableBeanFactory{
 	//无需自动装配
@@ -369,8 +369,8 @@ Process finished with exit code 0
 <li>constructor	类似于 byType，但该类型适用于构造函数参数类型。如果在容器中没有一个构造函数参数类型的 bean，则一个致命错误将会发生。</li>
 <li><font color=#00FF00>autodetect（3.0版本不支持deprecated）</font>Spring首先尝试通过 constructor 使用自动装配来连接，如果它不执行，Spring 尝试通过 byType 来自动装配。</li>
 </ol>
-<h2 id="示例">示例</h2>
-<h3 id="byname">byName</h3>
+<h3 id="示例">示例</h3>
+<h4 id="byname">byName</h4>
 <pre><code class="language-java">package com.ray.pojo;
 public class Role {
     public User user;
@@ -408,7 +408,7 @@ User{name='Ray', id=123}
 Process finished with exit code 0
 </code></pre>
 <p>值得注意的是自动装配使用byName时，其id值为<code>&quot;user&quot;</code>与<code>Role</code>中的属性名称<code>&quot;user&quot;</code>相对应，若不对应则无法将对应参数进行填充。参数填充时需要与setter方法配合。</p>
-<h3 id="bytype">byType</h3>
+<h4 id="bytype">byType</h4>
 <p>类似的：</p>
 <pre><code class="language-java">package com.ray.pojo;
 public class Role {
@@ -447,7 +447,7 @@ User{name='Ray', id=123}
 Process finished with exit code 0
 </code></pre>
 <p>如果bean的类型匹配配置文件中的一个确切的 bean 名称，它将尝试匹配和连接属性的类型。例如通过<code>Roles</code>类中的<code>com.ray.pojo.User</code>匹配到bean.xml中的<code>user</code> bean。参数填充时需要与setter方法配合。</p>
-<h3 id="constructor">constructor</h3>
+<h4 id="constructor">constructor</h4>
 <pre><code class="language-java">package com.ray.pojo;
 public class Role {
     public User user;
@@ -475,7 +475,7 @@ public class Role {
 </code></pre>
 <p>类似byType，按照类型进行匹配，但是不完全一样<br>
 填充属性时，调用构造contructor方法，因此bean.xml中必须有与constructor方法参数中对应的已注册的bean，否则会发生错误</p>
-<h3 id="default-autowire">default-autowire</h3>
+<h4 id="default-autowire">default-autowire</h4>
 <p>默认情况下，default-autowire属性被设置为none，标示所有的Bean都不使用自动装配，除非Bean上配置了autowire属性。 如果你需要为所有的Bean配置相同的autowire属性，有个办法可以简化这一操作。<br>
 在配置文件中加入<code>&lt;beans default-autowire=&quot;byType&quot;&gt;</code></p>
 <h2 id="自动装配中的循环依赖">自动装配中的循环依赖</h2>

@@ -9,7 +9,7 @@
 <meta name="description" content="Everything&#39;s gonna be just fine.">
 <meta name="theme-color" content="#000">
 <title>Leetcode Weekly Contest Round 243 | Ray&#39;s Blog</title>
-<link rel="shortcut icon" href="/favicon.ico?v=1622741879777">
+<link rel="shortcut icon" href="/favicon.ico?v=1622742213989">
 <link rel="stylesheet" href="/media/css/pisces.css">
 <link rel="stylesheet" href="/media/fonts/font-awesome.css">
 <link
@@ -1809,7 +1809,7 @@ Process finished with exit code 0
 后置处理器：InstantiationAwareBeanPostProcessor作用于实例化阶段的前后，BeanPostProcessor作用于初始化阶段的前后。正好和第一、第三个生命周期阶段对应。&lt;/p&gt;
 &lt;p&gt;InstantiationAwareBeanPostProcessor实际上继承了BeanPostProcessor接口，严格意义上来看他们不是两兄弟，而是两父子。但是从生命周期角度我们重点关注其特有的对实例化阶段的影响&lt;/p&gt;
 &lt;h2 id=&#34;bean自动装配&#34;&gt;Bean自动装配&lt;/h2&gt;
-&lt;h2 id=&#34;装配模式介绍&#34;&gt;装配模式介绍&lt;/h2&gt;
+&lt;h3 id=&#34;装配模式介绍&#34;&gt;装配模式介绍&lt;/h3&gt;
 &lt;p&gt;Spring 容器可以在不使用&lt;constructor-arg&gt;和&lt;property&gt; 元素的情况下自动装配相互协作的 bean 之间的关系，这有助于减少编写一个大的基于 Spring 的应用程序的 XML 配置的数量。&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public interface AutowireCapableBeanFactory{
 	//无需自动装配
@@ -1833,8 +1833,8 @@ Process finished with exit code 0
 &lt;li&gt;constructor	类似于 byType，但该类型适用于构造函数参数类型。如果在容器中没有一个构造函数参数类型的 bean，则一个致命错误将会发生。&lt;/li&gt;
 &lt;li&gt;&lt;font color=#00FF00&gt;autodetect（3.0版本不支持deprecated）&lt;/font&gt;Spring首先尝试通过 constructor 使用自动装配来连接，如果它不执行，Spring 尝试通过 byType 来自动装配。&lt;/li&gt;
 &lt;/ol&gt;
-&lt;h2 id=&#34;示例&#34;&gt;示例&lt;/h2&gt;
-&lt;h3 id=&#34;byname&#34;&gt;byName&lt;/h3&gt;
+&lt;h3 id=&#34;示例&#34;&gt;示例&lt;/h3&gt;
+&lt;h4 id=&#34;byname&#34;&gt;byName&lt;/h4&gt;
 &lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;package com.ray.pojo;
 public class Role {
     public User user;
@@ -1872,7 +1872,7 @@ User{name=&#39;Ray&#39;, id=123}
 Process finished with exit code 0
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;值得注意的是自动装配使用byName时，其id值为&lt;code&gt;&amp;quot;user&amp;quot;&lt;/code&gt;与&lt;code&gt;Role&lt;/code&gt;中的属性名称&lt;code&gt;&amp;quot;user&amp;quot;&lt;/code&gt;相对应，若不对应则无法将对应参数进行填充。参数填充时需要与setter方法配合。&lt;/p&gt;
-&lt;h3 id=&#34;bytype&#34;&gt;byType&lt;/h3&gt;
+&lt;h4 id=&#34;bytype&#34;&gt;byType&lt;/h4&gt;
 &lt;p&gt;类似的：&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;package com.ray.pojo;
 public class Role {
@@ -1911,7 +1911,7 @@ User{name=&#39;Ray&#39;, id=123}
 Process finished with exit code 0
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;如果bean的类型匹配配置文件中的一个确切的 bean 名称，它将尝试匹配和连接属性的类型。例如通过&lt;code&gt;Roles&lt;/code&gt;类中的&lt;code&gt;com.ray.pojo.User&lt;/code&gt;匹配到bean.xml中的&lt;code&gt;user&lt;/code&gt; bean。参数填充时需要与setter方法配合。&lt;/p&gt;
-&lt;h3 id=&#34;constructor&#34;&gt;constructor&lt;/h3&gt;
+&lt;h4 id=&#34;constructor&#34;&gt;constructor&lt;/h4&gt;
 &lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;package com.ray.pojo;
 public class Role {
     public User user;
@@ -1939,7 +1939,7 @@ public class Role {
 &lt;/code&gt;&lt;/pre&gt;
 &lt;p&gt;类似byType，按照类型进行匹配，但是不完全一样&lt;br&gt;
 填充属性时，调用构造contructor方法，因此bean.xml中必须有与constructor方法参数中对应的已注册的bean，否则会发生错误&lt;/p&gt;
-&lt;h3 id=&#34;default-autowire&#34;&gt;default-autowire&lt;/h3&gt;
+&lt;h4 id=&#34;default-autowire&#34;&gt;default-autowire&lt;/h4&gt;
 &lt;p&gt;默认情况下，default-autowire属性被设置为none，标示所有的Bean都不使用自动装配，除非Bean上配置了autowire属性。 如果你需要为所有的Bean配置相同的autowire属性，有个办法可以简化这一操作。&lt;br&gt;
 在配置文件中加入&lt;code&gt;&amp;lt;beans default-autowire=&amp;quot;byType&amp;quot;&amp;gt;&lt;/code&gt;&lt;/p&gt;
 &lt;h2 id=&#34;自动装配中的循环依赖&#34;&gt;自动装配中的循环依赖&lt;/h2&gt;
