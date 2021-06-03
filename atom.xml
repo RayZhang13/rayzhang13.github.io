@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://rayzhang13.github.io</id>
     <title>Ray&apos;s Blog</title>
-    <updated>2021-06-03T02:40:58.795Z</updated>
+    <updated>2021-06-03T17:38:03.763Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://rayzhang13.github.io"/>
     <link rel="self" href="https://rayzhang13.github.io/atom.xml"/>
@@ -11,7 +11,7 @@
     <icon>https://rayzhang13.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, Ray&apos;s Blog</rights>
     <entry>
-        <title type="html"><![CDATA[Spring 学习笔记]]></title>
+        <title type="html"><![CDATA[Spring 学习笔记（持续更新）]]></title>
         <id>https://rayzhang13.github.io/post/spring-notes/</id>
         <link href="https://rayzhang13.github.io/post/spring-notes/">
         </link>
@@ -156,10 +156,10 @@ Process finished with exit code 0
 <h2 id="ioc创建对象方式">IoC创建对象方式</h2>
 <ol>
 <li>
-<p>默认使用无参构造，然后根据bean中设置的property属性调用对应的Setter方法。</p>
+<p>默认使用无参构造，然后根据bean中设置的property属性调用对应的Setter方法。<font color=#DC143C>亦可通过p命名空间实现</font></p>
 </li>
 <li>
-<p>可以采用constructor-arg进行下标赋值</p>
+<p>可以采用constructor-arg进行下标赋值<font color=#DC143C>亦可通过c命名空间实现</font></p>
 <ul>
 <li>下标赋值</li>
 </ul>
@@ -341,12 +341,149 @@ Process finished with exit code 0
 </ul>
 <p>销毁是在ConfigurableApplicationContext#close()中使用的，是在容器关闭时调用的</p>
 <h3 id="拓展点">拓展点</h3>
-<ul>
-<li>影响多个Bean<br>
-<img src="https://rayzhang13.github.io/post-images/1622680458805.webp" alt="" loading="lazy"><br>
-后置处理器：InstantiationAwareBeanPostProcessor作用于实例化阶段的前后，BeanPostProcessor作用于初始化阶段的前后。正好和第一、第三个生命周期阶段对应。</li>
-</ul>
+<p><img src="https://rayzhang13.github.io/post-images/1622680458805.webp" alt="" loading="lazy"><br>
+后置处理器：InstantiationAwareBeanPostProcessor作用于实例化阶段的前后，BeanPostProcessor作用于初始化阶段的前后。正好和第一、第三个生命周期阶段对应。</p>
 <p>InstantiationAwareBeanPostProcessor实际上继承了BeanPostProcessor接口，严格意义上来看他们不是两兄弟，而是两父子。但是从生命周期角度我们重点关注其特有的对实例化阶段的影响</p>
+<h2 id="bean自动装配">Bean自动装配</h2>
+<h2 id="装配模式介绍">装配模式介绍</h2>
+<p>Spring 容器可以在不使用<constructor-arg>和<property> 元素的情况下自动装配相互协作的 bean 之间的关系，这有助于减少编写一个大的基于 Spring 的应用程序的 XML 配置的数量。</p>
+<pre><code class="language-java">public interface AutowireCapableBeanFactory{
+	//无需自动装配
+	int AUTOWIRE_NO = 0;
+	//按名称自动装配bean属性
+	int AUTOWIRE_BY_NAME = 1;
+	//按类型自动装配bean属性
+	int AUTOWIRE_BY_TYPE = 2;
+	//按构造器自动装配
+	int AUTOWIRE_CONSTRUCTOR = 3;
+	//过时方法，Spring3.0之后不再支持
+	@Deprecated
+	int AUTOWIRE_AUTODETECT = 4;
+}
+</code></pre>
+<p>下列自动装配模式，它们可用于指示 Spring 容器为来使用自动装配进行依赖注入。你可以使用<bean>元素的 autowire 属性为一个 bean 定义指定自动装配模式。</p>
+<ol>
+<li>no	这是默认的设置，它意味着没有自动装配，你应该使用显式的bean引用来连线。你不用为了连线做特殊的事。</li>
+<li>byName	由属性名自动装配。Spring 容器看到在 XML 配置文件中 bean 的自动装配的属性设置为 byName。然后尝试匹配，并且将它的属性与在配置文件中被定义为相同名称的 beans 的属性进行连接。</li>
+<li>byType	由属性数据类型自动装配。Spring 容器看到在 XML 配置文件中 bean 的自动装配的属性设置为 byType。然后如果它的类型匹配配置文件中的一个确切的 bean 名称，它将尝试匹配和连接属性的类型。<font color=#DC143C>如果存在不止一个这样的 bean，则一个致命的异常将会被抛出。</font></li>
+<li>constructor	类似于 byType，但该类型适用于构造函数参数类型。如果在容器中没有一个构造函数参数类型的 bean，则一个致命错误将会发生。</li>
+<li><font color=#00FF00>autodetect（3.0版本不支持deprecated）</font>Spring首先尝试通过 constructor 使用自动装配来连接，如果它不执行，Spring 尝试通过 byType 来自动装配。</li>
+</ol>
+<h2 id="示例">示例</h2>
+<h3 id="byname">byName</h3>
+<pre><code class="language-java">package com.ray.pojo;
+public class Role {
+    public User user;
+    public void setUser(User user) {
+        this.user = user;
+    }
+}
+</code></pre>
+<pre><code class="language-java">package com.ray.pojo;
+public class Role {
+    public User user;
+    public void setUser(User user) {
+        this.user = user;
+    }
+}
+</code></pre>
+<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
+       xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+       xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd&quot;&gt;
+    &lt;bean id=&quot;user&quot; class=&quot;com.ray.pojo.User&quot;&gt;
+        &lt;property name=&quot;name&quot; value=&quot;Ray&quot;/&gt;
+        &lt;property name=&quot;id&quot; value=&quot;123&quot;/&gt;
+    &lt;/bean&gt;
+    &lt;bean id=&quot;role&quot; class=&quot;com.ray.pojo.Role&quot; autowire=&quot;byName&quot;/&gt;
+&lt;/beans&gt;
+</code></pre>
+<p>结果：</p>
+<pre><code class="language-bash">调用无参构造
+调用setName
+调用setId
+User{name='Ray', id=123}
+
+Process finished with exit code 0
+</code></pre>
+<p>值得注意的是自动装配使用byName时，其id值为<code>&quot;user&quot;</code>与<code>Role</code>中的属性名称<code>&quot;user&quot;</code>相对应，若不对应则无法将对应参数进行填充。参数填充时需要与setter方法配合。</p>
+<h3 id="bytype">byType</h3>
+<p>类似的：</p>
+<pre><code class="language-java">package com.ray.pojo;
+public class Role {
+    public User user;
+    public void setUser(User user) {
+        this.user = user;
+    }
+}
+</code></pre>
+<pre><code class="language-java">package com.ray.pojo;
+public class Role {
+    public User user;
+    public void setUser(User user) {
+        this.user = user;
+    }
+}
+</code></pre>
+<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
+       xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+       xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd&quot;&gt;
+    &lt;bean id=&quot;user&quot; class=&quot;com.ray.pojo.User&quot;&gt;
+        &lt;property name=&quot;name&quot; value=&quot;Ray&quot;/&gt;
+        &lt;property name=&quot;id&quot; value=&quot;123&quot;/&gt;
+    &lt;/bean&gt;
+    &lt;bean id=&quot;role&quot; class=&quot;com.ray.pojo.Role&quot; autowire=&quot;byType&quot;/&gt;
+&lt;/beans&gt;
+</code></pre>
+<p>结果：</p>
+<pre><code class="language-bash">调用无参构造
+调用setName
+调用setId
+User{name='Ray', id=123}
+
+Process finished with exit code 0
+</code></pre>
+<p>如果bean的类型匹配配置文件中的一个确切的 bean 名称，它将尝试匹配和连接属性的类型。例如通过<code>Roles</code>类中的<code>com.ray.pojo.User</code>匹配到bean.xml中的<code>user</code> bean。参数填充时需要与setter方法配合。</p>
+<h3 id="constructor">constructor</h3>
+<pre><code class="language-java">package com.ray.pojo;
+public class Role {
+    public User user;
+    public void setUser(User user) {
+        this.user = user;
+    }
+    public Role() {
+    }
+    public Role(User user) {
+        this.user = user;
+    }
+}
+</code></pre>
+<pre><code class="language-xml">&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot;?&gt;
+&lt;beans xmlns=&quot;http://www.springframework.org/schema/beans&quot;
+       xmlns:xsi=&quot;http://www.w3.org/2001/XMLSchema-instance&quot;
+       xsi:schemaLocation=&quot;http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd&quot;&gt;
+    &lt;bean id=&quot;user&quot; class=&quot;com.ray.pojo.User&quot;&gt;
+        &lt;property name=&quot;name&quot; value=&quot;Ray&quot;/&gt;
+        &lt;property name=&quot;id&quot; value=&quot;123&quot;/&gt;
+    &lt;/bean&gt;
+    &lt;bean id=&quot;role&quot; class=&quot;com.ray.pojo.Role&quot; autowire=&quot;constructor&quot;/&gt;
+&lt;/beans&gt;
+</code></pre>
+<p>类似byType，按照类型进行匹配，但是不完全一样<br>
+填充属性时，调用构造contructor方法，因此bean.xml中必须有与constructor方法参数中对应的已注册的bean，否则会发生错误</p>
+<h3 id="default-autowire">default-autowire</h3>
+<p>默认情况下，default-autowire属性被设置为none，标示所有的Bean都不使用自动装配，除非Bean上配置了autowire属性。 如果你需要为所有的Bean配置相同的autowire属性，有个办法可以简化这一操作。<br>
+在配置文件中加入<code>&lt;beans default-autowire=&quot;byType&quot;&gt;</code></p>
+<h2 id="自动装配中的循环依赖">自动装配中的循环依赖</h2>
+<p>依赖注入稍不注意就会出现循环依赖：<br>
+Bean之间的依赖顺序： BeanA -&gt; BeanB -&gt; BeanA<br>
+即BeanA对象中引用了BeanB对象，而BeanB对象中又引用 了BeanA</p>
+<p><font color=#DC143C><b>解决方法：递归，三级缓存</b></font><br>
+类似于执行图的深拷贝等类似的过程，无向图中我们使用<code>Map&lt;Node, Node&gt;</code>的方式，在遍历未完成节点的同时将已经完成拷贝的节点用Map的形式标记出来，下次再连接时直接从Map中取即可（我们可以看做是二级缓存？）</p>
 ]]></content>
     </entry>
     <entry>
