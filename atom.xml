@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://rayzhang13.github.io</id>
     <title>Ray&apos;s Blog</title>
-    <updated>2021-06-04T08:07:45.492Z</updated>
+    <updated>2021-06-04T13:50:53.874Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://rayzhang13.github.io"/>
     <link rel="self" href="https://rayzhang13.github.io/atom.xml"/>
@@ -22,8 +22,8 @@
         <content type="html"><![CDATA[<p>Spring之前学的太仓促了，现在来总结一下<br>
 <a href="https://docs.spring.io/spring-framework/docs/current/reference/html/index.html">Spring Framework Documentation</a></p>
 <!-- more -->
-<h1 id="简介"><img src="https://rayzhang13.github.io/post-images/1622794061089.png" alt="" loading="lazy"><br>
-简介</h1>
+<figure data-type="image" tabindex="1"><img src="https://rayzhang13.github.io/post-images/1622794061089.png" alt="" loading="lazy"></figure>
+<h1 id="简介">简介</h1>
 <p>Spring是一个开源框架，Spring是于2003 年兴起的一个轻量级的Java 开发框架，由Rod Johnson 在其著作Expert One-On-One J2EE Development and Design中阐述的部分理念和原型衍生而来。它是为了解决企业应用开发的复杂性而创建的。框架的主要优势之一就是其分层架构，分层架构允许使用者选择使用哪一个组件，同时为 J2EE 应用程序开发提供集成的框架。Spring使用基本的JavaBean来完成以前只可能由EJB完成的事情。然而，Spring的用途不仅限于服务器端的开发。从简单性、可测试性和松耦合的角度而言，任何Java应用都可以从Spring中受益。Spring的核心是控制反转（IoC）和面向切面（AOP）。<br>
 <strong>简单来说，Spring是一个分层的JavaSE/EE full-stack(一站式) 轻量级开源框架。</strong></p>
 <h1 id="spring-ioc">Spring IoC</h1>
@@ -481,29 +481,97 @@ public class Role {
 在配置文件中加入<code>&lt;beans default-autowire=&quot;byType&quot;&gt;</code></p>
 <h2 id="自动装配中的循环依赖">自动装配中的循环依赖</h2>
 <p>依赖注入稍不注意就会出现循环依赖：<br>
-Bean之间的依赖顺序： BeanA -&gt; BeanB -&gt; BeanC -&gt; Bean<br>
-即BeanA对象中引用了BeanB对象，而BeanB对象中又引用了BeanC，BeanC最终又引用了BeanA</p>
+Bean之间的依赖顺序： BeanA -&gt; BeanB -&gt; BeanA<br>
+即BeanA对象中引用了BeanB对象，而BeanB对象中又引用了BeanA</p>
 <p><font color=#DC143C><b>解决方法：递归，三级缓存</b></font><br>
-类似于执行图的深拷贝等类似的过程，无向图中我们使用<code>Map&lt;Node, Node&gt;</code>的方式，在遍历未完成节点的同时将已经完成拷贝的节点用Map的形式标记出来，下次再连接时直接从Map中取即可（我们可以看做是二级缓存？）</p>
+类似于执行图的深拷贝等类似的过程，无向图中我们使用<code>Map&lt;Node, Node&gt;</code>的方式，在遍历未完成节点的同时将已经完成拷贝的节点用Map的形式标记出来，下次再连接时直接从Map中取即可（可以认为是一级缓存？）</p>
 <p>下面是未解决循环依赖的常规步骤：</p>
 <ul>
 <li>实例化 A，此时 A 还未完成属性填充和初始化方法（@PostConstruct）的执行。</li>
 <li>A 对象发现需要注入 B 对象，但是容器中并没有 B 对象（如果对象创建完成并且属性注入完成和执行完初始化方法就会放入容器中）。</li>
 <li>实例化 B，此时 B 还未完成属性填充和初始化方法（@PostConstruct）的执行。</li>
-<li>B 对象发现需要注入 C 对象，但是容器中并没有 C 对象。</li>
-<li>实例化 C，此时 C 还未完成属性填充和初始化方法（@PostConstruct）的执行。</li>
-<li>C 对象发现需要注入 A 对象，但是容器中并没有 A 对象。</li>
+<li>B 对象发现需要注入 A 对象，但是容器中并没有 A 对象。</li>
 <li>重复步骤 1。</li>
 </ul>
 <p>我们很容易的能够看出常规的解决循环依赖的步骤在这里并不起作用</p>
 <p>从而引入<strong>三级缓存</strong>的概念</p>
 <h3 id="三级缓存">三级缓存</h3>
+<p>Spring解决循环依赖的核心思想在于<strong>提前曝光</strong></p>
+<pre><code class="language-java">/** Cache of singleton objects: bean name to bean instance. */
+private final Map&lt;String, Object&gt; singletonObjects = new ConcurrentHashMap&lt;&gt;(256);
+/** Cache of early singleton objects: bean name to bean instance. */
+private final Map&lt;String, Object&gt; earlySingletonObjects = new HashMap&lt;&gt;(16);
+/** Cache of singleton factories: bean name to ObjectFactory. */
+private final Map&lt;String, ObjectFactory&lt;?&gt;&gt; singletonFactories = new HashMap&lt;&gt;(16);
+/** Names of beans that are currently in creation. */
+// 这个缓存也十分重要：它表示bean创建过程中都会在里面呆着~
+// 它在Bean开始创建时放值，创建完成时会将其移出~
+private final Set&lt;String&gt; singletonsCurrentlyInCreation = Collections.newSetFromMap(new ConcurrentHashMap&lt;&gt;(16));
+/** Names of beans that have already been created at least once. */
+// 当这个Bean被创建完成后，会标记为这个 注意：这里是set集合 不会重复
+// 至少被创建了一次的  都会放进这里~~~~
+private final Set&lt;String&gt; alreadyCreated = Collections.newSetFromMap(new ConcurrentHashMap&lt;&gt;(256));
+</code></pre>
 <p>以下为三级缓存的对应作用</p>
 <ul>
 <li>singletonObjects 一级缓存，存放完整的 Bean。</li>
-<li>earlySingletonObjects 二级缓存，存放提前暴露的Bean，Bean 是不完整的，未完成属性注入和执行 init 方法。</li>
-<li>singletonFactories 三级缓存，存放的是 Bean 工厂，主要是生产 Bean，存放到二级缓存中。</li>
+<li>earlySingletonObjects 二级缓存，存放提前暴露的Bean，Bean 是不完整的，未完成属性注入和执行 init 方法。<strong>用以解决循环依赖。</strong></li>
+<li>singletonFactories 三级缓存，存放的是 Bean 工厂，主要是生产 Bean，存放到二级缓存中。<strong>用以解决循环依赖。</strong></li>
 </ul>
+<p>获取单例Bean的源码如下：</p>
+<pre><code class="language-java">public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements SingletonBeanRegistry {
+	...
+	@Override
+	@Nullable
+	public Object getSingleton(String beanName) {
+		return getSingleton(beanName, true);
+	}
+	@Nullable
+	protected Object getSingleton(String beanName, boolean allowEarlyReference) {
+		Object singletonObject = this.singletonObjects.get(beanName);
+		if (singletonObject == null &amp;&amp; isSingletonCurrentlyInCreation(beanName)) {
+			synchronized (this.singletonObjects) {
+				singletonObject = this.earlySingletonObjects.get(beanName);
+				if (singletonObject == null &amp;&amp; allowEarlyReference) {
+					ObjectFactory&lt;?&gt; singletonFactory = this.singletonFactories.get(beanName);
+					if (singletonFactory != null) {
+						singletonObject = singletonFactory.getObject();
+						this.earlySingletonObjects.put(beanName, singletonObject);
+						this.singletonFactories.remove(beanName);
+					}
+				}
+			}
+		}
+		return singletonObject;
+	}
+	...
+	public boolean isSingletonCurrentlyInCreation(String beanName) {
+		return this.singletonsCurrentlyInCreation.contains(beanName);
+	}
+	protected boolean isActuallyInCreation(String beanName) {
+		return isSingletonCurrentlyInCreation(beanName);
+	}
+	...
+}
+</code></pre>
+<ul>
+<li>A半成品加入第三级缓存</li>
+<li>A填充属性注入B -&gt; 创建B对象 -&gt; B半成品加入第三级缓存</li>
+<li>B填充属性注入A -&gt; 创建A代理对象，从第三级缓存移除A对象，A代理对象加入第二级缓存（此时A还是半成品，B注入的是A代理对象）</li>
+<li>创建B代理对象（此时B是完成品） -&gt; 从第三级缓存移除B对象，B代理对象加入第一级缓存</li>
+<li>A半成品注入B代理对象</li>
+<li>从第二级缓存移除A代理对象，A代理对象加入第一级缓存</li>
+</ul>
+<p><font color=#DC143C><b>PS: 加入singletonFactories三级缓存的前提是执行了构造器，所以构造器的循环依赖没法解决</b></font></p>
+<h3 id="是否可以去掉第二级缓存">是否可以去掉第二级缓存？</h3>
+<p><font color=#DC143C><b>关键在于AOP</b></font><br>
+现在有A的field或者setter依赖B的实例对象，同时B的field或者setter依赖了A的实例，A首先开始创建，并将自己暴露到 earlySingletonObjects 中，开始填充属性，此时发现自己依赖B的属性，尝试去get(B)，发现B还没有被创建，所以开始创建B，在进行属性填充时初始化A，就从earlySingletonObjects 中获取到了实例化但没有任何属性的A，B拿到A后完成了初始化阶段，将自己放到singletonObjects中,此时返回A，A拿到B的对象继续完成初始化，完成后将自己放到singletonObjects中，由A与B中所表示的A的属性地址是一样的，所以A的属性填充完后，B也获取了A的属性，这样就解决了循环的问题。<br>
+似乎完美解决，如果就这么使用的话也没什么问题，但是再加上AOP情况就不同了，被AOP增强的Bean会在初始化后代理成为一个新的对象，也就是说：如果有AOP，A依赖于B，B依赖于A，A实例化完成暴露出去，开始注入属性，发现引用B，B开始实例化，使用A暴露的对象，<strong>初始化完成后封装成代理对象</strong>，A再将代理后的B注入，再做代理，那么<strong>代理A中的B就是代理后的B，但是代理后的B中的A是没用代理的A</strong>。<br>
+显然这是不对的，所以在Spring中存在第三级缓存，在创建对象时判断是否是单例，允许循环依赖，正在创建中，就将其从earlySingletonObjects中移除掉，并在singletonFactories放入新的对象，这样后续再查询beanName时会走到singletonFactory.getObject()，其中就会去调用各个beanPostProcessor的getEarlyBeanReference方法，返回的对象就是代理后的对象。</p>
+<h3 id="是否可以去掉第三级缓存">是否可以去掉第三级缓存？</h3>
+<p>是否可以：不管有没有循环依赖，都提前创建好代理对象，并将代理对象放入缓存，出现循环依赖时，其他对象直接就可以取到代理对象并注入。<br>
+每次实例化完 Bean 之后就直接去创建代理对象，并添加到二级缓存中。测试结果是完全正常的，Spring 的初始化时间应该也是不会有太大的影响，因为如果 Bean 本身不需要代理的话，是直接返回原始 Bean 的，并不需要走复杂的创建代理 Bean 的流程。<br>
+如果要使用二级缓存解决循环依赖，意味着Bean在构造完后就创建代理对象，这样违背了Spring设计原则。Spring结合AOP跟Bean的生命周期，是在Bean创建完全之后通过AnnotationAwareAspectJAutoProxyCreator这个后置处理器来完成的，在这个后置处理的postProcessAfterInitialization方法中对初始化后的Bean完成AOP代理。如果出现了循环依赖，那没有办法，只有给Bean先创建代理，但是没有出现循环依赖的情况下，设计之初就是让Bean在生命周期的最后一步完成代理而不是在实例化后就立马完成代理。</p>
 ]]></content>
     </entry>
     <entry>
