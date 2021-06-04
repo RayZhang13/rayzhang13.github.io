@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://rayzhang13.github.io</id>
     <title>Ray&apos;s Blog</title>
-    <updated>2021-06-04T13:50:53.874Z</updated>
+    <updated>2021-06-04T13:57:57.794Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://rayzhang13.github.io"/>
     <link rel="self" href="https://rayzhang13.github.io/atom.xml"/>
@@ -563,6 +563,8 @@ private final Set&lt;String&gt; alreadyCreated = Collections.newSetFromMap(new C
 <li>从第二级缓存移除A代理对象，A代理对象加入第一级缓存</li>
 </ul>
 <p><font color=#DC143C><b>PS: 加入singletonFactories三级缓存的前提是执行了构造器，所以构造器的循环依赖没法解决</b></font></p>
+<p>附上一张偷来的图：<br>
+<img src="https://rayzhang13.github.io/post-images/1622815064103.png" alt="" loading="lazy"></p>
 <h3 id="是否可以去掉第二级缓存">是否可以去掉第二级缓存？</h3>
 <p><font color=#DC143C><b>关键在于AOP</b></font><br>
 现在有A的field或者setter依赖B的实例对象，同时B的field或者setter依赖了A的实例，A首先开始创建，并将自己暴露到 earlySingletonObjects 中，开始填充属性，此时发现自己依赖B的属性，尝试去get(B)，发现B还没有被创建，所以开始创建B，在进行属性填充时初始化A，就从earlySingletonObjects 中获取到了实例化但没有任何属性的A，B拿到A后完成了初始化阶段，将自己放到singletonObjects中,此时返回A，A拿到B的对象继续完成初始化，完成后将自己放到singletonObjects中，由A与B中所表示的A的属性地址是一样的，所以A的属性填充完后，B也获取了A的属性，这样就解决了循环的问题。<br>

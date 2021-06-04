@@ -9,7 +9,7 @@
 <meta name="description" content="Everything&#39;s gonna be just fine.">
 <meta name="theme-color" content="#000">
 <title>Hanoi问题 | Ray&#39;s Blog</title>
-<link rel="shortcut icon" href="/favicon.ico?v=1622814650076">
+<link rel="shortcut icon" href="/favicon.ico?v=1622815072562">
 <link rel="stylesheet" href="/media/css/pisces.css">
 <link rel="stylesheet" href="/media/fonts/font-awesome.css">
 <link
@@ -1739,6 +1739,8 @@ private final Set&amp;lt;String&amp;gt; alreadyCreated = Collections.newSetFromM
 &lt;li&gt;从第二级缓存移除A代理对象，A代理对象加入第一级缓存&lt;/li&gt;
 &lt;/ul&gt;
 &lt;p&gt;&lt;font color=#DC143C&gt;&lt;b&gt;PS: 加入singletonFactories三级缓存的前提是执行了构造器，所以构造器的循环依赖没法解决&lt;/b&gt;&lt;/font&gt;&lt;/p&gt;
+&lt;p&gt;附上一张偷来的图：&lt;br&gt;
+&lt;img src=&#34;https://rayzhang13.github.io/post-images/1622815064103.png&#34; alt=&#34;&#34; loading=&#34;lazy&#34;&gt;&lt;/p&gt;
 &lt;h3 id=&#34;是否可以去掉第二级缓存&#34;&gt;是否可以去掉第二级缓存？&lt;/h3&gt;
 &lt;p&gt;&lt;font color=#DC143C&gt;&lt;b&gt;关键在于AOP&lt;/b&gt;&lt;/font&gt;&lt;br&gt;
 现在有A的field或者setter依赖B的实例对象，同时B的field或者setter依赖了A的实例，A首先开始创建，并将自己暴露到 earlySingletonObjects 中，开始填充属性，此时发现自己依赖B的属性，尝试去get(B)，发现B还没有被创建，所以开始创建B，在进行属性填充时初始化A，就从earlySingletonObjects 中获取到了实例化但没有任何属性的A，B拿到A后完成了初始化阶段，将自己放到singletonObjects中,此时返回A，A拿到B的对象继续完成初始化，完成后将自己放到singletonObjects中，由A与B中所表示的A的属性地址是一样的，所以A的属性填充完后，B也获取了A的属性，这样就解决了循环的问题。&lt;br&gt;
