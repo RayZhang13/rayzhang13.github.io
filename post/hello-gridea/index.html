@@ -9,7 +9,7 @@
 <meta name="description" content="Everything&#39;s gonna be just fine.">
 <meta name="theme-color" content="#000">
 <title>Hello Gridea | Ray&#39;s Blog</title>
-<link rel="shortcut icon" href="/favicon.ico?v=1622818554720">
+<link rel="shortcut icon" href="/favicon.ico?v=1622819052386">
 <link rel="stylesheet" href="/media/css/pisces.css">
 <link rel="stylesheet" href="/media/fonts/font-awesome.css">
 <link
@@ -1230,30 +1230,20 @@ Executors的弊端：&lt;br&gt;
              threadFactory, defaultHandler);
     }
 &lt;/code&gt;&lt;/pre&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;corePoolSize：核心线程数&lt;br&gt;
-线程池维护的最小线程数量，核心线程创建后不会被回收（注意：设置allowCoreThreadTimeout=true后，空闲的核心线程超过存活时间也会被回收）。&lt;br&gt;
+&lt;h3 id=&#34;corepoolsize核心线程数&#34;&gt;corePoolSize：核心线程数&lt;/h3&gt;
+&lt;p&gt;线程池维护的最小线程数量，核心线程创建后不会被回收（注意：设置allowCoreThreadTimeout=true后，空闲的核心线程超过存活时间也会被回收）。&lt;br&gt;
 大于核心线程数的线程，在空闲时间超过keepAliveTime后会被回收。&lt;br&gt;
 线程池刚创建时，里面没有一个线程，当调用 execute() 方法添加一个任务时，如果正在运行的线程数量小于corePoolSize，则马上创建新线程并运行这个任务。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;maximumPoolSize：最大线程数&lt;br&gt;
-线程池允许创建的最大线程数量。&lt;br&gt;
+&lt;h3 id=&#34;maximumpoolsize最大线程数&#34;&gt;maximumPoolSize：最大线程数&lt;/h3&gt;
+&lt;p&gt;线程池允许创建的最大线程数量。&lt;br&gt;
 当添加一个任务时，核心线程数已满，线程池还没达到最大线程数，并且没有空闲线程，工作队列已满的情况下，创建一个新线程，然后从工作队列的头部取出一个任务交由新线程来处理，而将刚提交的任务放入工作队列尾部。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;keepAliveTime：空闲线程存活时间&lt;br&gt;
-当一个可被回收的线程的空闲时间大于keepAliveTime，就会被回收。&lt;br&gt;
+&lt;h3 id=&#34;keepalivetime空闲线程存活时间&#34;&gt;keepAliveTime：空闲线程存活时间&lt;/h3&gt;
+&lt;p&gt;当一个可被回收的线程的空闲时间大于keepAliveTime，就会被回收。&lt;br&gt;
 可被回收的线程：&lt;br&gt;
 （1）设置allowCoreThreadTimeout=true的核心线程。&lt;br&gt;
 （2）大于核心线程数的线程（非核心线程）。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;unit：时间单位&lt;br&gt;
-keepAliveTime的时间单位：&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
+&lt;h3 id=&#34;unit时间单位&#34;&gt;unit：时间单位&lt;/h3&gt;
+&lt;p&gt;keepAliveTime的时间单位：&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;TimeUnit.NANOSECONDS
 TimeUnit.MICROSECONDS
 TimeUnit.MILLISECONDS // 毫秒
@@ -1262,22 +1252,16 @@ TimeUnit.MINUTES
 TimeUnit.HOURS
 TimeUnit.DAYS
 &lt;/code&gt;&lt;/pre&gt;
-&lt;ul&gt;
-&lt;li&gt;
-&lt;p&gt;workQueue：工作队列&lt;br&gt;
-新任务被提交后，会先添加到工作队列，任务调度时再从队列中取出任务。工作队列实现了BlockingQueue接口。&lt;br&gt;
+&lt;h3 id=&#34;workqueue工作队列&#34;&gt;workQueue：工作队列&lt;/h3&gt;
+&lt;p&gt;新任务被提交后，会先添加到工作队列，任务调度时再从队列中取出任务。工作队列实现了BlockingQueue接口。&lt;br&gt;
 JDK默认的工作队列有五种：&lt;br&gt;
 （1）ArrayBlockingQueue 数组型阻塞队列：数组结构，初始化时传入大小，有界，FIFO，使用一个重入锁，默认使用非公平锁，入队和出队共用一个锁，互斥。&lt;br&gt;
 （2）LinkedBlockingQueue 链表型阻塞队列：链表结构，默认初始化大小为Integer.MAX_VALUE，有界（近似无解），FIFO，使用两个重入锁分别控制元素的入队和出队，用Condition进行线程间的唤醒和等待。&lt;br&gt;
 （3）SynchronousQueue 同步队列：容量为0，添加任务必须等待取出任务，这个队列相当于通道，不存储元素。&lt;br&gt;
 （4）PriorityBlockingQueue 优先阻塞队列：无界，默认采用元素自然顺序升序排列。&lt;br&gt;
 （5）DelayQueue 延时队列：无界，元素有过期时间，过期的元素才能被取出。&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;threadFactory：线程工厂&lt;br&gt;
-创建线程的工厂，可以设定线程名、线程编号等。&lt;/p&gt;
-&lt;/li&gt;
-&lt;/ul&gt;
+&lt;h3 id=&#34;threadfactory线程工厂&#34;&gt;threadFactory：线程工厂&lt;/h3&gt;
+&lt;p&gt;创建线程的工厂，可以设定线程名、线程编号等。&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public interface ThreadFactory {
     /**
      * Constructs a new {@code Thread}.  Implementations may also initialize
@@ -1322,6 +1306,13 @@ JDK默认的工作队列有五种：&lt;br&gt;
         }
     }
 &lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;handler拒绝策略&#34;&gt;handler：拒绝策略&lt;/h3&gt;
+&lt;p&gt;当线程池线程数已满，并且工作队列达到限制，新提交的任务使用拒绝策略处理。可以自定义拒绝策略，拒绝策略需要实现RejectedExecutionHandler接口。&lt;br&gt;
+JDK默认的拒绝策略有四种：&lt;br&gt;
+（1）AbortPolicy：丢弃任务并抛出RejectedExecutionException异常。&lt;br&gt;
+（2）DiscardPolicy：丢弃任务，但是不抛出异常。可能导致无法发现系统的异常状态。&lt;br&gt;
+（3）DiscardOldestPolicy：丢弃队列最前面的任务，然后重新提交被拒绝的任务。&lt;br&gt;
+（4）CallerRunsPolicy：由调用线程处理该任务。&lt;/p&gt;
 ">Java线程池简单理解</a>
       </div>
       
