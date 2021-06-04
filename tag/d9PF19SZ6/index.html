@@ -9,7 +9,7 @@
 <meta name="description" content="Everything&#39;s gonna be just fine.">
 <meta name="theme-color" content="#000">
 <title>Ray&#39;s Blog</title>
-<link rel="shortcut icon" href="/favicon.ico?v=1622819052386">
+<link rel="shortcut icon" href="/favicon.ico?v=1622826215927">
 <link rel="stylesheet" href="/media/css/pisces.css">
 <link rel="stylesheet" href="/media/fonts/font-awesome.css">
 <link
@@ -684,13 +684,19 @@
                                     threadFactory));
     }
 &lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;线程池不允许使用Executors创建，而是通过ThreadPoolExecutor的方式，规避资源耗尽的风险&lt;br&gt;
-Executors的弊端：&lt;br&gt;
-(1)：FixedThreadPool和SingleThreadPool:&lt;br&gt;
-允许的请求队列长度为Integer.Max_VALUE，可能会堆积大量的请求，从而导致OOM（内存溢出）&lt;br&gt;
-(2: CachedThreadPool和ScheduledThreadPool:&lt;br&gt;
-允许的创建线程数目为Integer.Max_VALUE，可能会堆积大量的请求，从而导致OOM（内存溢出）&lt;/p&gt;
-&lt;h1 id=&#34;threadpoolexecutor的七个参数&#34;&gt;ThreadPoolExecutor的七个参数&lt;/h1&gt;
+&lt;p&gt;线程池不允许使用Executors创建，而是通过ThreadPoolExecutor的方式，规避资源耗尽的风险&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;Executors的弊端：&lt;/li&gt;
+&lt;/ul&gt;
+&lt;ul&gt;
+&lt;li&gt;FixedThreadPool和SingleThreadPool:&lt;br&gt;
+允许的请求队列长度为Integer.Max_VALUE，可能会堆积大量的请求，从而导致OOM（内存溢出）&lt;/li&gt;
+&lt;li&gt;CachedThreadPool和ScheduledThreadPool:&lt;br&gt;
+允许的创建线程数目为Integer.Max_VALUE，可能会堆积大量的请求，从而导致OOM（内存溢出）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;threadpoolexecutor七参数&#34;&gt;ThreadPoolExecutor七参数&lt;/h1&gt;
+&lt;h2 id=&#34;代码&#34;&gt;代码&lt;/h2&gt;
+&lt;p&gt;Executors创建的线程池本质都是基于ThreadPoolExecutor&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public ThreadPoolExecutor(int corePoolSize,
                               int maximumPoolSize,
                               long keepAliveTime,
@@ -701,19 +707,19 @@ Executors的弊端：&lt;br&gt;
              threadFactory, defaultHandler);
     }
 &lt;/code&gt;&lt;/pre&gt;
-&lt;h3 id=&#34;corepoolsize核心线程数&#34;&gt;corePoolSize：核心线程数&lt;/h3&gt;
-&lt;p&gt;线程池维护的最小线程数量，核心线程创建后不会被回收（注意：设置allowCoreThreadTimeout=true后，空闲的核心线程超过存活时间也会被回收）。&lt;br&gt;
+&lt;h2 id=&#34;corepoolsize核心线程数&#34;&gt;corePoolSize：核心线程数&lt;/h2&gt;
+&lt;p&gt;线程池维护的最小线程数量，核心线程创建后不会被回收（注意：设置allowCoreThreadTimeout=true&amp;gt;后，空闲的核心线程超过存活时间也会被回收）。&lt;br&gt;
 大于核心线程数的线程，在空闲时间超过keepAliveTime后会被回收。&lt;br&gt;
 线程池刚创建时，里面没有一个线程，当调用 execute() 方法添加一个任务时，如果正在运行的线程数量小于corePoolSize，则马上创建新线程并运行这个任务。&lt;/p&gt;
-&lt;h3 id=&#34;maximumpoolsize最大线程数&#34;&gt;maximumPoolSize：最大线程数&lt;/h3&gt;
+&lt;h2 id=&#34;maximumpoolsize最大线程数&#34;&gt;maximumPoolSize：最大线程数&lt;/h2&gt;
 &lt;p&gt;线程池允许创建的最大线程数量。&lt;br&gt;
 当添加一个任务时，核心线程数已满，线程池还没达到最大线程数，并且没有空闲线程，工作队列已满的情况下，创建一个新线程，然后从工作队列的头部取出一个任务交由新线程来处理，而将刚提交的任务放入工作队列尾部。&lt;/p&gt;
-&lt;h3 id=&#34;keepalivetime空闲线程存活时间&#34;&gt;keepAliveTime：空闲线程存活时间&lt;/h3&gt;
+&lt;h2 id=&#34;keepalivetime空闲线程存活时间&#34;&gt;keepAliveTime：空闲线程存活时间&lt;/h2&gt;
 &lt;p&gt;当一个可被回收的线程的空闲时间大于keepAliveTime，就会被回收。&lt;br&gt;
 可被回收的线程：&lt;br&gt;
 （1）设置allowCoreThreadTimeout=true的核心线程。&lt;br&gt;
 （2）大于核心线程数的线程（非核心线程）。&lt;/p&gt;
-&lt;h3 id=&#34;unit时间单位&#34;&gt;unit：时间单位&lt;/h3&gt;
+&lt;h2 id=&#34;unit时间单位&#34;&gt;unit：时间单位&lt;/h2&gt;
 &lt;p&gt;keepAliveTime的时间单位：&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;TimeUnit.NANOSECONDS
 TimeUnit.MICROSECONDS
@@ -723,7 +729,7 @@ TimeUnit.MINUTES
 TimeUnit.HOURS
 TimeUnit.DAYS
 &lt;/code&gt;&lt;/pre&gt;
-&lt;h3 id=&#34;workqueue工作队列&#34;&gt;workQueue：工作队列&lt;/h3&gt;
+&lt;h2 id=&#34;workqueue工作队列&#34;&gt;workQueue：工作队列&lt;/h2&gt;
 &lt;p&gt;新任务被提交后，会先添加到工作队列，任务调度时再从队列中取出任务。工作队列实现了BlockingQueue接口。&lt;br&gt;
 JDK默认的工作队列有五种：&lt;br&gt;
 （1）ArrayBlockingQueue 数组型阻塞队列：数组结构，初始化时传入大小，有界，FIFO，使用一个重入锁，默认使用非公平锁，入队和出队共用一个锁，互斥。&lt;br&gt;
@@ -731,7 +737,7 @@ JDK默认的工作队列有五种：&lt;br&gt;
 （3）SynchronousQueue 同步队列：容量为0，添加任务必须等待取出任务，这个队列相当于通道，不存储元素。&lt;br&gt;
 （4）PriorityBlockingQueue 优先阻塞队列：无界，默认采用元素自然顺序升序排列。&lt;br&gt;
 （5）DelayQueue 延时队列：无界，元素有过期时间，过期的元素才能被取出。&lt;/p&gt;
-&lt;h3 id=&#34;threadfactory线程工厂&#34;&gt;threadFactory：线程工厂&lt;/h3&gt;
+&lt;h2 id=&#34;threadfactory线程工厂&#34;&gt;threadFactory：线程工厂&lt;/h2&gt;
 &lt;p&gt;创建线程的工厂，可以设定线程名、线程编号等。&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public interface ThreadFactory {
     /**
@@ -777,13 +783,35 @@ JDK默认的工作队列有五种：&lt;br&gt;
         }
     }
 &lt;/code&gt;&lt;/pre&gt;
-&lt;h3 id=&#34;handler拒绝策略&#34;&gt;handler：拒绝策略&lt;/h3&gt;
+&lt;h2 id=&#34;handler拒绝策略&#34;&gt;handler：拒绝策略&lt;/h2&gt;
 &lt;p&gt;当线程池线程数已满，并且工作队列达到限制，新提交的任务使用拒绝策略处理。可以自定义拒绝策略，拒绝策略需要实现RejectedExecutionHandler接口。&lt;br&gt;
 JDK默认的拒绝策略有四种：&lt;br&gt;
 （1）AbortPolicy：丢弃任务并抛出RejectedExecutionException异常。&lt;br&gt;
 （2）DiscardPolicy：丢弃任务，但是不抛出异常。可能导致无法发现系统的异常状态。&lt;br&gt;
 （3）DiscardOldestPolicy：丢弃队列最前面的任务，然后重新提交被拒绝的任务。&lt;br&gt;
 （4）CallerRunsPolicy：由调用线程处理该任务。&lt;/p&gt;
+&lt;h1 id=&#34;基本执行流程&#34;&gt;基本执行流程&lt;/h1&gt;
+&lt;figure data-type=&#34;image&#34; tabindex=&#34;1&#34;&gt;&lt;img src=&#34;https://rayzhang13.github.io/post-images/1622822561168.png&#34; alt=&#34;&#34; loading=&#34;lazy&#34;&gt;&lt;/figure&gt;
+&lt;p&gt;任务调度是线程池的主要入口，当用户提交了一个任务，接下来这个任务将如何执行都是由这个阶段决定的。了解这部分就相当于了解了线程池的核心运行机制。&lt;br&gt;
+首先，所有任务的调度都是由execute方法完成的，这部分完成的工作是：检查现在线程池的运行状态、运行线程数、运行策略，决定接下来执行的流程，是直接申请线程执行，或是缓冲到队列中执行，亦或是直接拒绝该任务。其执行过程如下：&lt;br&gt;
+首先检测线程池运行状态，如果不是RUNNING，则直接拒绝，线程池要保证在RUNNING的状态下执行任务。&lt;br&gt;
+如果workerCount &amp;lt; corePoolSize，则创建并启动一个线程来执行新提交的任务。&lt;br&gt;
+如果workerCount &amp;gt;= corePoolSize，且线程池内的阻塞队列未满，则将任务添加到该阻塞队列中。&lt;br&gt;
+如果workerCount &amp;gt;= corePoolSize &amp;amp;&amp;amp; workerCount &amp;lt; maximumPoolSize，且线程池内的阻塞队列已满，则创建并启动一个线程来执行新提交的任务。&lt;br&gt;
+如果workerCount &amp;gt;= maximumPoolSize，并且线程池内的阻塞队列已满, 则根据拒绝策略来处理该任务, 默认的处理方式是直接抛异常。&lt;/p&gt;
+&lt;h1 id=&#34;生命周期&#34;&gt;生命周期&lt;/h1&gt;
+&lt;p&gt;1、RUNNING&lt;br&gt;
+2、SHUNDOWN&lt;br&gt;
+3、STOP&lt;br&gt;
+4、TIDYING&lt;br&gt;
+5、TERMINATED&lt;br&gt;
+&lt;img src=&#34;https://rayzhang13.github.io/post-images/1622823213188.png&#34; alt=&#34;&#34; loading=&#34;lazy&#34;&gt;&lt;/p&gt;
+&lt;p&gt;这几个状态的转化关系为：&lt;br&gt;
+1、调用shundown()方法线程池的状态由RUNNING——&amp;gt;SHUTDOWN&lt;br&gt;
+2、调用shutdowNow()方法线程池的状态由RUNNING——&amp;gt;STOP&lt;br&gt;
+3、当任务队列和线程池均为空的时候 线程池的状态由STOP/SHUTDOWN——–&amp;gt;TIDYING&lt;br&gt;
+4、当terminated()方法被调用完成之后，线程池的状态由TIDYING———-&amp;gt;TERMINATED状态&lt;br&gt;
+&lt;img src=&#34;https://rayzhang13.github.io/post-images/1622823162874.png&#34; alt=&#34;&#34; loading=&#34;lazy&#34;&gt;&lt;/p&gt;
 ">Java线程池简单理解</a>
       </div>
       

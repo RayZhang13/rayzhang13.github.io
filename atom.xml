@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://rayzhang13.github.io</id>
     <title>Ray&apos;s Blog</title>
-    <updated>2021-06-04T15:04:16.221Z</updated>
+    <updated>2021-06-04T17:04:06.167Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://rayzhang13.github.io"/>
     <link rel="self" href="https://rayzhang13.github.io/atom.xml"/>
@@ -62,13 +62,19 @@
                                     threadFactory));
     }
 </code></pre>
-<p>线程池不允许使用Executors创建，而是通过ThreadPoolExecutor的方式，规避资源耗尽的风险<br>
-Executors的弊端：<br>
-(1)：FixedThreadPool和SingleThreadPool:<br>
-允许的请求队列长度为Integer.Max_VALUE，可能会堆积大量的请求，从而导致OOM（内存溢出）<br>
-(2: CachedThreadPool和ScheduledThreadPool:<br>
-允许的创建线程数目为Integer.Max_VALUE，可能会堆积大量的请求，从而导致OOM（内存溢出）</p>
-<h1 id="threadpoolexecutor的七个参数">ThreadPoolExecutor的七个参数</h1>
+<p>线程池不允许使用Executors创建，而是通过ThreadPoolExecutor的方式，规避资源耗尽的风险</p>
+<ul>
+<li>Executors的弊端：</li>
+</ul>
+<ul>
+<li>FixedThreadPool和SingleThreadPool:<br>
+允许的请求队列长度为Integer.Max_VALUE，可能会堆积大量的请求，从而导致OOM（内存溢出）</li>
+<li>CachedThreadPool和ScheduledThreadPool:<br>
+允许的创建线程数目为Integer.Max_VALUE，可能会堆积大量的请求，从而导致OOM（内存溢出）</li>
+</ul>
+<h1 id="threadpoolexecutor七参数">ThreadPoolExecutor七参数</h1>
+<h2 id="代码">代码</h2>
+<p>Executors创建的线程池本质都是基于ThreadPoolExecutor</p>
 <pre><code class="language-java">public ThreadPoolExecutor(int corePoolSize,
                               int maximumPoolSize,
                               long keepAliveTime,
@@ -79,19 +85,19 @@ Executors的弊端：<br>
              threadFactory, defaultHandler);
     }
 </code></pre>
-<h3 id="corepoolsize核心线程数">corePoolSize：核心线程数</h3>
-<p>线程池维护的最小线程数量，核心线程创建后不会被回收（注意：设置allowCoreThreadTimeout=true后，空闲的核心线程超过存活时间也会被回收）。<br>
+<h2 id="corepoolsize核心线程数">corePoolSize：核心线程数</h2>
+<p>线程池维护的最小线程数量，核心线程创建后不会被回收（注意：设置allowCoreThreadTimeout=true&gt;后，空闲的核心线程超过存活时间也会被回收）。<br>
 大于核心线程数的线程，在空闲时间超过keepAliveTime后会被回收。<br>
 线程池刚创建时，里面没有一个线程，当调用 execute() 方法添加一个任务时，如果正在运行的线程数量小于corePoolSize，则马上创建新线程并运行这个任务。</p>
-<h3 id="maximumpoolsize最大线程数">maximumPoolSize：最大线程数</h3>
+<h2 id="maximumpoolsize最大线程数">maximumPoolSize：最大线程数</h2>
 <p>线程池允许创建的最大线程数量。<br>
 当添加一个任务时，核心线程数已满，线程池还没达到最大线程数，并且没有空闲线程，工作队列已满的情况下，创建一个新线程，然后从工作队列的头部取出一个任务交由新线程来处理，而将刚提交的任务放入工作队列尾部。</p>
-<h3 id="keepalivetime空闲线程存活时间">keepAliveTime：空闲线程存活时间</h3>
+<h2 id="keepalivetime空闲线程存活时间">keepAliveTime：空闲线程存活时间</h2>
 <p>当一个可被回收的线程的空闲时间大于keepAliveTime，就会被回收。<br>
 可被回收的线程：<br>
 （1）设置allowCoreThreadTimeout=true的核心线程。<br>
 （2）大于核心线程数的线程（非核心线程）。</p>
-<h3 id="unit时间单位">unit：时间单位</h3>
+<h2 id="unit时间单位">unit：时间单位</h2>
 <p>keepAliveTime的时间单位：</p>
 <pre><code class="language-java">TimeUnit.NANOSECONDS
 TimeUnit.MICROSECONDS
@@ -101,7 +107,7 @@ TimeUnit.MINUTES
 TimeUnit.HOURS
 TimeUnit.DAYS
 </code></pre>
-<h3 id="workqueue工作队列">workQueue：工作队列</h3>
+<h2 id="workqueue工作队列">workQueue：工作队列</h2>
 <p>新任务被提交后，会先添加到工作队列，任务调度时再从队列中取出任务。工作队列实现了BlockingQueue接口。<br>
 JDK默认的工作队列有五种：<br>
 （1）ArrayBlockingQueue 数组型阻塞队列：数组结构，初始化时传入大小，有界，FIFO，使用一个重入锁，默认使用非公平锁，入队和出队共用一个锁，互斥。<br>
@@ -109,7 +115,7 @@ JDK默认的工作队列有五种：<br>
 （3）SynchronousQueue 同步队列：容量为0，添加任务必须等待取出任务，这个队列相当于通道，不存储元素。<br>
 （4）PriorityBlockingQueue 优先阻塞队列：无界，默认采用元素自然顺序升序排列。<br>
 （5）DelayQueue 延时队列：无界，元素有过期时间，过期的元素才能被取出。</p>
-<h3 id="threadfactory线程工厂">threadFactory：线程工厂</h3>
+<h2 id="threadfactory线程工厂">threadFactory：线程工厂</h2>
 <p>创建线程的工厂，可以设定线程名、线程编号等。</p>
 <pre><code class="language-java">public interface ThreadFactory {
     /**
@@ -155,13 +161,35 @@ JDK默认的工作队列有五种：<br>
         }
     }
 </code></pre>
-<h3 id="handler拒绝策略">handler：拒绝策略</h3>
+<h2 id="handler拒绝策略">handler：拒绝策略</h2>
 <p>当线程池线程数已满，并且工作队列达到限制，新提交的任务使用拒绝策略处理。可以自定义拒绝策略，拒绝策略需要实现RejectedExecutionHandler接口。<br>
 JDK默认的拒绝策略有四种：<br>
 （1）AbortPolicy：丢弃任务并抛出RejectedExecutionException异常。<br>
 （2）DiscardPolicy：丢弃任务，但是不抛出异常。可能导致无法发现系统的异常状态。<br>
 （3）DiscardOldestPolicy：丢弃队列最前面的任务，然后重新提交被拒绝的任务。<br>
 （4）CallerRunsPolicy：由调用线程处理该任务。</p>
+<h1 id="基本执行流程">基本执行流程</h1>
+<figure data-type="image" tabindex="1"><img src="https://rayzhang13.github.io/post-images/1622822561168.png" alt="" loading="lazy"></figure>
+<p>任务调度是线程池的主要入口，当用户提交了一个任务，接下来这个任务将如何执行都是由这个阶段决定的。了解这部分就相当于了解了线程池的核心运行机制。<br>
+首先，所有任务的调度都是由execute方法完成的，这部分完成的工作是：检查现在线程池的运行状态、运行线程数、运行策略，决定接下来执行的流程，是直接申请线程执行，或是缓冲到队列中执行，亦或是直接拒绝该任务。其执行过程如下：<br>
+首先检测线程池运行状态，如果不是RUNNING，则直接拒绝，线程池要保证在RUNNING的状态下执行任务。<br>
+如果workerCount &lt; corePoolSize，则创建并启动一个线程来执行新提交的任务。<br>
+如果workerCount &gt;= corePoolSize，且线程池内的阻塞队列未满，则将任务添加到该阻塞队列中。<br>
+如果workerCount &gt;= corePoolSize &amp;&amp; workerCount &lt; maximumPoolSize，且线程池内的阻塞队列已满，则创建并启动一个线程来执行新提交的任务。<br>
+如果workerCount &gt;= maximumPoolSize，并且线程池内的阻塞队列已满, 则根据拒绝策略来处理该任务, 默认的处理方式是直接抛异常。</p>
+<h1 id="生命周期">生命周期</h1>
+<p>1、RUNNING<br>
+2、SHUNDOWN<br>
+3、STOP<br>
+4、TIDYING<br>
+5、TERMINATED<br>
+<img src="https://rayzhang13.github.io/post-images/1622823213188.png" alt="" loading="lazy"></p>
+<p>这几个状态的转化关系为：<br>
+1、调用shundown()方法线程池的状态由RUNNING——&gt;SHUTDOWN<br>
+2、调用shutdowNow()方法线程池的状态由RUNNING——&gt;STOP<br>
+3、当任务队列和线程池均为空的时候 线程池的状态由STOP/SHUTDOWN——–&gt;TIDYING<br>
+4、当terminated()方法被调用完成之后，线程池的状态由TIDYING———-&gt;TERMINATED状态<br>
+<img src="https://rayzhang13.github.io/post-images/1622823162874.png" alt="" loading="lazy"></p>
 ]]></content>
     </entry>
     <entry>
