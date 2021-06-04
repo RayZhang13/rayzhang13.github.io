@@ -9,7 +9,7 @@
 <meta name="description" content="Everything&#39;s gonna be just fine.">
 <meta name="theme-color" content="#000">
 <title>Ray&#39;s Blog</title>
-<link rel="shortcut icon" href="/favicon.ico?v=1622742799186">
+<link rel="shortcut icon" href="/favicon.ico?v=1622794062869">
 <link rel="stylesheet" href="/media/css/pisces.css">
 <link rel="stylesheet" href="/media/fonts/font-awesome.css">
 <link
@@ -1011,7 +1011,8 @@
           &lt;p&gt;Spring之前学的太仓促了，现在来总结一下&lt;br&gt;
 &lt;a href=&#34;https://docs.spring.io/spring-framework/docs/current/reference/html/index.html&#34;&gt;Spring Framework Documentation&lt;/a&gt;&lt;/p&gt;
 &lt;!-- more --&gt;
-&lt;h1 id=&#34;简介&#34;&gt;简介&lt;/h1&gt;
+&lt;h1 id=&#34;简介&#34;&gt;&lt;img src=&#34;https://rayzhang13.github.io/post-images/1622794061089.png&#34; alt=&#34;&#34; loading=&#34;lazy&#34;&gt;&lt;br&gt;
+简介&lt;/h1&gt;
 &lt;p&gt;Spring是一个开源框架，Spring是于2003 年兴起的一个轻量级的Java 开发框架，由Rod Johnson 在其著作Expert One-On-One J2EE Development and Design中阐述的部分理念和原型衍生而来。它是为了解决企业应用开发的复杂性而创建的。框架的主要优势之一就是其分层架构，分层架构允许使用者选择使用哪一个组件，同时为 J2EE 应用程序开发提供集成的框架。Spring使用基本的JavaBean来完成以前只可能由EJB完成的事情。然而，Spring的用途不仅限于服务器端的开发。从简单性、可测试性和松耦合的角度而言，任何Java应用都可以从Spring中受益。Spring的核心是控制反转（IoC）和面向切面（AOP）。&lt;br&gt;
 &lt;strong&gt;简单来说，Spring是一个分层的JavaSE/EE full-stack(一站式) 轻量级开源框架。&lt;/strong&gt;&lt;/p&gt;
 &lt;h1 id=&#34;spring-ioc&#34;&gt;Spring IoC&lt;/h1&gt;
@@ -1485,7 +1486,7 @@ Bean之间的依赖顺序： BeanA -&amp;gt; BeanB -&amp;gt; BeanC -&amp;gt; Bea
 &lt;/ul&gt;
 &lt;p&gt;我们很容易的能够看出常规的解决循环依赖的步骤在这里并不起作用&lt;/p&gt;
 &lt;p&gt;从而引入&lt;strong&gt;三级缓存&lt;/strong&gt;的概念&lt;/p&gt;
-&lt;h2 id=&#34;三级缓存&#34;&gt;三级缓存&lt;/h2&gt;
+&lt;h3 id=&#34;三级缓存&#34;&gt;三级缓存&lt;/h3&gt;
 &lt;p&gt;以下为三级缓存的对应作用&lt;/p&gt;
 &lt;ul&gt;
 &lt;li&gt;singletonObjects 一级缓存，存放完整的 Bean。&lt;/li&gt;
