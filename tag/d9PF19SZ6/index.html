@@ -9,7 +9,7 @@
 <meta name="description" content="Everything&#39;s gonna be just fine.">
 <meta name="theme-color" content="#000">
 <title>Ray&#39;s Blog</title>
-<link rel="shortcut icon" href="/favicon.ico?v=1622826215927">
+<link rel="shortcut icon" href="/favicon.ico?v=1622870801873">
 <link rel="stylesheet" href="/media/css/pisces.css">
 <link rel="stylesheet" href="/media/fonts/font-awesome.css">
 <link
@@ -193,19 +193,19 @@
     <div class="sidebar-item-box">
       <a href="/archives/">
         
-        <span class="site-item-stat-count">8</span>
+        <span class="site-item-stat-count">9</span>
         <span class="site-item-stat-name language" data-lan="article">文章</span>
       </a>
     </div>
     <div class="sidebar-item-box">
       <a href="">
-        <span class="site-item-stat-count">3</span>
+        <span class="site-item-stat-count">4</span>
         <span class="site-item-stat-name language" data-lan="category">分类</span>
       </a>
     </div>
     <div class="sidebar-item-box">
       <a href="/tags/">
-        <span class="site-item-stat-count">3</span>
+        <span class="site-item-stat-count">4</span>
         <span class="site-item-stat-name language" data-lan="tag">标签</span>
       </a>
     </div>
@@ -256,6 +256,10 @@
           <small class="language" data-lan="tag">标签</small>
         </h2>
       </div>
+      
+      
+      
+      
       
       
       
@@ -639,6 +643,27 @@
     <div class="result" id="result">
       
       <div class="item">
+        <a class="result-title" style="opacity: 0;" href="https://rayzhang13.github.io/post/IO-modules/"" data-c="
+          &lt;p&gt;这里先拉几篇有意思的知乎做一下补充理解：&lt;br&gt;
+&lt;a href=&#34;https://www.zhihu.com/question/19732473/answer/20851256&#34;&gt;链接&lt;/a&gt;&lt;/p&gt;
+&lt;h1 id=&#34;阻塞与非阻塞与同步与异步不能简单的从字面理解提供一个从分布式系统角度的回答-同步与异步&#34;&gt;“阻塞”与&amp;quot;非阻塞&amp;quot;与&amp;quot;同步&amp;quot;与“异步&amp;quot;不能简单的从字面理解，提供一个从分布式系统角度的回答。&lt;br&gt;
+同步与异步&lt;/h1&gt;
+&lt;p&gt;同步和异步关注的是&lt;strong&gt;消息通信机制&lt;/strong&gt; (synchronous communication/ asynchronous communication)所谓同步，就是在发出一个&lt;strong&gt;调用&lt;/strong&gt;时，在没有得到结果之前，该&lt;strong&gt;调用&lt;/strong&gt;就不返回。但是一旦调用返回，就得到返回值了。&lt;br&gt;
+换句话说，就是由&lt;strong&gt;调用者&lt;/strong&gt;主动等待这个&lt;strong&gt;调用&lt;/strong&gt;的结果。而异步则是相反，&lt;strong&gt;调用&lt;/strong&gt;在发出之后，这个调用就直接返回了，所以没有返回结果。换句话说，当一个异步过程调用发出后，调用者不会立刻得到结果。而是在&lt;strong&gt;调用&lt;/strong&gt;发出后，&lt;strong&gt;被调用者&lt;/strong&gt;通过状态、通知来通知调用者，或通过回调函数处理这个调用。典型的异步编程模型比如Node.js举个通俗的例子：你打电话问书店老板有没有《分布式系统》这本书，如果是同步通信机制，书店老板会说，你稍等，”我查一下&amp;quot;，然后开始查啊查，等查好了（可能是5秒，也可能是一天）告诉你结果（返回结果）。而异步通信机制，书店老板直接告诉你我查一下啊，查好了打电话给你，然后直接挂电话了（不返回结果）。然后查好了，他会主动打电话给你。在这里老板通过“回电”这种方式来回调。&lt;/p&gt;
+&lt;h1 id=&#34;阻塞与非阻塞&#34;&gt;阻塞与非阻塞&lt;/h1&gt;
+&lt;p&gt;阻塞和非阻塞关注的是&lt;strong&gt;程序在等待调用结果（消息，返回值）时的状态.&lt;/strong&gt;&lt;br&gt;
+阻塞调用是指调用结果返回之前，当前线程会被挂起。调用线程只有在得到结果之后才会返回。非阻塞调用指在不能立刻得到结果之前，该调用不会阻塞当前线程。&lt;br&gt;
+还是上面的例子，你打电话问书店老板有没有《分布式系统》这本书，你如果是阻塞式调用，你会一直把自己“挂起”，直到得到这本书有没有的结果，如果是非阻塞式调用，你不管老板有没有告诉你，你自己先一边去玩了， 当然你也要偶尔过几分钟check一下老板有没有返回结果。在这里阻塞与非阻塞与是否同步异步无关。跟老板通过什么方式回答你结果无关。&lt;/p&gt;
+&lt;p&gt;阻塞和非阻塞，应该描述的是一种状态，同步与非同步描述的是行为方式&lt;/p&gt;
+&lt;h1 id=&#34;关于bio-nio-aio的理解&#34;&gt;关于BIO、NIO、AIO的理解&lt;/h1&gt;
+&lt;p&gt;BIO同步阻塞：你打电话告诉老板你要买某书，老板拿起电话听你说完就去查书，没有说话，你什么也不知道，在得到任何结果之前，你一直拿着电话干等，你此时什么也干不了。30分钟后老板直接把书送到你家，这时你才挂断电话。每次电话你都要得得到结果（书到家）后你才挂断电话，这是同步。你一直拿着电话等结果，这是阻塞。&lt;/p&gt;
+&lt;p&gt;NIO同步非阻塞：你打电话告诉老板你要买某书，老板拿起电话后说“我不知道有没有货，现在去查”便挂了电话，又过了10分种你第二次打电话说你要买某书，老板拿起电话说完“还没有查到，你再等会儿”便挂断电话。挂断电话5分钟后老板查到有书，但并没有主动打电话告诉你。你再次等待10分钟后第三次电话老板问结果，老板说“书有了，我给你送到家”，你断挂电话。每次电话你都要得得到结果（去查-&amp;gt;还没有查到-&amp;gt;有货）后你才挂断电话，这是同步。你每隔10分钟打电话询问结果，这是非阻塞。&lt;/p&gt;
+&lt;p&gt;异步阻塞：你打电话过去问老板有没有某书，老板说“我不知道有没有货，现在去查，先挂了电话，有结果告诉你，你等我电话”就挂掉电话。等电话期间你什么也不干，老板主动给你发短信通知你结果书有了，5分钟后希望老板现在把书送来，你再次打电话让老板送书，老板马上送书上门。老板主动给你发短信，这是异步。等待老板的短信期间你什么也没干，这是阻塞。&lt;/p&gt;
+&lt;p&gt;AIO异步非阻塞：你打电话过去后问老板有没有某书，老板说“好的，有货我直接给你送上门”就挂掉电话。然后你想干嘛干嘛，等老板把书送到后你看书。等待老板主动给你送书上门，这是异步。挂了电话后你就想干嘛干嘛，这是非阻塞。&lt;/p&gt;
+">关于阻塞非阻塞与同步异步的理解</a>
+      </div>
+      
+      <div class="item">
         <a class="result-title" style="opacity: 0;" href="https://rayzhang13.github.io/post/thread-pool/"" data-c="
           &lt;p&gt;暂时快速梳理一下Java线程池（毕竟都是速成的）&lt;/p&gt;
 &lt;!-- more --&gt;
@@ -812,6 +837,10 @@ JDK默认的拒绝策略有四种：&lt;br&gt;
 3、当任务队列和线程池均为空的时候 线程池的状态由STOP/SHUTDOWN——–&amp;gt;TIDYING&lt;br&gt;
 4、当terminated()方法被调用完成之后，线程池的状态由TIDYING———-&amp;gt;TERMINATED状态&lt;br&gt;
 &lt;img src=&#34;https://rayzhang13.github.io/post-images/1622823162874.png&#34; alt=&#34;&#34; loading=&#34;lazy&#34;&gt;&lt;/p&gt;
+&lt;p&gt;shutdown()/shutdownNow()有着重要的区别：&lt;br&gt;
+shutdown() 执行后停止接受新任务，会把队列的任务执行完毕。&lt;br&gt;
+shutdownNow() 也是停止接受新任务，但会中断所有的任务，将线程池状态变为 stop。&lt;br&gt;
+两个方法都会中断线程，用户可自行判断是否需要响应中断。&lt;/p&gt;
 ">Java线程池简单理解</a>
       </div>
       

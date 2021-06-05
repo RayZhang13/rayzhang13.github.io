@@ -8,7 +8,7 @@
 <meta name="keywords" content="Ray&#39;s Blog">
 <meta name="description" content="Everything&#39;s gonna be just fine.">
 <meta name="theme-color" content="#000">
-<title>二分查找的边界问题 | Ray&#39;s Blog</title>
+<title>关于阻塞非阻塞与同步异步的理解 | Ray&#39;s Blog</title>
 <link rel="shortcut icon" href="/favicon.ico?v=1622870801873">
 <link rel="stylesheet" href="/media/css/pisces.css">
 <link rel="stylesheet" href="/media/fonts/font-awesome.css">
@@ -38,8 +38,8 @@
 
 
 
-  <meta name="description" content="二分查找的边界问题" />
-  <meta name="keywords" content="Algorithms" />
+  <meta name="description" content="关于阻塞非阻塞与同步异步的理解" />
+  <meta name="keywords" content="Operating System" />
 </head>
 
 <body>
@@ -254,19 +254,10 @@
   <div class="toc-wrapper auto-number auto"
     id="toc_wrapper">
     <ul class="markdownIt-TOC">
-<li><a href="#%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE%E6%A8%A1%E7%89%88">二分查找模版</a>
-<ul>
-<li><a href="#%E6%99%AE%E9%80%9A%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE%E6%89%BE%E5%88%B0%E7%9B%AE%E6%A0%87target%E5%8D%B3%E5%8F%AF">普通二分查找（找到目标target即可）</a></li>
-<li><a href="#%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE%E4%B8%8B%E7%95%8C">二分查找下界</a></li>
-<li><a href="#%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE%E4%B8%8A%E7%95%8C">二分查找上界</a></li>
-</ul>
-</li>
-<li><a href="#%E4%BA%8C%E5%88%86%E6%9F%A5%E6%89%BE%E4%BE%8B%E9%A2%98">二分查找例题</a>
-<ul>
-<li><a href="#leetcode-1870-%E5%87%86%E6%97%B6%E5%88%B0%E8%BE%BE%E7%9A%84%E5%88%97%E8%BD%A6%E6%9C%80%E5%B0%8F%E6%97%B6%E9%80%9F-round-242-t2">leetcode 1870. 准时到达的列车最小时速 Round 242 T2</a></li>
-<li><a href="#leetcode-962-%E6%9C%80%E5%A4%A7%E5%AE%BD%E5%BA%A6%E5%9D%A1">leetcode 962. 最大宽度坡</a></li>
-</ul>
-</li>
+<li><a href="#%E9%98%BB%E5%A1%9E%E4%B8%8E%E9%9D%9E%E9%98%BB%E5%A1%9E%E4%B8%8E%E5%90%8C%E6%AD%A5%E4%B8%8E%E5%BC%82%E6%AD%A5%E4%B8%8D%E8%83%BD%E7%AE%80%E5%8D%95%E7%9A%84%E4%BB%8E%E5%AD%97%E9%9D%A2%E7%90%86%E8%A7%A3%E6%8F%90%E4%BE%9B%E4%B8%80%E4%B8%AA%E4%BB%8E%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F%E8%A7%92%E5%BA%A6%E7%9A%84%E5%9B%9E%E7%AD%94-%E5%90%8C%E6%AD%A5%E4%B8%8E%E5%BC%82%E6%AD%A5">“阻塞”与&quot;非阻塞&quot;与&quot;同步&quot;与“异步&quot;不能简单的从字面理解，提供一个从分布式系统角度的回答。<br>
+同步与异步</a></li>
+<li><a href="#%E9%98%BB%E5%A1%9E%E4%B8%8E%E9%9D%9E%E9%98%BB%E5%A1%9E">阻塞与非阻塞</a></li>
+<li><a href="#%E5%85%B3%E4%BA%8Ebio-nio-aio%E7%9A%84%E7%90%86%E8%A7%A3">关于BIO、NIO、AIO的理解</a></li>
 </ul>
 
   </div>
@@ -532,8 +523,8 @@
           <div class="section bg-color post post-page">
             <section class="post-header">
   <h1 class="post-title">
-    <a class="post-title-link" href="https://rayzhang13.github.io/post/BinarySearchOccasions/">
-      二分查找的边界问题
+    <a class="post-title-link" href="https://rayzhang13.github.io/post/IO-modules/">
+      关于阻塞非阻塞与同步异步的理解
     </a>
   </h1>
   <div class="post-meta">
@@ -541,7 +532,7 @@
     <span class="meta-item pc-show">
       <i class="fa fa-calendar-o"></i>
       <span class="language" data-lan="publish">发布于</span>
-      <span class="publish-time" data-t="2021-05-28 22:47:13">2021-05-28</span>
+      <span class="publish-time" data-t="2021-06-05 13:08:49">2021-06-05</span>
       <span class="post-meta-divider pc-show">|</span>
     </span>
     
@@ -550,8 +541,8 @@
       <span class="pc-show language" data-lan="category-in">分类于</span>
       
       
-      <a href="https://rayzhang13.github.io/tag/d9PF19SZ6/">
-        <span>Algorithms</span>
+      <a href="https://rayzhang13.github.io/tag/3FUrp6PZU/">
+        <span>Operating System</span>
       </a>
       
       
@@ -560,17 +551,17 @@
     
     <span class="meta-item">
       <i class="fa fa-clock-o"></i>
-      <span>9<span class="language" data-lan="minute">分钟</span></span>
+      <span>5<span class="language" data-lan="minute">分钟</span></span>
     </span>
     <span class="meta-item">
       <span class="post-meta-divider">|</span>
       <i class="fa fa-file-word-o"></i>
-      <span>1910<span class="pc-show language" data-lan="words">字数</span></span>
+      <span>1270<span class="pc-show language" data-lan="words">字数</span></span>
     </span>
     
     
     
-    <span id="/post/BinarySearchOccasions/" data-flag-title="二分查找的边界问题" class="meta-item pc-show leancloud_visitors">
+    <span id="/post/IO-modules/" data-flag-title="关于阻塞非阻塞与同步异步的理解" class="meta-item pc-show leancloud_visitors">
       <span class="post-meta-divider">|</span>
       <i class="fa fa-eye"></i>
       <span><span class="language" data-lan="view">浏览量</span>：<span class="leancloud-visitors-count"></span></span>
@@ -579,240 +570,22 @@
   </div>
 </section>
             <div class="post-body next-md-body" id="post_body">
-              <p>二分问题的边界在很久以来一直是我的一个难以言表的痛点，经常一debug就是半天，这下仔细来分析一下二分查找的几种情况</p>
-<!-- more -->
-<p>我们都知道对于一个单调数组，对其进行二分查找的复杂度一般为O(log N)<br>
-通过控制上下界lo和hi不断缩小范围得到</p>
-<h1 id="二分查找模版">二分查找模版</h1>
-<h2 id="普通二分查找找到目标target即可">普通二分查找（找到目标target即可）</h2>
-<pre><code class="language-Java">public class BinarySearch {
-    public int search(int[] arr, int target){
-        int lo = 0, hi = arr.length - 1;
-        while(lo &lt;= hi){
-            int mid = lo + (hi - lo) / 2;       //为了防止 (hi + lo) / 2 发生整型溢出
-            if(target &gt; arr[mid]) lo = mid + 1;
-            else if(target &lt; arr[mid]) hi = mid - 1;
-            else return mid;
-        }
-        return -1;
-    }
-
-    public static void main(String[] args) {
-        int[] arr = new int[]{-1, 0, 3, 5, 9, 12};
-        System.out.println(new BinarySearch().search(arr, 9));
-    }
-}
-</code></pre>
-<p>其中查找区间为<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>[</mo><mi>l</mi><mi>o</mi><mo separator="true">,</mo><mi>h</mi><mi>i</mi><mo>]</mo></mrow><annotation encoding="application/x-tex">[lo, hi]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">o</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord mathdefault">h</span><span class="mord mathdefault">i</span><span class="mclose">]</span></span></span></span>，即左闭右闭，因此while循环内条件为<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>l</mi><mi>o</mi><mo>≤</mo><mi>h</mi><mi>i</mi></mrow><annotation encoding="application/x-tex">lo \leq hi</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83041em;vertical-align:-0.13597em;"></span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">o</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">≤</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault">h</span><span class="mord mathdefault">i</span></span></span></span></p>
-<ol>
-<li>当查询到mid所在下标值为target时停止</li>
-<li>若mid所在下表值小于target，则说明目标值在当前区间右半侧，故将闭区间左端点调整为mid + 1<br>
-<img src="https://rayzhang13.github.io/post-images/1622221197511.png" alt="too small" loading="lazy"></li>
-<li>若mid所在下表值大于target，则说明目标值在当前区间左半侧，故将闭区间左端点调整为mid - 1<br>
-<img src="https://rayzhang13.github.io/post-images/1622221348036.png" alt="too large" loading="lazy"></li>
-</ol>
-<h2 id="二分查找下界">二分查找下界</h2>
-<p>例如数组{1, 2, 2, 2, 2, 3, 4, 5}<br>
-当查找2时，区间缩小时可能取到下标1, 2, 3, 4任意一点，故需要重新修改边界条件<br>
-代码如下:</p>
-<pre><code class="language-java">public class BinarySearch {
-    public int search(int[] arr, int target){
-        int res = -1;
-        int lo = 0, hi = arr.length - 1;
-        while(lo &lt;= hi){
-            int mid = lo + (hi - lo) / 2;
-            if(target &gt; arr[mid]) lo = mid + 1;
-            else {
-                if(arr[mid] == target) res = mid;   //若满足要求提前将res记录
-                hi = mid - 1;   //排除当前mid，继续缩小区间
-            }
-        }
-        return res;
-    }
-
-    public static void main(String[] args) {
-        int[] arr = new int[]{1, 1, 1, 2, 2, 3, 3, 5};
-        System.out.println(new BinarySearch().search(arr, 5));
-    }
-}
-</code></pre>
-<p>若<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>a</mi><mi>r</mi><mi>r</mi><mo>[</mo><mi>m</mi><mi>i</mi><mi>d</mi><mo>]</mo><mo>≤</mo><mi>t</mi><mi>a</mi><mi>r</mi><mi>g</mi><mi>e</mi><mi>t</mi></mrow><annotation encoding="application/x-tex">arr[mid] \leq target</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">a</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mopen">[</span><span class="mord mathdefault">m</span><span class="mord mathdefault">i</span><span class="mord mathdefault">d</span><span class="mclose">]</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">≤</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.80952em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">t</span><span class="mord mathdefault">a</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="mord mathdefault">e</span><span class="mord mathdefault">t</span></span></span></span></p>
-<ul>
-<li>若小于，则应该缩小上界，继续向下搜索</li>
-<li>若等于，则应该首先标记当前mid下标为res，再排除当前mid以后的所有元素，继续尝试向下查找</li>
-</ul>
-<h2 id="二分查找上界">二分查找上界</h2>
-<p>同理，与上方类似<br>
-二分下界查找如下：</p>
-<pre><code class="language-java">public class BinarySearch {
-    public int search(int[] arr, int target){
-        int res = -1;
-        int lo = 0, hi = arr.length - 1;
-        while(lo &lt;= hi){
-            int mid = lo + (hi - lo) / 2;
-            if(target &lt; arr[mid]) hi = mid - 1;
-            else {
-                if(arr[mid] == target) res = mid;
-                lo = mid + 1;
-            }
-        }
-        return res;
-    }
-
-    public static void main(String[] args) {
-        int[] arr = new int[]{1, 1, 1, 2, 2, 3, 3, 5};
-        System.out.println(new BinarySearch().search(arr, 3));
-    }
-}
-</code></pre>
-<h1 id="二分查找例题">二分查找例题</h1>
-<h2 id="leetcode-1870-准时到达的列车最小时速-round-242-t2"><a href="https://leetcode-cn.com/problems/minimum-speed-to-arrive-on-time/">leetcode 1870. 准时到达的列车最小时速 Round 242 T2</a></h2>
-<p>给你一个浮点数 hour ，表示你到达办公室可用的总通勤时间。要到达办公室，你必须按给定次序乘坐 n 趟列车。另给你一个长度为 n 的整数数组 dist ，其中 dist[i] 表示第 i 趟列车的行驶距离（单位是千米）。</p>
-<p>每趟列车均只能在整点发车，所以你可能需要在两趟列车之间等待一段时间。</p>
-<p>例如，第 1 趟列车需要 1.5 小时，那你必须再等待 0.5 小时，搭乘在第 2 小时发车的第 2 趟列车。<br>
-返回能满足你准时到达办公室所要求全部列车的 最小正整数 时速（单位：千米每小时），如果无法准时到达，则返回 -1 。</p>
-<p>生成的测试用例保证答案不超过 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1</mn><msup><mn>0</mn><mn>7</mn></msup></mrow><annotation encoding="application/x-tex">10^7</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="mord">1</span><span class="mord"><span class="mord">0</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">7</span></span></span></span></span></span></span></span></span></span></span> ，且 hour 的 小数点后最多存在两位数字 。</p>
-<blockquote>
-<p>示例 1：<br>
-输入：dist = [1,3,2], hour = 6<br>
-输出：1<br>
-解释：速度为 1 时：<br>
-第 1 趟列车运行需要 1/1 = 1 小时。<br>
-由于是在整数时间到达，可以立即换乘在第 1 小时发车的列车。第 2 趟列车运行需要 3/1 = 3 小时。<br>
-由于是在整数时间到达，可以立即换乘在第 4 小时发车的列车。第 3 趟列车运行需要 2/1 = 2 小时。<br>
-你将会恰好在第 6 小时到达。</p>
-</blockquote>
-<blockquote>
-<p>示例 2：<br>
-输入：dist = [1,3,2], hour = 2.7<br>
-输出：3<br>
-解释：速度为 3 时：<br>
-第 1 趟列车运行需要 1/3 = 0.33333 小时。<br>
-由于不是在整数时间到达，故需要等待至第 1 小时才能搭乘列车。第 2 趟列车运行需要 3/3 = 1 小时。<br>
-由于是在整数时间到达，可以立即换乘在第 2 小时发车的列车。第 3 趟列车运行需要 2/3 = 0.66667 小时。<br>
-你将会在第 2.66667 小时到达。</p>
-</blockquote>
-<blockquote>
-<p>示例 3：<br>
-输入：dist = [1,3,2], hour = 1.9<br>
-输出：-1<br>
-解释：不可能准时到达，因为第 3 趟列车最早是在第 2 小时发车。</p>
-</blockquote>
-<blockquote>
-<p>提示：<br>
-n == dist.length<br>
-1 &lt;= n &lt;= 10^5<br>
-1 &lt;= dist[i] &lt;= 10^5<br>
-1 &lt;= hour &lt;= 10^9<br>
-hours 中，<strong>小数点后最多存在两位数字</strong></p>
-</blockquote>
-<p>我们可以用二分的方法寻找到能够按时到达的最小时速。<br>
-由于时速必须为正整数，因此二分的下界为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1</mn></mrow><annotation encoding="application/x-tex">1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span>；对于二分的上界，我们考虑 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>h</mi><mi>o</mi><mi>u</mi><mi>r</mi><mi>s</mi></mrow><annotation encoding="application/x-tex">hours</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69444em;vertical-align:0em;"></span><span class="mord mathdefault">h</span><span class="mord mathdefault">o</span><span class="mord mathdefault">u</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault">s</span></span></span></span> 为两位小数，因此对于最后一段路程，最小的时限为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>0.01</mn></mrow><annotation encoding="application/x-tex">0.01</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span><span class="mord">.</span><span class="mord">0</span><span class="mord">1</span></span></span></span>，那么最高的时速要求即为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>d</mi><mi>i</mi><mi>s</mi><mi>t</mi><mo>[</mo><mi>i</mi><mo>]</mo><mi mathvariant="normal">/</mi><mn>0.01</mn><mo>≤</mo><mn>1</mn><msup><mn>0</mn><mn>7</mn></msup></mrow><annotation encoding="application/x-tex">dist[i] / 0.01 \leq 10^7</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">d</span><span class="mord mathdefault">i</span><span class="mord mathdefault">s</span><span class="mord mathdefault">t</span><span class="mopen">[</span><span class="mord mathdefault">i</span><span class="mclose">]</span><span class="mord">/</span><span class="mord">0</span><span class="mord">.</span><span class="mord">0</span><span class="mord">1</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">≤</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="mord">1</span><span class="mord"><span class="mord">0</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">7</span></span></span></span></span></span></span></span></span></span></span> ，同时为二分时速的上界, 即<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>d</mi><mi>i</mi><mi>s</mi><mi>t</mi><mo>≤</mo><mn>1</mn><msup><mn>0</mn><mn>9</mn></msup></mrow><annotation encoding="application/x-tex">dist \leq 10^9</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.83041em;vertical-align:-0.13597em;"></span><span class="mord mathdefault">d</span><span class="mord mathdefault">i</span><span class="mord mathdefault">s</span><span class="mord mathdefault">t</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">≤</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="mord">1</span><span class="mord"><span class="mord">0</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">9</span></span></span></span></span></span></span></span></span></span></span>。注意向上取整细节</p>
-<pre><code class="language-java">class Solution {
-public static int minSpeedOnTime(int[] dist, double hour) {
-        if ((((dist[dist.length - 1] * 1.0) / (10000000 * 1.0)) + dist.length - 1) &gt; hour) {
-            return -1;
-        }
-        int left = 1;
-        int right = 1000000000;
-        int speed = left + (right - left) / 2;
-        int result = -1;
-        while (left &lt; right) {
-            boolean isOk = judge(speed, dist, hour);
-            if (isOk) {
-                result = result == -1 ? speed : Math.min(result, speed);
-                right = speed;
-            } else {
-                left = speed + 1;
-            }
-            speed = left + (right - left) / 2;
-        }
-        if (result != -1) {
-            return result;
-        }
-        boolean isOk = judge(speed, dist, hour);
-        if (isOk) {
-            return speed;
-        } else {
-            return -1;
-        }
-    }
-    private static boolean judge(int speed, int[] dist, double hour) {
-        double time = 0.0;
-        for (int i = 0; i &lt; dist.length - 1; i++) {
-            time += ceilDiv(dist[i], speed);
-            if (time &gt; hour) {
-                continue;
-            }
-        }
-        time += (dist[dist.length - 1] * 1.0) / (speed * 1.0);
-        return time &lt;= hour;
-    }
-    private static int ceilDiv(int a, int b) {
-        int temp = Math.floorDiv(a, b);
-        if (temp * b &lt; a) {
-            return (temp + 1);
-        } else {
-            return temp;
-        }
-    }
-}
-</code></pre>
-<h2 id="leetcode-962-最大宽度坡"><a href="https://leetcode-cn.com/problems/maximum-width-ramp/">leetcode 962. 最大宽度坡</a></h2>
-<p>给定一个整数数组 A，坡是元组 (i, j)，其中  <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>i</mi><mo>&lt;</mo><mi>j</mi></mrow><annotation encoding="application/x-tex">i \lt j</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.69862em;vertical-align:-0.0391em;"></span><span class="mord mathdefault">i</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">&lt;</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.85396em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.05724em;">j</span></span></span></span> 且 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>A</mi><mo>[</mo><mi>i</mi><mo>]</mo><mo>≤</mo><mi>A</mi><mo>[</mo><mi>j</mi><mo>]</mo></mrow><annotation encoding="application/x-tex">A[i] \leq A[j]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">A</span><span class="mopen">[</span><span class="mord mathdefault">i</span><span class="mclose">]</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">≤</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">A</span><span class="mopen">[</span><span class="mord mathdefault" style="margin-right:0.05724em;">j</span><span class="mclose">]</span></span></span></span>。这样的坡的宽度为 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>j</mi><mo>−</mo><mi>i</mi></mrow><annotation encoding="application/x-tex">j - i</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.85396em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.05724em;">j</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.65952em;vertical-align:0em;"></span><span class="mord mathdefault">i</span></span></span></span>。<br>
-找出 A 中的坡的最大宽度，如果不存在，返回 0 。</p>
-<blockquote>
-<p>示例 1：<br>
-输入：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>[</mo><mn>6</mn><mo separator="true">,</mo><mn>0</mn><mo separator="true">,</mo><mn>8</mn><mo separator="true">,</mo><mn>2</mn><mo separator="true">,</mo><mn>1</mn><mo separator="true">,</mo><mn>5</mn><mo>]</mo></mrow><annotation encoding="application/x-tex">[6,0,8,2,1,5]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord">6</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">0</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">8</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">2</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">5</span><span class="mclose">]</span></span></span></span><br>
-输出：4<br>
-解释：<br>
-最大宽度的坡为 (i, j) = (1, 5): <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>A</mi><mo>[</mo><mn>1</mn><mo>]</mo><mo>=</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">A[1] = 0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">A</span><span class="mopen">[</span><span class="mord">1</span><span class="mclose">]</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span> 且 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>A</mi><mo>[</mo><mn>5</mn><mo>]</mo><mo>=</mo><mn>5</mn></mrow><annotation encoding="application/x-tex">A[5] = 5</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">A</span><span class="mopen">[</span><span class="mord">5</span><span class="mclose">]</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">5</span></span></span></span>.</p>
-</blockquote>
-<blockquote>
-<p>示例 2：<br>
-输入：<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mo>[</mo><mn>9</mn><mo separator="true">,</mo><mn>8</mn><mo separator="true">,</mo><mn>1</mn><mo separator="true">,</mo><mn>0</mn><mo separator="true">,</mo><mn>1</mn><mo separator="true">,</mo><mn>9</mn><mo separator="true">,</mo><mn>4</mn><mo separator="true">,</mo><mn>0</mn><mo separator="true">,</mo><mn>4</mn><mo separator="true">,</mo><mn>1</mn><mo>]</mo></mrow><annotation encoding="application/x-tex">[9,8,1,0,1,9,4,0,4,1]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mopen">[</span><span class="mord">9</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">8</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">0</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">1</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">9</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">4</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">0</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">4</span><span class="mpunct">,</span><span class="mspace" style="margin-right:0.16666666666666666em;"></span><span class="mord">1</span><span class="mclose">]</span></span></span></span><br>
-输出：7<br>
-解释：<br>
-最大宽度的坡为 (i, j) = (2, 9): <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>A</mi><mo>[</mo><mn>2</mn><mo>]</mo><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">A[2] = 1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">A</span><span class="mopen">[</span><span class="mord">2</span><span class="mclose">]</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span> 且 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>A</mi><mo>[</mo><mn>9</mn><mo>]</mo><mo>=</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">A[9] = 1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">A</span><span class="mopen">[</span><span class="mord">9</span><span class="mclose">]</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span>.</p>
-</blockquote>
-<p>维护一个max数组，自右向左遍历当前最大元素<br>
-再A数组自左向右一次遍历，查询max数组中大于<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>A</mi><mo>[</mo><mi>i</mi><mo>]</mo></mrow><annotation encoding="application/x-tex">A[i]</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">A</span><span class="mopen">[</span><span class="mord mathdefault">i</span><span class="mclose">]</span></span></span></span>的元素下标的上界，查询后将差与res取大</p>
-<pre><code class="language-java">class Solution {
-    public int maxWidthRamp(int[] A) {
-        int len = A.length;
-        int[] max = new int[len];
-        int tmp = 0;
-        int res = 0;
-        for(int i = len - 1; i &gt;= 0; i--){
-            tmp = Math.max(tmp, A[i]);
-            max[i] = tmp;
-        }
-        //System.out.println(Arrays.toString(max));
-        for(int i = 0 ; i &lt; len; i++){
-            int target = search(max, i + 1, A[i]);
-            //System.out.println(i + &quot; &quot; + target);
-            if(target != -1) res = Math.max(res, target - i);
-        }
-        return res;
-    }
-    public int search(int[] arr, int start, int target){
-        int lo = start, hi = arr.length - 1;
-        int ans = -1;
-        while(lo &lt;= hi){
-            int mid = lo + (hi - lo) / 2;
-            //System.out.println(lo + &quot; &quot; + hi + &quot; &quot; + mid);
-            if(arr[mid] &lt; target){
-                hi = mid - 1;
-            }
-            else{
-                ans = mid;
-                lo = mid + 1;
-            }
-        }
-        return ans;
-    }
-}
-</code></pre>
+              <p>这里先拉几篇有意思的知乎做一下补充理解：<br>
+<a href="https://www.zhihu.com/question/19732473/answer/20851256">链接</a></p>
+<h1 id="阻塞与非阻塞与同步与异步不能简单的从字面理解提供一个从分布式系统角度的回答-同步与异步">“阻塞”与&quot;非阻塞&quot;与&quot;同步&quot;与“异步&quot;不能简单的从字面理解，提供一个从分布式系统角度的回答。<br>
+同步与异步</h1>
+<p>同步和异步关注的是<strong>消息通信机制</strong> (synchronous communication/ asynchronous communication)所谓同步，就是在发出一个<strong>调用</strong>时，在没有得到结果之前，该<strong>调用</strong>就不返回。但是一旦调用返回，就得到返回值了。<br>
+换句话说，就是由<strong>调用者</strong>主动等待这个<strong>调用</strong>的结果。而异步则是相反，<strong>调用</strong>在发出之后，这个调用就直接返回了，所以没有返回结果。换句话说，当一个异步过程调用发出后，调用者不会立刻得到结果。而是在<strong>调用</strong>发出后，<strong>被调用者</strong>通过状态、通知来通知调用者，或通过回调函数处理这个调用。典型的异步编程模型比如Node.js举个通俗的例子：你打电话问书店老板有没有《分布式系统》这本书，如果是同步通信机制，书店老板会说，你稍等，”我查一下&quot;，然后开始查啊查，等查好了（可能是5秒，也可能是一天）告诉你结果（返回结果）。而异步通信机制，书店老板直接告诉你我查一下啊，查好了打电话给你，然后直接挂电话了（不返回结果）。然后查好了，他会主动打电话给你。在这里老板通过“回电”这种方式来回调。</p>
+<h1 id="阻塞与非阻塞">阻塞与非阻塞</h1>
+<p>阻塞和非阻塞关注的是<strong>程序在等待调用结果（消息，返回值）时的状态.</strong><br>
+阻塞调用是指调用结果返回之前，当前线程会被挂起。调用线程只有在得到结果之后才会返回。非阻塞调用指在不能立刻得到结果之前，该调用不会阻塞当前线程。<br>
+还是上面的例子，你打电话问书店老板有没有《分布式系统》这本书，你如果是阻塞式调用，你会一直把自己“挂起”，直到得到这本书有没有的结果，如果是非阻塞式调用，你不管老板有没有告诉你，你自己先一边去玩了， 当然你也要偶尔过几分钟check一下老板有没有返回结果。在这里阻塞与非阻塞与是否同步异步无关。跟老板通过什么方式回答你结果无关。</p>
+<p>阻塞和非阻塞，应该描述的是一种状态，同步与非同步描述的是行为方式</p>
+<h1 id="关于bio-nio-aio的理解">关于BIO、NIO、AIO的理解</h1>
+<p>BIO同步阻塞：你打电话告诉老板你要买某书，老板拿起电话听你说完就去查书，没有说话，你什么也不知道，在得到任何结果之前，你一直拿着电话干等，你此时什么也干不了。30分钟后老板直接把书送到你家，这时你才挂断电话。每次电话你都要得得到结果（书到家）后你才挂断电话，这是同步。你一直拿着电话等结果，这是阻塞。</p>
+<p>NIO同步非阻塞：你打电话告诉老板你要买某书，老板拿起电话后说“我不知道有没有货，现在去查”便挂了电话，又过了10分种你第二次打电话说你要买某书，老板拿起电话说完“还没有查到，你再等会儿”便挂断电话。挂断电话5分钟后老板查到有书，但并没有主动打电话告诉你。你再次等待10分钟后第三次电话老板问结果，老板说“书有了，我给你送到家”，你断挂电话。每次电话你都要得得到结果（去查-&gt;还没有查到-&gt;有货）后你才挂断电话，这是同步。你每隔10分钟打电话询问结果，这是非阻塞。</p>
+<p>异步阻塞：你打电话过去问老板有没有某书，老板说“我不知道有没有货，现在去查，先挂了电话，有结果告诉你，你等我电话”就挂掉电话。等电话期间你什么也不干，老板主动给你发短信通知你结果书有了，5分钟后希望老板现在把书送来，你再次打电话让老板送书，老板马上送书上门。老板主动给你发短信，这是异步。等待老板的短信期间你什么也没干，这是阻塞。</p>
+<p>AIO异步非阻塞：你打电话过去后问老板有没有某书，老板说“好的，有货我直接给你送上门”就挂掉电话。然后你想干嘛干嘛，等老板把书送到后你看书。等待老板主动给你送书上门，这是异步。挂了电话后你就想干嘛干嘛，这是非阻塞。</p>
 
             </div>
             
@@ -825,7 +598,7 @@ public static int minSpeedOnTime(int[] dist, double hour) {
     </li>
     <li class="post-copyright-link">
       <strong class="language" data-lan="link">本文链接：</strong>
-      <a href="https://rayzhang13.github.io/post/BinarySearchOccasions/" title="二分查找的边界问题">https://rayzhang13.github.io/post/BinarySearchOccasions/</a>
+      <a href="https://rayzhang13.github.io/post/IO-modules/" title="关于阻塞非阻塞与同步异步的理解">https://rayzhang13.github.io/post/IO-modules/</a>
     </li>
     <li class="post-copyright-license">
       <strong class="language" data-lan="copyright">版权声明： </strong>
@@ -834,18 +607,18 @@ public static int minSpeedOnTime(int[] dist, double hour) {
   </ul>
   <div class="tags">
     
-      <a href="https://rayzhang13.github.io/tag/d9PF19SZ6/"># Algorithms</a>
+      <a href="https://rayzhang13.github.io/tag/3FUrp6PZU/"># Operating System</a>
     
   </div>
   <div class="nav">
     <div class="nav-prev">
       
-        <i class="fa fa-chevron-left"></i>
-        <a class="nav-pc-next" title="Leetcode刷题计划" href="https://rayzhang13.github.io/post/leetcode-project/">Leetcode刷题计划</a class="nav-pc-next">
-        <a class="nav-mobile-prev" title="Leetcode刷题计划" href="https://rayzhang13.github.io/post/leetcode-project/">上一篇</a>
-      
     </div>
     <div class="nav-next">
+      
+        <a class="nav-pc-next" title="Java线程池简单理解" href="https://rayzhang13.github.io/post/thread-pool/">Java线程池简单理解</a>
+        <a class="nav-mobile-next" title="Java线程池简单理解" href="https://rayzhang13.github.io/post/thread-pool/">下一篇</a>
+        <i class="fa fa-chevron-right"></i>
       
     </div>
   </div>
