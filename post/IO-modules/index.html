@@ -9,7 +9,7 @@
 <meta name="description" content="Everything&#39;s gonna be just fine.">
 <meta name="theme-color" content="#000">
 <title>关于阻塞非阻塞与同步异步的理解 | Ray&#39;s Blog</title>
-<link rel="shortcut icon" href="/favicon.ico?v=1622870801873">
+<link rel="shortcut icon" href="/favicon.ico?v=1622870999460">
 <link rel="stylesheet" href="/media/css/pisces.css">
 <link rel="stylesheet" href="/media/fonts/font-awesome.css">
 <link
@@ -254,8 +254,7 @@
   <div class="toc-wrapper auto-number auto"
     id="toc_wrapper">
     <ul class="markdownIt-TOC">
-<li><a href="#%E9%98%BB%E5%A1%9E%E4%B8%8E%E9%9D%9E%E9%98%BB%E5%A1%9E%E4%B8%8E%E5%90%8C%E6%AD%A5%E4%B8%8E%E5%BC%82%E6%AD%A5%E4%B8%8D%E8%83%BD%E7%AE%80%E5%8D%95%E7%9A%84%E4%BB%8E%E5%AD%97%E9%9D%A2%E7%90%86%E8%A7%A3%E6%8F%90%E4%BE%9B%E4%B8%80%E4%B8%AA%E4%BB%8E%E5%88%86%E5%B8%83%E5%BC%8F%E7%B3%BB%E7%BB%9F%E8%A7%92%E5%BA%A6%E7%9A%84%E5%9B%9E%E7%AD%94-%E5%90%8C%E6%AD%A5%E4%B8%8E%E5%BC%82%E6%AD%A5">“阻塞”与&quot;非阻塞&quot;与&quot;同步&quot;与“异步&quot;不能简单的从字面理解，提供一个从分布式系统角度的回答。<br>
-同步与异步</a></li>
+<li><a href="#%E5%90%8C%E6%AD%A5%E4%B8%8E%E5%BC%82%E6%AD%A5">同步与异步</a></li>
 <li><a href="#%E9%98%BB%E5%A1%9E%E4%B8%8E%E9%9D%9E%E9%98%BB%E5%A1%9E">阻塞与非阻塞</a></li>
 <li><a href="#%E5%85%B3%E4%BA%8Ebio-nio-aio%E7%9A%84%E7%90%86%E8%A7%A3">关于BIO、NIO、AIO的理解</a></li>
 </ul>
@@ -556,7 +555,7 @@
     <span class="meta-item">
       <span class="post-meta-divider">|</span>
       <i class="fa fa-file-word-o"></i>
-      <span>1270<span class="pc-show language" data-lan="words">字数</span></span>
+      <span>1290<span class="pc-show language" data-lan="words">字数</span></span>
     </span>
     
     
@@ -570,10 +569,12 @@
   </div>
 </section>
             <div class="post-body next-md-body" id="post_body">
-              <p>这里先拉几篇有意思的知乎做一下补充理解：<br>
+              <p>一直对BIO、NIO、AIO模型理解不到位，特意整理了一下<br>
+这里先拉几篇有意思的知乎做一下补充理解：<br>
 <a href="https://www.zhihu.com/question/19732473/answer/20851256">链接</a></p>
-<h1 id="阻塞与非阻塞与同步与异步不能简单的从字面理解提供一个从分布式系统角度的回答-同步与异步">“阻塞”与&quot;非阻塞&quot;与&quot;同步&quot;与“异步&quot;不能简单的从字面理解，提供一个从分布式系统角度的回答。<br>
-同步与异步</h1>
+<!-- more -->
+<p>“阻塞”与&quot;非阻塞&quot;与&quot;同步&quot;与“异步&quot;不能简单的从字面理解，提供一个从分布式系统角度的回答。</p>
+<h1 id="同步与异步">同步与异步</h1>
 <p>同步和异步关注的是<strong>消息通信机制</strong> (synchronous communication/ asynchronous communication)所谓同步，就是在发出一个<strong>调用</strong>时，在没有得到结果之前，该<strong>调用</strong>就不返回。但是一旦调用返回，就得到返回值了。<br>
 换句话说，就是由<strong>调用者</strong>主动等待这个<strong>调用</strong>的结果。而异步则是相反，<strong>调用</strong>在发出之后，这个调用就直接返回了，所以没有返回结果。换句话说，当一个异步过程调用发出后，调用者不会立刻得到结果。而是在<strong>调用</strong>发出后，<strong>被调用者</strong>通过状态、通知来通知调用者，或通过回调函数处理这个调用。典型的异步编程模型比如Node.js举个通俗的例子：你打电话问书店老板有没有《分布式系统》这本书，如果是同步通信机制，书店老板会说，你稍等，”我查一下&quot;，然后开始查啊查，等查好了（可能是5秒，也可能是一天）告诉你结果（返回结果）。而异步通信机制，书店老板直接告诉你我查一下啊，查好了打电话给你，然后直接挂电话了（不返回结果）。然后查好了，他会主动打电话给你。在这里老板通过“回电”这种方式来回调。</p>
 <h1 id="阻塞与非阻塞">阻塞与非阻塞</h1>
@@ -1167,10 +1168,12 @@
       
       <div class="item">
         <a class="result-title" style="opacity: 0;" href="https://rayzhang13.github.io/post/IO-modules/"" data-c="
-          &lt;p&gt;这里先拉几篇有意思的知乎做一下补充理解：&lt;br&gt;
+          &lt;p&gt;一直对BIO、NIO、AIO模型理解不到位，特意整理了一下&lt;br&gt;
+这里先拉几篇有意思的知乎做一下补充理解：&lt;br&gt;
 &lt;a href=&#34;https://www.zhihu.com/question/19732473/answer/20851256&#34;&gt;链接&lt;/a&gt;&lt;/p&gt;
-&lt;h1 id=&#34;阻塞与非阻塞与同步与异步不能简单的从字面理解提供一个从分布式系统角度的回答-同步与异步&#34;&gt;“阻塞”与&amp;quot;非阻塞&amp;quot;与&amp;quot;同步&amp;quot;与“异步&amp;quot;不能简单的从字面理解，提供一个从分布式系统角度的回答。&lt;br&gt;
-同步与异步&lt;/h1&gt;
+&lt;!-- more --&gt;
+&lt;p&gt;“阻塞”与&amp;quot;非阻塞&amp;quot;与&amp;quot;同步&amp;quot;与“异步&amp;quot;不能简单的从字面理解，提供一个从分布式系统角度的回答。&lt;/p&gt;
+&lt;h1 id=&#34;同步与异步&#34;&gt;同步与异步&lt;/h1&gt;
 &lt;p&gt;同步和异步关注的是&lt;strong&gt;消息通信机制&lt;/strong&gt; (synchronous communication/ asynchronous communication)所谓同步，就是在发出一个&lt;strong&gt;调用&lt;/strong&gt;时，在没有得到结果之前，该&lt;strong&gt;调用&lt;/strong&gt;就不返回。但是一旦调用返回，就得到返回值了。&lt;br&gt;
 换句话说，就是由&lt;strong&gt;调用者&lt;/strong&gt;主动等待这个&lt;strong&gt;调用&lt;/strong&gt;的结果。而异步则是相反，&lt;strong&gt;调用&lt;/strong&gt;在发出之后，这个调用就直接返回了，所以没有返回结果。换句话说，当一个异步过程调用发出后，调用者不会立刻得到结果。而是在&lt;strong&gt;调用&lt;/strong&gt;发出后，&lt;strong&gt;被调用者&lt;/strong&gt;通过状态、通知来通知调用者，或通过回调函数处理这个调用。典型的异步编程模型比如Node.js举个通俗的例子：你打电话问书店老板有没有《分布式系统》这本书，如果是同步通信机制，书店老板会说，你稍等，”我查一下&amp;quot;，然后开始查啊查，等查好了（可能是5秒，也可能是一天）告诉你结果（返回结果）。而异步通信机制，书店老板直接告诉你我查一下啊，查好了打电话给你，然后直接挂电话了（不返回结果）。然后查好了，他会主动打电话给你。在这里老板通过“回电”这种方式来回调。&lt;/p&gt;
 &lt;h1 id=&#34;阻塞与非阻塞&#34;&gt;阻塞与非阻塞&lt;/h1&gt;
