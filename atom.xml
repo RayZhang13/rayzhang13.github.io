@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://rayzhang13.github.io</id>
     <title>Ray&apos;s Blog</title>
-    <updated>2021-06-06T13:42:38.608Z</updated>
+    <updated>2021-06-06T14:00:31.160Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://rayzhang13.github.io"/>
     <link rel="self" href="https://rayzhang13.github.io/atom.xml"/>
@@ -270,7 +270,7 @@ n == <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>m
             cnt1[i] = (i &gt; 0 ? cnt1[i - 1] : 0) + (s.charAt(i) == sb1.charAt(i)? 0: 1);
             cnt2[i] = (i &gt; 0 ? cnt2[i - 1] : 0) + (s.charAt(i) == sb2.charAt(i)? 0: 1);
         }
-        int res = cnt2[len - 1];
+        int res = Math.min(cnt1[len - 1], cnt2[len - 1]);
         if(len % 2 == 1){
             for(int i = 0; i &lt; len; i++){
                 res = Math.min(cnt1[i] + cnt2[len - 1] - cnt2[i], res);

@@ -9,7 +9,7 @@
 <meta name="description" content="Everything&#39;s gonna be just fine.">
 <meta name="theme-color" content="#000">
 <title>Leetcode刷题计划 | Ray&#39;s Blog</title>
-<link rel="shortcut icon" href="/favicon.ico?v=1622986955578">
+<link rel="shortcut icon" href="/favicon.ico?v=1622988026169">
 <link rel="stylesheet" href="/media/css/pisces.css">
 <link rel="stylesheet" href="/media/fonts/font-awesome.css">
 <link
@@ -1231,7 +1231,7 @@ n == &lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;
             cnt1[i] = (i &amp;gt; 0 ? cnt1[i - 1] : 0) + (s.charAt(i) == sb1.charAt(i)? 0: 1);
             cnt2[i] = (i &amp;gt; 0 ? cnt2[i - 1] : 0) + (s.charAt(i) == sb2.charAt(i)? 0: 1);
         }
-        int res = cnt2[len - 1];
+        int res = Math.min(cnt1[len - 1], cnt2[len - 1]);
         if(len % 2 == 1){
             for(int i = 0; i &amp;lt; len; i++){
                 res = Math.min(cnt1[i] + cnt2[len - 1] - cnt2[i], res);
