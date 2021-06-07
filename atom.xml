@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://rayzhang13.github.io</id>
     <title>Ray&apos;s Blog</title>
-    <updated>2021-06-07T03:39:26.409Z</updated>
+    <updated>2021-06-07T04:13:19.258Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://rayzhang13.github.io"/>
     <link rel="self" href="https://rayzhang13.github.io/atom.xml"/>
@@ -244,7 +244,7 @@ n == <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>m
 <p>而对于奇数长度串，情况就有了一些复杂</p>
 </li>
 <li>
-<p>例如01 | 0101-&gt;10101 01，101 | 1010-&gt;1010 101我们发现原先的Pattern很明显的从某个位置被划开分成了两部分，左右各遵循不同的匹配模式</p>
+<p>例如01 | 10101-&gt;10101 01，101 | 1010-&gt;1010 101我们发现原先的Pattern很明显的从某个位置被划开分成了两部分，左右各遵循不同的匹配模式</p>
 </li>
 <li>
 <p>据此我们想到了需要拼串，需要分别求解两段区间各自匹配不同模式后不满足的数字的总数</p>
