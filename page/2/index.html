@@ -9,7 +9,7 @@
 <meta name="description" content="Everything&#39;s gonna be just fine.">
 <meta name="theme-color" content="#000">
 <title>Ray&#39;s Blog</title>
-<link rel="shortcut icon" href="/favicon.ico?v=1624190509447">
+<link rel="shortcut icon" href="/favicon.ico?v=1624191965359">
 <link rel="stylesheet" href="/media/css/pisces.css">
 <link rel="stylesheet" href="/media/fonts/font-awesome.css">
 <link
@@ -193,7 +193,7 @@
     <div class="sidebar-item-box">
       <a href="/archives/">
         
-        <span class="site-item-stat-count">11</span>
+        <span class="site-item-stat-count">12</span>
         <span class="site-item-stat-name language" data-lan="article">文章</span>
       </a>
     </div>
@@ -248,6 +248,71 @@
         <div class="section-box pisces">
           <section class="section bg-color posts-expand slide-down-in">
             
+  <article class="post-list-box  post box-shadow-wrapper">
+    <div class="article-wrapper bg-color">
+      <section class="post-header">
+  <h1 class="post-title">
+    <a class="post-title-link" href="https://rayzhang13.github.io/post/hanoi-problem/">
+      Hanoi问题
+    </a>
+  </h1>
+  <div class="post-meta">
+    
+    <span class="meta-item pc-show">
+      <i class="fa fa-calendar-o"></i>
+      <span class="language" data-lan="publish">发布于</span>
+      <span class="publish-time" data-t="2021-05-29 15:49:01">2021-05-29</span>
+      <span class="post-meta-divider pc-show">|</span>
+    </span>
+    
+    <span class="meta-item">
+      <i class="fa fa-folder-o"></i>
+      <span class="pc-show language" data-lan="category-in">分类于</span>
+      
+      
+      <a href="https://rayzhang13.github.io/tag/d9PF19SZ6/">
+        <span>Algorithms</span>
+      </a>
+      
+      
+    </span>
+    <span class="post-meta-divider">|</span>
+    
+    <span class="meta-item">
+      <i class="fa fa-clock-o"></i>
+      <span>3<span class="language" data-lan="minute">分钟</span></span>
+    </span>
+    <span class="meta-item">
+      <span class="post-meta-divider">|</span>
+      <i class="fa fa-file-word-o"></i>
+      <span>664<span class="pc-show language" data-lan="words">字数</span></span>
+    </span>
+    
+  </div>
+</section>
+      <div class="post-body">
+        
+        
+          
+          <p>Hanoi问题是经典递归问题，本文将描述Hanoi问题的起源和解法原理</p>
+
+        
+        
+        <div class="post-button text-center">
+          <a class="btn language" data-lan="read-more" href="https://rayzhang13.github.io/post/hanoi-problem/" rel="contents">
+            阅读全文 »
+          </a>
+        </div>
+        
+      </div>
+      
+        <footer class="post-footer">
+          <div class="post-eof"></div>
+        </footer>
+      
+    </div>
+  </article>
+
   <article class="post-list-box  post box-shadow-wrapper">
     <div class="article-wrapper bg-color">
       <section class="post-header">
@@ -615,6 +680,738 @@
       <hr>
     </div>
     <div class="result" id="result">
+      
+      <div class="item">
+        <a class="result-title" style="opacity: 0;" href="https://rayzhang13.github.io/post/request-aop-log/"" data-c="
+          &lt;p&gt;在请求servlet的过程中，我们可以使用AOP给我们的项目添加日志打印功能&lt;br&gt;
+本文中，我们将详细描述如何使用AOP，将HttpRequest相关信息记录在日志中&lt;/p&gt;
+&lt;!-- more --&gt;
+&lt;h1 id=&#34;预期效果&#34;&gt;预期效果&lt;/h1&gt;
+&lt;p&gt;之前尝试调试成功的 若依 项目，在访问index页面并登陆成功后，后台日志会有如下显示：&lt;br&gt;
+&lt;img src=&#34;https://rayzhang13.github.io/post-images/1624191171817.png&#34; alt=&#34;&#34; loading=&#34;lazy&#34;&gt;&lt;br&gt;
+这是通过AOP切面的形式添加的功能&lt;/p&gt;
+&lt;p&gt;我们目标将如下参数打印在日志中：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;URL: 请求接口地址；&lt;/li&gt;
+&lt;li&gt;HTTP Method: 请求的方法，是 POST, GET, 还是 DELETE 等；&lt;/li&gt;
+&lt;li&gt;Class Method: 对应 Controller 的全路径以及调用的哪个方法;&lt;/li&gt;
+&lt;li&gt;IP: 请求 IP 地址；&lt;/li&gt;
+&lt;li&gt;Request Args: 请求入参，以 JSON 格式输出；&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h1 id=&#34;上手实现&#34;&gt;上手实现&lt;/h1&gt;
+&lt;p&gt;在此我们使用了Log4j2作为日志工具，配合Lombok插件&lt;/p&gt;
+&lt;p&gt;配置AOP切面 和 日志封装类：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;package com.ray.blog.aspect;
+
+import lombok.AllArgsConstructor;
+import lombok.ToString;
+import lombok.extern.log4j.Log4j2;
+import org.aspectj.lang.JoinPoint;
+import org.aspectj.lang.annotation.*;
+import org.springframework.stereotype.Component;
+import org.springframework.web.context.request.RequestContextHolder;
+import org.springframework.web.context.request.ServletRequestAttributes;
+
+import javax.servlet.http.HttpServletRequest;
+
+@Aspect
+@Component
+@Log4j2
+public class LogAspect {
+    @Pointcut(&amp;quot;execution(* com.ray.blog.web.*.*(..))&amp;quot;)
+    public void log(){}
+
+    @Before(&amp;quot;log()&amp;quot;)
+    public void doBefore(JoinPoint joinPoint){
+        ServletRequestAttributes attributes = (ServletRequestAttributes) RequestContextHolder.getRequestAttributes();
+        HttpServletRequest request = attributes.getRequest();
+        //根据HttpServletRequest对象，获得相应参数
+        String url = request.getRequestURL().toString();
+        String ip = request.getRemoteAddr();
+        String classMethod = joinPoint.getSignature().getDeclaringTypeName() + &amp;quot;.&amp;quot; + joinPoint.getSignature().getName();
+        Object[] args = joinPoint.getArgs();
+        //封装成类
+        RequestLog requestLog = new RequestLog(url, ip, classMethod, args);
+        //日志打印
+        log.info(&amp;quot;Request: {}&amp;quot;, requestLog);
+//        log.info(&amp;quot;-----------doBefore-------------&amp;quot;);
+    }
+    @After(&amp;quot;log()&amp;quot;)
+    public void doAfter(){
+//        log.info(&amp;quot;-------------doAfter-----------------&amp;quot;);
+    }
+    @AfterReturning(returning = &amp;quot;result&amp;quot;, pointcut = &amp;quot;log()&amp;quot;)
+    public void doAfterReturn(Object result){
+//        log.info(&amp;quot;Result: {}&amp;quot;, result);
+    }
+
+    @AllArgsConstructor
+    @ToString       //调用了有参构造和toString()方法
+    private class RequestLog{
+        private String url;
+        private String ip;
+        private String classMethod;
+        private Object[] args;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;配置Servlet Controller:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;package com.ray.blog.web;
+
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+
+@Controller
+public class IndexController {
+    @GetMapping(&amp;quot;/{a}/{b}&amp;quot;)
+    public String index(@PathVariable String a, @PathVariable String b){
+        return &amp;quot;index&amp;quot;;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;例如当我访问&lt;code&gt;127.0.0.1:8080/ray/123456&lt;/code&gt;时&lt;br&gt;
+面板会产生如下日志，表示AOP已经正常运行&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;20:18:39.973 [http-nio-8080-exec-4] INFO  com.ray.blog.aspect.LogAspect - Request: 
+LogAspect.RequestLog(url=http://127.0.0.1:8080/ray/123456, ip=127.0.0.1, classMethod=com.ray.blog.web.IndexController.index, args=[ray, 123456])
+&lt;/code&gt;&lt;/pre&gt;
+">AOP 切面统一打印请求日志（博客项目）</a>
+      </div>
+      
+      <div class="item">
+        <a class="result-title" style="opacity: 0;" href="https://rayzhang13.github.io/post/spring-notes/"" data-c="
+          &lt;p&gt;Spring之前学的太仓促了，现在来总结一下&lt;br&gt;
+&lt;a href=&#34;https://docs.spring.io/spring-framework/docs/current/reference/html/index.html&#34;&gt;Spring Framework Documentation&lt;/a&gt;&lt;/p&gt;
+&lt;!-- more --&gt;
+&lt;figure data-type=&#34;image&#34; tabindex=&#34;1&#34;&gt;&lt;img src=&#34;https://rayzhang13.github.io/post-images/1622794061089.png&#34; alt=&#34;&#34; loading=&#34;lazy&#34;&gt;&lt;/figure&gt;
+&lt;h1 id=&#34;简介&#34;&gt;简介&lt;/h1&gt;
+&lt;p&gt;Spring是一个开源框架，Spring是于2003 年兴起的一个轻量级的Java 开发框架，由Rod Johnson 在其著作Expert One-On-One J2EE Development and Design中阐述的部分理念和原型衍生而来。它是为了解决企业应用开发的复杂性而创建的。框架的主要优势之一就是其分层架构，分层架构允许使用者选择使用哪一个组件，同时为 J2EE 应用程序开发提供集成的框架。Spring使用基本的JavaBean来完成以前只可能由EJB完成的事情。然而，Spring的用途不仅限于服务器端的开发。从简单性、可测试性和松耦合的角度而言，任何Java应用都可以从Spring中受益。Spring的核心是控制反转（IoC）和面向切面（AOP）。&lt;br&gt;
+&lt;strong&gt;简单来说，Spring是一个分层的JavaSE/EE full-stack(一站式) 轻量级开源框架。&lt;/strong&gt;&lt;/p&gt;
+&lt;h1 id=&#34;spring-ioc&#34;&gt;Spring IoC&lt;/h1&gt;
+&lt;h2 id=&#34;quick-start&#34;&gt;Quick Start&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;Maven pom.xml依赖配置如下&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code class=&#34;language-xml&#34;&gt;&amp;lt;packaging&amp;gt;jar&amp;lt;/packaging&amp;gt;
+&amp;lt;dependencies&amp;gt;
+        &amp;lt;!--导入Spring相关jar包--&amp;gt;
+        &amp;lt;dependency&amp;gt;
+            &amp;lt;groupId&amp;gt;org.springframework&amp;lt;/groupId&amp;gt;
+            &amp;lt;artifactId&amp;gt;spring-context&amp;lt;/artifactId&amp;gt;
+            &amp;lt;version&amp;gt;5.2.12.RELEASE&amp;lt;/version&amp;gt;
+        &amp;lt;/dependency&amp;gt;
+        &amp;lt;!--导入测试相关jar包--&amp;gt;
+        &amp;lt;dependency&amp;gt;
+            &amp;lt;groupId&amp;gt;junit&amp;lt;/groupId&amp;gt;
+            &amp;lt;artifactId&amp;gt;junit&amp;lt;/artifactId&amp;gt;
+            &amp;lt;version&amp;gt;4.12&amp;lt;/version&amp;gt;
+        &amp;lt;/dependency&amp;gt;
+&amp;lt;/dependencies&amp;gt; 
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;创建实体类&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;package com.ray.pojo;
+
+public class User {
+    String name;
+    Integer id;
+    public User(String name, Integer id) {
+        System.out.println(&amp;quot;调用有参构造&amp;quot;);
+        this.name = name;
+        this.id = id;
+    }
+    public String getName() {
+        return name;
+    }
+    public void setId(Integer id) {
+        System.out.println(&amp;quot;调用setId&amp;quot;);
+        this.id = id;
+    }
+    public void setName(String name) {
+        System.out.println(&amp;quot;调用setName&amp;quot;);
+        this.name = name;
+    }
+    @Override
+    public String toString() {
+        return &amp;quot;User{&amp;quot; +
+                &amp;quot;name=&#39;&amp;quot; + name + &#39;\&#39;&#39; +
+                &amp;quot;, id=&amp;quot; + id +
+                &#39;}&#39;;
+    }
+    public Integer getId() {
+        return id;
+    }
+    public User() {
+        System.out.println(&amp;quot;调用无参构造&amp;quot;);
+    }
+}
+
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ol start=&#34;3&#34;&gt;
+&lt;li&gt;Resource目录下创建配置文件 bean.xml&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code class=&#34;language-xml&#34;&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt;
+&amp;lt;beans xmlns=&amp;quot;http://www.springframework.org/schema/beans&amp;quot;
+       xmlns:xsi=&amp;quot;http://www.w3.org/2001/XMLSchema-instance&amp;quot;
+       xsi:schemaLocation=&amp;quot;http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd&amp;quot;&amp;gt;
+    &amp;lt;bean id=&amp;quot;User&amp;quot; class=&amp;quot;com.ray.pojo.User&amp;quot;&amp;gt;
+        &amp;lt;property name=&amp;quot;name&amp;quot; value=&amp;quot;Ray&amp;quot;/&amp;gt;
+        &amp;lt;property name=&amp;quot;id&amp;quot; value=&amp;quot;123&amp;quot;/&amp;gt;
+    &amp;lt;/bean&amp;gt;
+&amp;lt;/beans&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;需要注意的是property设置时对应类中的Setter方法，若无对应Setter方法则会发生报错&lt;/p&gt;
+&lt;ol start=&#34;4&#34;&gt;
+&lt;li&gt;测试类调用&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;import com.ray.pojo.User;
+import org.springframework.context.ApplicationContext;
+import org.springframework.context.support.ClassPathXmlApplicationContext;
+
+public class Test {
+    public static void main(String[] args) {
+        ApplicationContext applicationContext = new ClassPathXmlApplicationContext(&amp;quot;bean.xml&amp;quot;);
+        //User user = (User)applicationContext.getBean(&amp;quot;user&amp;quot;);
+        User user = applicationContext.getBean(&amp;quot;User&amp;quot;, User.class);
+        System.out.println(user);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;结果：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;/Users/ray/Library/Java/JavaVirtualMachines/openjdk-15.0.2/Contents/Home/bin/java -javaagent:/Users/ray/Library/Application Support/JetBrains/Toolbox/apps/IDEA-U/ch-0/211.7142.45/IntelliJ IDEA.app/Contents/lib/idea_rt.jar=58760:/Users/ray/Library/Application Support/JetBrains/Toolbox/apps/IDEA-U/ch-0/211.7142.45/IntelliJ IDEA.app/Contents/bin -Dfile.encoding=UTF-8 -classpath /Users/ray/Downloads/Spring/target/test-classes:/Users/ray/Downloads/Spring/target/classes:/Users/ray/.m2/repository/org/springframework/spring-context/5.2.12.RELEASE/spring-context-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-aop/5.2.12.RELEASE/spring-aop-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-beans/5.2.12.RELEASE/spring-beans-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-core/5.2.12.RELEASE/spring-core-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-jcl/5.2.12.RELEASE/spring-jcl-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-expression/5.2.12.RELEASE/spring-expression-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/junit/junit/4.12/junit-4.12.jar:/Users/ray/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar Test
+调用无参构造
+调用setName
+调用setId
+User{name=&#39;Ray&#39;, id=123}
+
+Process finished with exit code 0
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;ioc获取bean方式&#34;&gt;IoC获取bean方式&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;根据 id 获取&lt;br&gt;
+根据bean.xml中配置的bean的唯一标识id进行查找&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;User user = (User)applicationContext.getBean(&amp;quot;user&amp;quot;)
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ol start=&#34;2&#34;&gt;
+&lt;li&gt;通过 bean 类型获取&lt;br&gt;
+如果同一个类型的bean在xml文件中配置了多个，则获取时会抛出异常，所以&lt;strong&gt;同一个类型的bean在容器中必须是唯一的&lt;/strong&gt;&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;User user = applicationContext.getBean(User.class);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ol start=&#34;3&#34;&gt;
+&lt;li&gt;指定bean的 id 值和类型&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;User user = applicationContext.getBean(&amp;quot;User&amp;quot;, User.class);
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;beanfactory和applicationcontext区别&#34;&gt;BeanFactory和ApplicationContext区别&lt;/h2&gt;
+&lt;ul&gt;
+&lt;li&gt;BeanFactory和ApplicationContext是Spring的两大核心接口，都可以当做Spring的容器。其中ApplicationContext是BeanFactory的子接口, 包含 BeanFactory 的所有特性,它的主要功能是支持大型的业务应用的创建。&lt;/li&gt;
+&lt;li&gt;BeanFactroy采用的是&lt;font color=#DC143C&gt;&lt;b&gt;延迟加载形式来注入Bean&lt;/b&gt;&lt;/font&gt;的，&lt;font color=#DC143C&gt;&lt;b&gt;即只有在使用到某个Bean时(调用getBean())，才对该Bean进行加载实例化&lt;/b&gt;&lt;/font&gt;。这样，我们就不能发现一些存在的Spring的配置问题。如果Bean的某一个属性没有注入，BeanFacotry加载后，直至第一次使用调用getBean方法才会抛出异常。&lt;/li&gt;
+&lt;li&gt;ApplicationContext，它是&lt;font color=#DC143C&gt;&lt;b&gt;在容器启动时，一次性创建了所有的Bean&lt;/b&gt;&lt;/font&gt;。这样，在容器启动时，我们就可以发现Spring中存在的配置错误，这样有利于检查所依赖属性是否注入。 ApplicationContext启动后预载入所有的单实例Bean，通过预载入单实例bean ,确保当你需要的时候，你就不用等待，因为它们已经创建好了。它还可以为Bean配置lazy-init=true来让Bean延迟实例化；（饿汉式加载？）&lt;/li&gt;
+&lt;li&gt;相对于基本的BeanFactory，ApplicationContext 唯一的不足是占用内存空间。当应用程序配置Bean较多时，程序启动较慢。&lt;/li&gt;
+&lt;li&gt;BeanFactory通常以编程的方式被创建，ApplicationContext还能以声明的方式创建，如使用ContextLoader。&lt;/li&gt;
+&lt;li&gt;BeanFactory和ApplicationContext都支持BeanPostProcessor、BeanFactoryPostProcessor（后置处理器）的使用，但两者之间的区别是：BeanFactory需要手动注册，而ApplicationContext则是自动注册。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;ioc创建对象方式&#34;&gt;IoC创建对象方式&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;
+&lt;p&gt;默认使用无参构造，然后根据bean中设置的property属性调用对应的Setter方法。&lt;font color=#DC143C&gt;亦可通过p命名空间实现&lt;/font&gt;&lt;/p&gt;
+&lt;/li&gt;
+&lt;li&gt;
+&lt;p&gt;可以采用constructor-arg进行下标赋值&lt;font color=#DC143C&gt;亦可通过c命名空间实现&lt;/font&gt;&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;下标赋值&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code class=&#34;language-xml&#34;&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt;
+&amp;lt;beans xmlns=&amp;quot;http://www.springframework.org/schema/beans&amp;quot;
+        xmlns:xsi=&amp;quot;http://www.w3.org/2001/XMLSchema-instance&amp;quot;
+        xsi:schemaLocation=&amp;quot;http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd&amp;quot;&amp;gt;
+    &amp;lt;bean id=&amp;quot;User&amp;quot; class=&amp;quot;com.ray.pojo.User&amp;quot;&amp;gt;
+        &amp;lt;constructor-arg index=&amp;quot;0&amp;quot; value=&amp;quot;Ray&amp;quot;/&amp;gt;
+        &amp;lt;constructor-arg index=&amp;quot;1&amp;quot; value=&amp;quot;123&amp;quot;/&amp;gt;
+    &amp;lt;/bean&amp;gt;
+&amp;lt;/beans&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;运行结果：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;/Users/ray/Library/Java/JavaVirtualMachines/openjdk-15.0.2/Contents/Home/bin/java -javaagent:/Users/ray/Library/Application Support/JetBrains/Toolbox/apps/IDEA-U/ch-0/211.7142.45/IntelliJ IDEA.app/Contents/lib/idea_rt.jar=61025:/Users/ray/Library/Application Support/JetBrains/Toolbox/apps/IDEA-U/ch-0/211.7142.45/IntelliJ IDEA.app/Contents/bin -Dfile.encoding=UTF-8 -classpath /Users/ray/Downloads/Spring/target/test-classes:/Users/ray/Downloads/Spring/target/classes:/Users/ray/.m2/repository/org/springframework/spring-context/5.2.12.RELEASE/spring-context-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-aop/5.2.12.RELEASE/spring-aop-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-beans/5.2.12.RELEASE/spring-beans-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-core/5.2.12.RELEASE/spring-core-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-jcl/5.2.12.RELEASE/spring-jcl-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-expression/5.2.12.RELEASE/spring-expression-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/junit/junit/4.12/junit-4.12.jar:/Users/ray/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar Test
+调用有参构造
+User{name=&#39;Ray&#39;, id=123}
+
+Process finished with exit code 0
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;类型赋值&lt;br&gt;
+根据args类型进行赋值（不建议使用）&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code class=&#34;language-xml&#34;&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt;
+&amp;lt;beans xmlns=&amp;quot;http://www.springframework.org/schema/beans&amp;quot;
+        xmlns:xsi=&amp;quot;http://www.w3.org/2001/XMLSchema-instance&amp;quot;
+        xsi:schemaLocation=&amp;quot;http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd&amp;quot;&amp;gt;
+    &amp;lt;bean id=&amp;quot;User&amp;quot; class=&amp;quot;com.ray.pojo.User&amp;quot;&amp;gt;
+        &amp;lt;constructor-arg type=&amp;quot;java.lang.String&amp;quot; value=&amp;quot;Ray&amp;quot;/&amp;gt;
+        &amp;lt;constructor-arg type=&amp;quot;java.lang.Integer&amp;quot; value=&amp;quot;123&amp;quot;/&amp;gt;
+    &amp;lt;/bean&amp;gt;
+&amp;lt;/beans&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;运行结果：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;/Users/ray/Library/Java/JavaVirtualMachines/openjdk-15.0.2/Contents/Home/bin/java -javaagent:/Users/ray/Library/Application Support/JetBrains/Toolbox/apps/IDEA-U/ch-0/211.7142.45/IntelliJ IDEA.app/Contents/lib/idea_rt.jar=51746:/Users/ray/Library/Application Support/JetBrains/Toolbox/apps/IDEA-U/ch-0/211.7142.45/IntelliJ IDEA.app/Contents/bin -Dfile.encoding=UTF-8 -classpath /Users/ray/Downloads/Spring/target/test-classes:/Users/ray/Downloads/Spring/target/classes:/Users/ray/.m2/repository/org/springframework/spring-context/5.2.12.RELEASE/spring-context-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-aop/5.2.12.RELEASE/spring-aop-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-beans/5.2.12.RELEASE/spring-beans-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-core/5.2.12.RELEASE/spring-core-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-jcl/5.2.12.RELEASE/spring-jcl-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-expression/5.2.12.RELEASE/spring-expression-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/junit/junit/4.12/junit-4.12.jar:/Users/ray/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar Test
+调用有参构造
+User{name=&#39;Ray&#39;, id=123}
+
+Process finished with exit code 0
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;参数名赋值&lt;/li&gt;
+&lt;/ul&gt;
+&lt;pre&gt;&lt;code class=&#34;language-xml&#34;&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt;
+&amp;lt;beans xmlns=&amp;quot;http://www.springframework.org/schema/beans&amp;quot;
+        xmlns:xsi=&amp;quot;http://www.w3.org/2001/XMLSchema-instance&amp;quot;
+        xsi:schemaLocation=&amp;quot;http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd&amp;quot;&amp;gt;
+    &amp;lt;bean id=&amp;quot;User&amp;quot; class=&amp;quot;com.ray.pojo.User&amp;quot;&amp;gt;
+        &amp;lt;constructor-arg name=&amp;quot;name&amp;quot; value=&amp;quot;Ray&amp;quot;/&amp;gt;
+        &amp;lt;constructor-arg name=&amp;quot;id&amp;quot; value=&amp;quot;123&amp;quot;/&amp;gt;
+    &amp;lt;/bean&amp;gt;
+&amp;lt;/beans&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;运行结果：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;/Users/ray/Library/Java/JavaVirtualMachines/openjdk-15.0.2/Contents/Home/bin/java -javaagent:/Users/ray/Library/Application Support/JetBrains/Toolbox/apps/IDEA-U/ch-0/211.7142.45/IntelliJ IDEA.app/Contents/lib/idea_rt.jar=53590:/Users/ray/Library/Application Support/JetBrains/Toolbox/apps/IDEA-U/ch-0/211.7142.45/IntelliJ IDEA.app/Contents/bin -Dfile.encoding=UTF-8 -classpath /Users/ray/Downloads/Spring/target/test-classes:/Users/ray/Downloads/Spring/target/classes:/Users/ray/.m2/repository/org/springframework/spring-context/5.2.12.RELEASE/spring-context-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-aop/5.2.12.RELEASE/spring-aop-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-beans/5.2.12.RELEASE/spring-beans-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-core/5.2.12.RELEASE/spring-core-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-jcl/5.2.12.RELEASE/spring-jcl-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-expression/5.2.12.RELEASE/spring-expression-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/junit/junit/4.12/junit-4.12.jar:/Users/ray/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar Test
+调用有参构造
+User{name=&#39;Ray&#39;, id=123}
+
+Process finished with exit code 0
+&lt;/code&gt;&lt;/pre&gt;
+&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h2 id=&#34;bean的作用域&#34;&gt;Bean的作用域&lt;/h2&gt;
+&lt;ol&gt;
+&lt;li&gt;singleton&lt;br&gt;
+在SpringIOC容器中仅存在唯一一个Bean实例，Bean以单实例的方式存在&lt;/li&gt;
+&lt;li&gt;prototype&lt;br&gt;
+每次调用getBean（）是都会返回一个新的实例&lt;/li&gt;
+&lt;li&gt;request（创建一个新的bean）&lt;br&gt;
+每次HTTP请求都会创建一个新的Bean，作用域仅适用于WebApplicationContext环境&lt;/li&gt;
+&lt;li&gt;session（一个会话中共享bean）&lt;br&gt;
+同一个HTTP Session 共享一个Bean，不同的HTTP Session 使用不同的Bean。该作用域适用于WebApplicationContext环境&lt;br&gt;
+示例：&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code class=&#34;language-xml&#34;&gt;&amp;lt;bean id=&amp;quot;User&amp;quot; class=&amp;quot;com.ray.pojo.User&amp;quot; scope=&amp;quot;singleton&amp;quot;&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h2 id=&#34;bean的生命周期&#34;&gt;Bean的生命周期&lt;/h2&gt;
+&lt;h3 id=&#34;四个阶段&#34;&gt;四个阶段&lt;/h3&gt;
+&lt;ol&gt;
+&lt;li&gt;实例化 Instantiation&lt;/li&gt;
+&lt;li&gt;属性赋值 Populate&lt;/li&gt;
+&lt;li&gt;初始化 Initialization&lt;/li&gt;
+&lt;li&gt;销毁 Destruction&lt;/li&gt;
+&lt;/ol&gt;
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;protected Object doCreateBean(String beanName, RootBeanDefinition mbd, @Nullable Object[] args) throws BeanCreationException {
+        BeanWrapper instanceWrapper = null;
+        if (mbd.isSingleton()) {
+            instanceWrapper = (BeanWrapper)this.factoryBeanInstanceCache.remove(beanName);
+        }
+
+        if (instanceWrapper == null) {
+            instanceWrapper = this.createBeanInstance(beanName, mbd, args);
+        }
+
+        Object bean = instanceWrapper.getWrappedInstance();
+        Class&amp;lt;?&amp;gt; beanType = instanceWrapper.getWrappedClass();
+        if (beanType != NullBean.class) {
+            mbd.resolvedTargetType = beanType;
+        }
+
+        synchronized(mbd.postProcessingLock) {
+            if (!mbd.postProcessed) {
+                try {
+                    this.applyMergedBeanDefinitionPostProcessors(mbd, beanType, beanName);
+                } catch (Throwable var17) {
+                    throw new BeanCreationException(mbd.getResourceDescription(), beanName, &amp;quot;Post-processing of merged bean definition failed&amp;quot;, var17);
+                }
+
+                mbd.postProcessed = true;
+            }
+        }
+
+        boolean earlySingletonExposure = mbd.isSingleton() &amp;amp;&amp;amp; this.allowCircularReferences &amp;amp;&amp;amp; this.isSingletonCurrentlyInCreation(beanName);
+        if (earlySingletonExposure) {
+            if (this.logger.isTraceEnabled()) {
+                this.logger.trace(&amp;quot;Eagerly caching bean &#39;&amp;quot; + beanName + &amp;quot;&#39; to allow for resolving potential circular references&amp;quot;);
+            }
+
+            this.addSingletonFactory(beanName, () -&amp;gt; {
+                return this.getEarlyBeanReference(beanName, mbd, bean);
+            });
+        }
+
+        Object exposedObject = bean;
+
+        try {
+            this.populateBean(beanName, mbd, instanceWrapper);
+            exposedObject = this.initializeBean(beanName, exposedObject, mbd);
+        } catch (Throwable var18) {
+            if (var18 instanceof BeanCreationException &amp;amp;&amp;amp; beanName.equals(((BeanCreationException)var18).getBeanName())) {
+                throw (BeanCreationException)var18;
+            }
+
+            throw new BeanCreationException(mbd.getResourceDescription(), beanName, &amp;quot;Initialization of bean failed&amp;quot;, var18);
+        }
+
+        if (earlySingletonExposure) {
+            Object earlySingletonReference = this.getSingleton(beanName, false);
+            if (earlySingletonReference != null) {
+                if (exposedObject == bean) {
+                    exposedObject = earlySingletonReference;
+                } else if (!this.allowRawInjectionDespiteWrapping &amp;amp;&amp;amp; this.hasDependentBean(beanName)) {
+                    String[] dependentBeans = this.getDependentBeans(beanName);
+                    Set&amp;lt;String&amp;gt; actualDependentBeans = new LinkedHashSet(dependentBeans.length);
+                    String[] var12 = dependentBeans;
+                    int var13 = dependentBeans.length;
+
+                    for(int var14 = 0; var14 &amp;lt; var13; ++var14) {
+                        String dependentBean = var12[var14];
+                        if (!this.removeSingletonIfCreatedForTypeCheckOnly(dependentBean)) {
+                            actualDependentBeans.add(dependentBean);
+                        }
+                    }
+
+                    if (!actualDependentBeans.isEmpty()) {
+                        throw new BeanCurrentlyInCreationException(beanName, &amp;quot;Bean with name &#39;&amp;quot; + beanName + &amp;quot;&#39; has been injected into other beans [&amp;quot; + StringUtils.collectionToCommaDelimitedString(actualDependentBeans) + &amp;quot;] in its raw version as part of a circular reference, but has eventually been wrapped. This means that said other beans do not use the final version of the bean. This is often the result of over-eager type matching - consider using &#39;getBeanNamesForType&#39; with the &#39;allowEagerInit&#39; flag turned off, for example.&amp;quot;);
+                    }
+                }
+            }
+        }
+
+        try {
+            this.registerDisposableBeanIfNecessary(beanName, bean, mbd);
+            return exposedObject;
+        } catch (BeanDefinitionValidationException var16) {
+            throw new BeanCreationException(mbd.getResourceDescription(), beanName, &amp;quot;Invalid destruction signature&amp;quot;, var16);
+        }
+    }
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;doCreateBean()方法中调用了以下三个方法&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;createBeanInstance() -&amp;gt; 实例化&lt;/li&gt;
+&lt;li&gt;populateBean() -&amp;gt; 属性赋值&lt;/li&gt;
+&lt;li&gt;initializeBean() -&amp;gt; 初始化&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;销毁是在ConfigurableApplicationContext#close()中使用的，是在容器关闭时调用的&lt;/p&gt;
+&lt;h3 id=&#34;拓展点&#34;&gt;拓展点&lt;/h3&gt;
+&lt;p&gt;&lt;img src=&#34;https://rayzhang13.github.io/post-images/1622680458805.webp&#34; alt=&#34;&#34; loading=&#34;lazy&#34;&gt;&lt;br&gt;
+后置处理器：InstantiationAwareBeanPostProcessor作用于实例化阶段的前后，BeanPostProcessor作用于初始化阶段的前后。正好和第一、第三个生命周期阶段对应。&lt;/p&gt;
+&lt;p&gt;InstantiationAwareBeanPostProcessor实际上继承了BeanPostProcessor接口，严格意义上来看他们不是两兄弟，而是两父子。但是从生命周期角度我们重点关注其特有的对实例化阶段的影响&lt;/p&gt;
+&lt;h2 id=&#34;bean自动装配&#34;&gt;Bean自动装配&lt;/h2&gt;
+&lt;h3 id=&#34;装配模式介绍&#34;&gt;装配模式介绍&lt;/h3&gt;
+&lt;p&gt;Spring 容器可以在不使用&lt;constructor-arg&gt;和&lt;property&gt; 元素的情况下自动装配相互协作的 bean 之间的关系，这有助于减少编写一个大的基于 Spring 的应用程序的 XML 配置的数量。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public interface AutowireCapableBeanFactory{
+	//无需自动装配
+	int AUTOWIRE_NO = 0;
+	//按名称自动装配bean属性
+	int AUTOWIRE_BY_NAME = 1;
+	//按类型自动装配bean属性
+	int AUTOWIRE_BY_TYPE = 2;
+	//按构造器自动装配
+	int AUTOWIRE_CONSTRUCTOR = 3;
+	//过时方法，Spring3.0之后不再支持
+	@Deprecated
+	int AUTOWIRE_AUTODETECT = 4;
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;下列自动装配模式，它们可用于指示 Spring 容器为来使用自动装配进行依赖注入。你可以使用&lt;bean&gt;元素的 autowire 属性为一个 bean 定义指定自动装配模式。&lt;/p&gt;
+&lt;ol&gt;
+&lt;li&gt;no	这是默认的设置，它意味着没有自动装配，你应该使用显式的bean引用来连线。你不用为了连线做特殊的事。&lt;/li&gt;
+&lt;li&gt;byName	由属性名自动装配。Spring 容器看到在 XML 配置文件中 bean 的自动装配的属性设置为 byName。然后尝试匹配，并且将它的属性与在配置文件中被定义为相同名称的 beans 的属性进行连接。&lt;/li&gt;
+&lt;li&gt;byType	由属性数据类型自动装配。Spring 容器看到在 XML 配置文件中 bean 的自动装配的属性设置为 byType。然后如果它的类型匹配配置文件中的一个确切的 bean 名称，它将尝试匹配和连接属性的类型。&lt;font color=#DC143C&gt;如果存在不止一个这样的 bean，则一个致命的异常将会被抛出。&lt;/font&gt;&lt;/li&gt;
+&lt;li&gt;constructor	类似于 byType，但该类型适用于构造函数参数类型。如果在容器中没有一个构造函数参数类型的 bean，则一个致命错误将会发生。&lt;/li&gt;
+&lt;li&gt;&lt;font color=#00FF00&gt;autodetect（3.0版本不支持deprecated）&lt;/font&gt;Spring首先尝试通过 constructor 使用自动装配来连接，如果它不执行，Spring 尝试通过 byType 来自动装配。&lt;/li&gt;
+&lt;/ol&gt;
+&lt;h3 id=&#34;示例&#34;&gt;示例&lt;/h3&gt;
+&lt;h4 id=&#34;byname&#34;&gt;byName&lt;/h4&gt;
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;package com.ray.pojo;
+public class Role {
+    public User user;
+    public void setUser(User user) {
+        this.user = user;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;package com.ray.pojo;
+public class Role {
+    public User user;
+    public void setUser(User user) {
+        this.user = user;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&#34;language-xml&#34;&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt;
+&amp;lt;beans xmlns=&amp;quot;http://www.springframework.org/schema/beans&amp;quot;
+       xmlns:xsi=&amp;quot;http://www.w3.org/2001/XMLSchema-instance&amp;quot;
+       xsi:schemaLocation=&amp;quot;http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd&amp;quot;&amp;gt;
+    &amp;lt;bean id=&amp;quot;user&amp;quot; class=&amp;quot;com.ray.pojo.User&amp;quot;&amp;gt;
+        &amp;lt;property name=&amp;quot;name&amp;quot; value=&amp;quot;Ray&amp;quot;/&amp;gt;
+        &amp;lt;property name=&amp;quot;id&amp;quot; value=&amp;quot;123&amp;quot;/&amp;gt;
+    &amp;lt;/bean&amp;gt;
+    &amp;lt;bean id=&amp;quot;role&amp;quot; class=&amp;quot;com.ray.pojo.Role&amp;quot; autowire=&amp;quot;byName&amp;quot;/&amp;gt;
+&amp;lt;/beans&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;结果：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;调用无参构造
+调用setName
+调用setId
+User{name=&#39;Ray&#39;, id=123}
+
+Process finished with exit code 0
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;值得注意的是自动装配使用byName时，其id值为&lt;code&gt;&amp;quot;user&amp;quot;&lt;/code&gt;与&lt;code&gt;Role&lt;/code&gt;中的属性名称&lt;code&gt;&amp;quot;user&amp;quot;&lt;/code&gt;相对应，若不对应则无法将对应参数进行填充。参数填充时需要与setter方法配合。&lt;/p&gt;
+&lt;h4 id=&#34;bytype&#34;&gt;byType&lt;/h4&gt;
+&lt;p&gt;类似的：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;package com.ray.pojo;
+public class Role {
+    public User user;
+    public void setUser(User user) {
+        this.user = user;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;package com.ray.pojo;
+public class Role {
+    public User user;
+    public void setUser(User user) {
+        this.user = user;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&#34;language-xml&#34;&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt;
+&amp;lt;beans xmlns=&amp;quot;http://www.springframework.org/schema/beans&amp;quot;
+       xmlns:xsi=&amp;quot;http://www.w3.org/2001/XMLSchema-instance&amp;quot;
+       xsi:schemaLocation=&amp;quot;http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd&amp;quot;&amp;gt;
+    &amp;lt;bean id=&amp;quot;user&amp;quot; class=&amp;quot;com.ray.pojo.User&amp;quot;&amp;gt;
+        &amp;lt;property name=&amp;quot;name&amp;quot; value=&amp;quot;Ray&amp;quot;/&amp;gt;
+        &amp;lt;property name=&amp;quot;id&amp;quot; value=&amp;quot;123&amp;quot;/&amp;gt;
+    &amp;lt;/bean&amp;gt;
+    &amp;lt;bean id=&amp;quot;role&amp;quot; class=&amp;quot;com.ray.pojo.Role&amp;quot; autowire=&amp;quot;byType&amp;quot;/&amp;gt;
+&amp;lt;/beans&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;结果：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;调用无参构造
+调用setName
+调用setId
+User{name=&#39;Ray&#39;, id=123}
+
+Process finished with exit code 0
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;如果bean的类型匹配配置文件中的一个确切的 bean 名称，它将尝试匹配和连接属性的类型。例如通过&lt;code&gt;Roles&lt;/code&gt;类中的&lt;code&gt;com.ray.pojo.User&lt;/code&gt;匹配到bean.xml中的&lt;code&gt;user&lt;/code&gt; bean。参数填充时需要与setter方法配合。&lt;/p&gt;
+&lt;h4 id=&#34;constructor&#34;&gt;constructor&lt;/h4&gt;
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;package com.ray.pojo;
+public class Role {
+    public User user;
+    public void setUser(User user) {
+        this.user = user;
+    }
+    public Role() {
+    }
+    public Role(User user) {
+        this.user = user;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;pre&gt;&lt;code class=&#34;language-xml&#34;&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt;
+&amp;lt;beans xmlns=&amp;quot;http://www.springframework.org/schema/beans&amp;quot;
+       xmlns:xsi=&amp;quot;http://www.w3.org/2001/XMLSchema-instance&amp;quot;
+       xsi:schemaLocation=&amp;quot;http://www.springframework.org/schema/beans
+        http://www.springframework.org/schema/beans/spring-beans.xsd&amp;quot;&amp;gt;
+    &amp;lt;bean id=&amp;quot;user&amp;quot; class=&amp;quot;com.ray.pojo.User&amp;quot;&amp;gt;
+        &amp;lt;property name=&amp;quot;name&amp;quot; value=&amp;quot;Ray&amp;quot;/&amp;gt;
+        &amp;lt;property name=&amp;quot;id&amp;quot; value=&amp;quot;123&amp;quot;/&amp;gt;
+    &amp;lt;/bean&amp;gt;
+    &amp;lt;bean id=&amp;quot;role&amp;quot; class=&amp;quot;com.ray.pojo.Role&amp;quot; autowire=&amp;quot;constructor&amp;quot;/&amp;gt;
+&amp;lt;/beans&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;类似byType，按照类型进行匹配，但是不完全一样&lt;br&gt;
+填充属性时，调用构造contructor方法，因此bean.xml中必须有与constructor方法参数中对应的已注册的bean，否则会发生错误&lt;/p&gt;
+&lt;h4 id=&#34;default-autowire&#34;&gt;default-autowire&lt;/h4&gt;
+&lt;p&gt;默认情况下，default-autowire属性被设置为none，标示所有的Bean都不使用自动装配，除非Bean上配置了autowire属性。 如果你需要为所有的Bean配置相同的autowire属性，有个办法可以简化这一操作。&lt;br&gt;
+在配置文件中加入&lt;code&gt;&amp;lt;beans default-autowire=&amp;quot;byType&amp;quot;&amp;gt;&lt;/code&gt;&lt;/p&gt;
+&lt;h2 id=&#34;自动装配中的循环依赖&#34;&gt;自动装配中的循环依赖&lt;/h2&gt;
+&lt;p&gt;依赖注入稍不注意就会出现循环依赖：&lt;br&gt;
+Bean之间的依赖顺序： BeanA -&amp;gt; BeanB -&amp;gt; BeanA&lt;br&gt;
+即BeanA对象中引用了BeanB对象，而BeanB对象中又引用了BeanA&lt;/p&gt;
+&lt;p&gt;&lt;font color=#DC143C&gt;&lt;b&gt;解决方法：递归，三级缓存&lt;/b&gt;&lt;/font&gt;&lt;br&gt;
+类似于执行图的深拷贝等类似的过程，无向图中我们使用&lt;code&gt;Map&amp;lt;Node, Node&amp;gt;&lt;/code&gt;的方式，在遍历未完成节点的同时将已经完成拷贝的节点用Map的形式标记出来，下次再连接时直接从Map中取即可（可以认为是一级缓存？）&lt;/p&gt;
+&lt;p&gt;下面是未解决循环依赖的常规步骤：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;实例化 A，此时 A 还未完成属性填充和初始化方法（@PostConstruct）的执行。&lt;/li&gt;
+&lt;li&gt;A 对象发现需要注入 B 对象，但是容器中并没有 B 对象（如果对象创建完成并且属性注入完成和执行完初始化方法就会放入容器中）。&lt;/li&gt;
+&lt;li&gt;实例化 B，此时 B 还未完成属性填充和初始化方法（@PostConstruct）的执行。&lt;/li&gt;
+&lt;li&gt;B 对象发现需要注入 A 对象，但是容器中并没有 A 对象。&lt;/li&gt;
+&lt;li&gt;重复步骤 1。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;我们很容易的能够看出常规的解决循环依赖的步骤在这里并不起作用&lt;/p&gt;
+&lt;p&gt;从而引入&lt;strong&gt;三级缓存&lt;/strong&gt;的概念&lt;/p&gt;
+&lt;h3 id=&#34;三级缓存&#34;&gt;三级缓存&lt;/h3&gt;
+&lt;p&gt;Spring解决循环依赖的核心思想在于&lt;strong&gt;提前曝光&lt;/strong&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;/** Cache of singleton objects: bean name to bean instance. */
+private final Map&amp;lt;String, Object&amp;gt; singletonObjects = new ConcurrentHashMap&amp;lt;&amp;gt;(256);
+/** Cache of early singleton objects: bean name to bean instance. */
+private final Map&amp;lt;String, Object&amp;gt; earlySingletonObjects = new HashMap&amp;lt;&amp;gt;(16);
+/** Cache of singleton factories: bean name to ObjectFactory. */
+private final Map&amp;lt;String, ObjectFactory&amp;lt;?&amp;gt;&amp;gt; singletonFactories = new HashMap&amp;lt;&amp;gt;(16);
+/** Names of beans that are currently in creation. */
+// 这个缓存也十分重要：它表示bean创建过程中都会在里面呆着~
+// 它在Bean开始创建时放值，创建完成时会将其移出~
+private final Set&amp;lt;String&amp;gt; singletonsCurrentlyInCreation = Collections.newSetFromMap(new ConcurrentHashMap&amp;lt;&amp;gt;(16));
+/** Names of beans that have already been created at least once. */
+// 当这个Bean被创建完成后，会标记为这个 注意：这里是set集合 不会重复
+// 至少被创建了一次的  都会放进这里~~~~
+private final Set&amp;lt;String&amp;gt; alreadyCreated = Collections.newSetFromMap(new ConcurrentHashMap&amp;lt;&amp;gt;(256));
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;以下为三级缓存的对应作用&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;singletonObjects 一级缓存，存放完整的 Bean。&lt;/li&gt;
+&lt;li&gt;earlySingletonObjects 二级缓存，存放提前暴露的Bean，Bean 是不完整的，未完成属性注入和执行 init 方法。&lt;strong&gt;用以解决循环依赖。&lt;/strong&gt;&lt;/li&gt;
+&lt;li&gt;singletonFactories 三级缓存，存放的是 Bean 工厂，主要是生产 Bean，存放到二级缓存中。&lt;strong&gt;用以解决循环依赖。&lt;/strong&gt;&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;获取单例Bean的源码如下：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements SingletonBeanRegistry {
+	...
+	@Override
+	@Nullable
+	public Object getSingleton(String beanName) {
+		return getSingleton(beanName, true);
+	}
+	@Nullable
+	protected Object getSingleton(String beanName, boolean allowEarlyReference) {
+		Object singletonObject = this.singletonObjects.get(beanName);
+		if (singletonObject == null &amp;amp;&amp;amp; isSingletonCurrentlyInCreation(beanName)) {
+			synchronized (this.singletonObjects) {
+				singletonObject = this.earlySingletonObjects.get(beanName);
+				if (singletonObject == null &amp;amp;&amp;amp; allowEarlyReference) {
+					ObjectFactory&amp;lt;?&amp;gt; singletonFactory = this.singletonFactories.get(beanName);
+					if (singletonFactory != null) {
+						singletonObject = singletonFactory.getObject();
+						this.earlySingletonObjects.put(beanName, singletonObject);
+						this.singletonFactories.remove(beanName);
+					}
+				}
+			}
+		}
+		return singletonObject;
+	}
+	...
+	public boolean isSingletonCurrentlyInCreation(String beanName) {
+		return this.singletonsCurrentlyInCreation.contains(beanName);
+	}
+	protected boolean isActuallyInCreation(String beanName) {
+		return isSingletonCurrentlyInCreation(beanName);
+	}
+	...
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;A半成品加入第三级缓存&lt;/li&gt;
+&lt;li&gt;A填充属性注入B -&amp;gt; 创建B对象 -&amp;gt; B半成品加入第三级缓存&lt;/li&gt;
+&lt;li&gt;B填充属性注入A -&amp;gt; 创建A代理对象，从第三级缓存移除A对象，A代理对象加入第二级缓存（此时A还是半成品，B注入的是A代理对象）&lt;/li&gt;
+&lt;li&gt;创建B代理对象（此时B是完成品） -&amp;gt; 从第三级缓存移除B对象，B代理对象加入第一级缓存&lt;/li&gt;
+&lt;li&gt;A半成品注入B代理对象&lt;/li&gt;
+&lt;li&gt;从第二级缓存移除A代理对象，A代理对象加入第一级缓存&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;font color=#DC143C&gt;&lt;b&gt;PS: 加入singletonFactories三级缓存的前提是执行了构造器，所以构造器的循环依赖没法解决&lt;/b&gt;&lt;/font&gt;&lt;/p&gt;
+&lt;p&gt;附上一张偷来的图：&lt;br&gt;
+&lt;img src=&#34;https://rayzhang13.github.io/post-images/1622815064103.png&#34; alt=&#34;&#34; loading=&#34;lazy&#34;&gt;&lt;/p&gt;
+&lt;h3 id=&#34;是否可以去掉第二级缓存&#34;&gt;是否可以去掉第二级缓存？&lt;/h3&gt;
+&lt;p&gt;&lt;font color=#DC143C&gt;&lt;b&gt;关键在于AOP&lt;/b&gt;&lt;/font&gt;&lt;br&gt;
+现在有A的field或者setter依赖B的实例对象，同时B的field或者setter依赖了A的实例，A首先开始创建，并将自己暴露到 earlySingletonObjects 中，开始填充属性，此时发现自己依赖B的属性，尝试去get(B)，发现B还没有被创建，所以开始创建B，在进行属性填充时初始化A，就从earlySingletonObjects 中获取到了实例化但没有任何属性的A，B拿到A后完成了初始化阶段，将自己放到singletonObjects中,此时返回A，A拿到B的对象继续完成初始化，完成后将自己放到singletonObjects中，由A与B中所表示的A的属性地址是一样的，所以A的属性填充完后，B也获取了A的属性，这样就解决了循环的问题。&lt;br&gt;
+似乎完美解决，如果就这么使用的话也没什么问题，但是再加上AOP情况就不同了，被AOP增强的Bean会在初始化后代理成为一个新的对象，也就是说：如果有AOP，A依赖于B，B依赖于A，A实例化完成暴露出去，开始注入属性，发现引用B，B开始实例化，使用A暴露的对象，&lt;strong&gt;初始化完成后封装成代理对象&lt;/strong&gt;，A再将代理后的B注入，再做代理，那么&lt;strong&gt;代理A中的B就是代理后的B，但是代理后的B中的A是没用代理的A&lt;/strong&gt;。&lt;br&gt;
+显然这是不对的，所以在Spring中存在第三级缓存，在创建对象时判断是否是单例，允许循环依赖，正在创建中，就将其从earlySingletonObjects中移除掉，并在singletonFactories放入新的对象，这样后续再查询beanName时会走到singletonFactory.getObject()，其中就会去调用各个beanPostProcessor的getEarlyBeanReference方法，返回的对象就是代理后的对象。&lt;/p&gt;
+&lt;h3 id=&#34;是否可以去掉第三级缓存&#34;&gt;是否可以去掉第三级缓存？&lt;/h3&gt;
+&lt;p&gt;是否可以：不管有没有循环依赖，都提前创建好代理对象，并将代理对象放入缓存，出现循环依赖时，其他对象直接就可以取到代理对象并注入。&lt;br&gt;
+每次实例化完 Bean 之后就直接去创建代理对象，并添加到二级缓存中。测试结果是完全正常的，Spring 的初始化时间应该也是不会有太大的影响，因为如果 Bean 本身不需要代理的话，是直接返回原始 Bean 的，并不需要走复杂的创建代理 Bean 的流程。&lt;br&gt;
+如果要使用二级缓存解决循环依赖，意味着Bean在构造完后就创建代理对象，这样违背了Spring设计原则。Spring结合AOP跟Bean的生命周期，是在Bean创建完全之后通过AnnotationAwareAspectJAutoProxyCreator这个后置处理器来完成的，在这个后置处理的postProcessAfterInitialization方法中对初始化后的Bean完成AOP代理。如果出现了循环依赖，那没有办法，只有给Bean先创建代理，但是没有出现循环依赖的情况下，设计之初就是让Bean在生命周期的最后一步完成代理而不是在实例化后就立马完成代理。&lt;/p&gt;
+&lt;h1 id=&#34;spring-aop&#34;&gt;Spring AOP&lt;/h1&gt;
+&lt;h2 id=&#34;基本概念&#34;&gt;基本概念&lt;/h2&gt;
+&lt;p&gt;在 spring 中 Aspect 通过&lt;code&gt;@Aspect&lt;/code&gt;、&lt;code&gt;@Pointcut&lt;/code&gt;和一系列 advice（&lt;code&gt;@Before&lt;/code&gt;、&lt;code&gt;@after&lt;/code&gt;、&lt;code&gt;@afterReturning&lt;/code&gt;、&lt;code&gt;@Around&lt;/code&gt;）组成。&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;@Aspect&lt;/code&gt; 切面，声明当前 class 为一个切面&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;@Pointcut&lt;/code&gt; 切入点，通过 execution 表达式描述切入规则，&lt;/li&gt;
+&lt;li&gt;advice 通知，定义了切面是什么以及何时使用。&lt;/li&gt;
+&lt;li&gt;advice 中还包含了 连接点（joinpoint）&lt;/li&gt;
+&lt;li&gt;weave 织入，将切面应用到目标对象并导致代理对象创建的过程&lt;/li&gt;
+&lt;li&gt;introduction 引入，在不修改代码的前提下，引入可以在运行期为类动态地添加一些方法或字段&lt;/li&gt;
+&lt;/ul&gt;
+&lt;h2 id=&#34;advice类型&#34;&gt;advice类型&lt;/h2&gt;
+&lt;h3 id=&#34;before&#34;&gt;@Before&lt;/h3&gt;
+&lt;p&gt;前置通知（Before advice）：在某连接点（JoinPoint）——被切入代码（类或者方法）之前执行的通知，但这个通知不能阻止连接点前的执行。因为&lt;code&gt;@Before&lt;/code&gt; 注解的方法入参不能传 ProceedingJoinPoint，而只能传入 JoinPoint。而从 aop 走到核心代码就是通过调用 ProceedingJionPoint 的 proceed()方法。而 JoinPoint 没有这个方法。&lt;br&gt;
+这里牵扯区别这两个类：Proceedingjoinpoint 继承了 JoinPoint 。是在 JoinPoint 的基础上暴露出 proceed 这个方法。proceed 很重要，这个是 aop 代理链执行的方法。暴露出这个方法，就能支持 aop:around 这种切面（而其他的几种切面只需要用到 JoinPoint，这跟切面类型有关）， 能决定是否走代理链还是走自己拦截的其他逻辑。&lt;/p&gt;
+&lt;h3 id=&#34;after&#34;&gt;@After&lt;/h3&gt;
+&lt;p&gt;后通知（After advice）：当某连接点退出的时候执行的通知（不论是正常返回还是异常退出）。&lt;/p&gt;
+&lt;h3 id=&#34;afterreturning&#34;&gt;@AfterReturning&lt;/h3&gt;
+&lt;p&gt;返回后通知（After return advice）：在某连接点正常完成后执行的通知，不包括抛出异常的情况。&lt;/p&gt;
+&lt;h3 id=&#34;around&#34;&gt;@Around&lt;/h3&gt;
+&lt;p&gt;环绕通知（Around advice）：包围一个连接点的通知，类似 Web 中 Servlet 规范中的 Filter 的 doFilter 方法。可以在方法的调用前后完成自定义的行为，也可以选择不执行。这时 aop 的最重要的，最常用的注解。用这个注解的方法入参传的是 ProceedingJionPoint pjp，可以决定当前线程能否进入核心方法中——通过调用 &lt;code&gt;pjp.proceed();&lt;/code&gt;&lt;/p&gt;
+&lt;h3 id=&#34;afterthrowing&#34;&gt;@AfterThrowing&lt;/h3&gt;
+&lt;p&gt;抛出异常后通知（After throwing advice）：在方法抛出异常退出时执行的通知。&lt;/p&gt;
+&lt;h2 id=&#34;advice-注解的执行先后顺序&#34;&gt;advice 注解的执行先后顺序&lt;/h2&gt;
+&lt;p&gt;单个执行：&lt;br&gt;
+&lt;img src=&#34;https://rayzhang13.github.io/post-images/1624189595455.png&#34; alt=&#34;&#34; loading=&#34;lazy&#34;&gt;&lt;br&gt;
+多个切面执行：&lt;br&gt;
+&lt;img src=&#34;https://rayzhang13.github.io/post-images/1624189647566.png&#34; alt=&#34;&#34; loading=&#34;lazy&#34;&gt;&lt;/p&gt;
+&lt;p&gt;其实我们可以将aop视作同心圆&lt;br&gt;
+&lt;img src=&#34;https://rayzhang13.github.io/post-images/1624189778815.png&#34; alt=&#34;&#34; loading=&#34;lazy&#34;&gt;&lt;br&gt;
+spring aop就是一个同心圆，要执行的方法为圆心，最外层的order最小。从最外层按照AOP1、AOP2的顺序依次执行doAround方法，doBefore方法。然后执行method方法，最后按照AOP2、AOP1的顺序依次执行doAfter、doAfterReturn方法。也就是说对多个AOP来说，先before的，一定后after。&lt;br&gt;
+如果我们要在同一个方法事务提交后执行自己的AOP，那么把事务的AOP order设置为2，自己的AOP order设置为1，然后在doAfterReturn里边处理自己的业务逻辑。&lt;br&gt;
+order越小越是最先执行，但更重要的是最先执行的最后结束。&lt;/p&gt;
+&lt;h2 id=&#34;代码实例&#34;&gt;代码实例&lt;/h2&gt;
+&lt;p&gt;如下为Ascpect类&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;@Aspect
+@Component
+@Log4j2
+public class LogAspect {
+    @Pointcut(&amp;quot;execution(* com.ray.blog.web.*.*(..))&amp;quot;)
+    //表示匹配 所有返回类型（*含义） 下的com.ray.web下面的所有类（.*含义）
+    //匹配所有方法（.*）任何参数（(..)含义）
+    public void log(){}
+
+    @Before(&amp;quot;log()&amp;quot;)
+    public void doBefore(JoinPoint joinPoint){
+        log.info(&amp;quot;-----------doBefore-------------&amp;quot;);
+    }
+    @After(&amp;quot;log()&amp;quot;)
+    public void doAfter(){
+        log.info(&amp;quot;-------------doAfter-----------------&amp;quot;);
+    }
+    @AfterReturning(returning = &amp;quot;result&amp;quot;, pointcut = &amp;quot;log()&amp;quot;)
+    public void doAfterReturn(Object result){
+        log.info(&amp;quot;Result: {}&amp;quot;, result);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;如下为对应的Servlet Controller类：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;@Controller
+public class IndexController {
+    @GetMapping(&amp;quot;/&amp;quot;)
+    public String index(){
+        System.out.println(&amp;quot;-----------index-----------&amp;quot;);
+        return &amp;quot;index&amp;quot;;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;访问&lt;code&gt;127.0.0.1:8080&lt;/code&gt;得到如下日志：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;20:00:22.415 [http-nio-8080-exec-1] INFO  com.ray.blog.aspect.LogAspect - -----------doBefore-------------
+-----------index-----------
+20:00:22.421 [http-nio-8080-exec-1] INFO  com.ray.blog.aspect.LogAspect - Result: index
+20:00:22.421 [http-nio-8080-exec-1] INFO  com.ray.blog.aspect.LogAspect - -------------doAfter-----------------
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;验证了aop切面的运行顺序&lt;/p&gt;
+">Spring 学习笔记（持续更新）</a>
+      </div>
       
       <div class="item">
         <a class="result-title" style="opacity: 0;" href="https://rayzhang13.github.io/post/leetcode-weekly-contest-round-246/"" data-c="
@@ -1477,641 +2274,6 @@ shutdown() 执行后停止接受新任务，会把队列的任务执行完毕。
 shutdownNow() 也是停止接受新任务，但会中断所有的任务，将线程池状态变为 stop。&lt;br&gt;
 两个方法都会中断线程，用户可自行判断是否需要响应中断。&lt;/p&gt;
 ">Java线程池简单理解</a>
-      </div>
-      
-      <div class="item">
-        <a class="result-title" style="opacity: 0;" href="https://rayzhang13.github.io/post/spring-notes/"" data-c="
-          &lt;p&gt;Spring之前学的太仓促了，现在来总结一下&lt;br&gt;
-&lt;a href=&#34;https://docs.spring.io/spring-framework/docs/current/reference/html/index.html&#34;&gt;Spring Framework Documentation&lt;/a&gt;&lt;/p&gt;
-&lt;!-- more --&gt;
-&lt;figure data-type=&#34;image&#34; tabindex=&#34;1&#34;&gt;&lt;img src=&#34;https://rayzhang13.github.io/post-images/1622794061089.png&#34; alt=&#34;&#34; loading=&#34;lazy&#34;&gt;&lt;/figure&gt;
-&lt;h1 id=&#34;简介&#34;&gt;简介&lt;/h1&gt;
-&lt;p&gt;Spring是一个开源框架，Spring是于2003 年兴起的一个轻量级的Java 开发框架，由Rod Johnson 在其著作Expert One-On-One J2EE Development and Design中阐述的部分理念和原型衍生而来。它是为了解决企业应用开发的复杂性而创建的。框架的主要优势之一就是其分层架构，分层架构允许使用者选择使用哪一个组件，同时为 J2EE 应用程序开发提供集成的框架。Spring使用基本的JavaBean来完成以前只可能由EJB完成的事情。然而，Spring的用途不仅限于服务器端的开发。从简单性、可测试性和松耦合的角度而言，任何Java应用都可以从Spring中受益。Spring的核心是控制反转（IoC）和面向切面（AOP）。&lt;br&gt;
-&lt;strong&gt;简单来说，Spring是一个分层的JavaSE/EE full-stack(一站式) 轻量级开源框架。&lt;/strong&gt;&lt;/p&gt;
-&lt;h1 id=&#34;spring-ioc&#34;&gt;Spring IoC&lt;/h1&gt;
-&lt;h2 id=&#34;quick-start&#34;&gt;Quick Start&lt;/h2&gt;
-&lt;ol&gt;
-&lt;li&gt;Maven pom.xml依赖配置如下&lt;/li&gt;
-&lt;/ol&gt;
-&lt;pre&gt;&lt;code class=&#34;language-xml&#34;&gt;&amp;lt;packaging&amp;gt;jar&amp;lt;/packaging&amp;gt;
-&amp;lt;dependencies&amp;gt;
-        &amp;lt;!--导入Spring相关jar包--&amp;gt;
-        &amp;lt;dependency&amp;gt;
-            &amp;lt;groupId&amp;gt;org.springframework&amp;lt;/groupId&amp;gt;
-            &amp;lt;artifactId&amp;gt;spring-context&amp;lt;/artifactId&amp;gt;
-            &amp;lt;version&amp;gt;5.2.12.RELEASE&amp;lt;/version&amp;gt;
-        &amp;lt;/dependency&amp;gt;
-        &amp;lt;!--导入测试相关jar包--&amp;gt;
-        &amp;lt;dependency&amp;gt;
-            &amp;lt;groupId&amp;gt;junit&amp;lt;/groupId&amp;gt;
-            &amp;lt;artifactId&amp;gt;junit&amp;lt;/artifactId&amp;gt;
-            &amp;lt;version&amp;gt;4.12&amp;lt;/version&amp;gt;
-        &amp;lt;/dependency&amp;gt;
-&amp;lt;/dependencies&amp;gt; 
-&lt;/code&gt;&lt;/pre&gt;
-&lt;ol start=&#34;2&#34;&gt;
-&lt;li&gt;创建实体类&lt;/li&gt;
-&lt;/ol&gt;
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;package com.ray.pojo;
-
-public class User {
-    String name;
-    Integer id;
-    public User(String name, Integer id) {
-        System.out.println(&amp;quot;调用有参构造&amp;quot;);
-        this.name = name;
-        this.id = id;
-    }
-    public String getName() {
-        return name;
-    }
-    public void setId(Integer id) {
-        System.out.println(&amp;quot;调用setId&amp;quot;);
-        this.id = id;
-    }
-    public void setName(String name) {
-        System.out.println(&amp;quot;调用setName&amp;quot;);
-        this.name = name;
-    }
-    @Override
-    public String toString() {
-        return &amp;quot;User{&amp;quot; +
-                &amp;quot;name=&#39;&amp;quot; + name + &#39;\&#39;&#39; +
-                &amp;quot;, id=&amp;quot; + id +
-                &#39;}&#39;;
-    }
-    public Integer getId() {
-        return id;
-    }
-    public User() {
-        System.out.println(&amp;quot;调用无参构造&amp;quot;);
-    }
-}
-
-&lt;/code&gt;&lt;/pre&gt;
-&lt;ol start=&#34;3&#34;&gt;
-&lt;li&gt;Resource目录下创建配置文件 bean.xml&lt;/li&gt;
-&lt;/ol&gt;
-&lt;pre&gt;&lt;code class=&#34;language-xml&#34;&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt;
-&amp;lt;beans xmlns=&amp;quot;http://www.springframework.org/schema/beans&amp;quot;
-       xmlns:xsi=&amp;quot;http://www.w3.org/2001/XMLSchema-instance&amp;quot;
-       xsi:schemaLocation=&amp;quot;http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans.xsd&amp;quot;&amp;gt;
-    &amp;lt;bean id=&amp;quot;User&amp;quot; class=&amp;quot;com.ray.pojo.User&amp;quot;&amp;gt;
-        &amp;lt;property name=&amp;quot;name&amp;quot; value=&amp;quot;Ray&amp;quot;/&amp;gt;
-        &amp;lt;property name=&amp;quot;id&amp;quot; value=&amp;quot;123&amp;quot;/&amp;gt;
-    &amp;lt;/bean&amp;gt;
-&amp;lt;/beans&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;需要注意的是property设置时对应类中的Setter方法，若无对应Setter方法则会发生报错&lt;/p&gt;
-&lt;ol start=&#34;4&#34;&gt;
-&lt;li&gt;测试类调用&lt;/li&gt;
-&lt;/ol&gt;
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;import com.ray.pojo.User;
-import org.springframework.context.ApplicationContext;
-import org.springframework.context.support.ClassPathXmlApplicationContext;
-
-public class Test {
-    public static void main(String[] args) {
-        ApplicationContext applicationContext = new ClassPathXmlApplicationContext(&amp;quot;bean.xml&amp;quot;);
-        //User user = (User)applicationContext.getBean(&amp;quot;user&amp;quot;);
-        User user = applicationContext.getBean(&amp;quot;User&amp;quot;, User.class);
-        System.out.println(user);
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;结果：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;/Users/ray/Library/Java/JavaVirtualMachines/openjdk-15.0.2/Contents/Home/bin/java -javaagent:/Users/ray/Library/Application Support/JetBrains/Toolbox/apps/IDEA-U/ch-0/211.7142.45/IntelliJ IDEA.app/Contents/lib/idea_rt.jar=58760:/Users/ray/Library/Application Support/JetBrains/Toolbox/apps/IDEA-U/ch-0/211.7142.45/IntelliJ IDEA.app/Contents/bin -Dfile.encoding=UTF-8 -classpath /Users/ray/Downloads/Spring/target/test-classes:/Users/ray/Downloads/Spring/target/classes:/Users/ray/.m2/repository/org/springframework/spring-context/5.2.12.RELEASE/spring-context-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-aop/5.2.12.RELEASE/spring-aop-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-beans/5.2.12.RELEASE/spring-beans-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-core/5.2.12.RELEASE/spring-core-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-jcl/5.2.12.RELEASE/spring-jcl-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-expression/5.2.12.RELEASE/spring-expression-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/junit/junit/4.12/junit-4.12.jar:/Users/ray/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar Test
-调用无参构造
-调用setName
-调用setId
-User{name=&#39;Ray&#39;, id=123}
-
-Process finished with exit code 0
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&#34;ioc获取bean方式&#34;&gt;IoC获取bean方式&lt;/h2&gt;
-&lt;ol&gt;
-&lt;li&gt;根据 id 获取&lt;br&gt;
-根据bean.xml中配置的bean的唯一标识id进行查找&lt;/li&gt;
-&lt;/ol&gt;
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;User user = (User)applicationContext.getBean(&amp;quot;user&amp;quot;)
-&lt;/code&gt;&lt;/pre&gt;
-&lt;ol start=&#34;2&#34;&gt;
-&lt;li&gt;通过 bean 类型获取&lt;br&gt;
-如果同一个类型的bean在xml文件中配置了多个，则获取时会抛出异常，所以&lt;strong&gt;同一个类型的bean在容器中必须是唯一的&lt;/strong&gt;&lt;/li&gt;
-&lt;/ol&gt;
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;User user = applicationContext.getBean(User.class);
-&lt;/code&gt;&lt;/pre&gt;
-&lt;ol start=&#34;3&#34;&gt;
-&lt;li&gt;指定bean的 id 值和类型&lt;/li&gt;
-&lt;/ol&gt;
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;User user = applicationContext.getBean(&amp;quot;User&amp;quot;, User.class);
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&#34;beanfactory和applicationcontext区别&#34;&gt;BeanFactory和ApplicationContext区别&lt;/h2&gt;
-&lt;ul&gt;
-&lt;li&gt;BeanFactory和ApplicationContext是Spring的两大核心接口，都可以当做Spring的容器。其中ApplicationContext是BeanFactory的子接口, 包含 BeanFactory 的所有特性,它的主要功能是支持大型的业务应用的创建。&lt;/li&gt;
-&lt;li&gt;BeanFactroy采用的是&lt;font color=#DC143C&gt;&lt;b&gt;延迟加载形式来注入Bean&lt;/b&gt;&lt;/font&gt;的，&lt;font color=#DC143C&gt;&lt;b&gt;即只有在使用到某个Bean时(调用getBean())，才对该Bean进行加载实例化&lt;/b&gt;&lt;/font&gt;。这样，我们就不能发现一些存在的Spring的配置问题。如果Bean的某一个属性没有注入，BeanFacotry加载后，直至第一次使用调用getBean方法才会抛出异常。&lt;/li&gt;
-&lt;li&gt;ApplicationContext，它是&lt;font color=#DC143C&gt;&lt;b&gt;在容器启动时，一次性创建了所有的Bean&lt;/b&gt;&lt;/font&gt;。这样，在容器启动时，我们就可以发现Spring中存在的配置错误，这样有利于检查所依赖属性是否注入。 ApplicationContext启动后预载入所有的单实例Bean，通过预载入单实例bean ,确保当你需要的时候，你就不用等待，因为它们已经创建好了。它还可以为Bean配置lazy-init=true来让Bean延迟实例化；（饿汉式加载？）&lt;/li&gt;
-&lt;li&gt;相对于基本的BeanFactory，ApplicationContext 唯一的不足是占用内存空间。当应用程序配置Bean较多时，程序启动较慢。&lt;/li&gt;
-&lt;li&gt;BeanFactory通常以编程的方式被创建，ApplicationContext还能以声明的方式创建，如使用ContextLoader。&lt;/li&gt;
-&lt;li&gt;BeanFactory和ApplicationContext都支持BeanPostProcessor、BeanFactoryPostProcessor（后置处理器）的使用，但两者之间的区别是：BeanFactory需要手动注册，而ApplicationContext则是自动注册。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;ioc创建对象方式&#34;&gt;IoC创建对象方式&lt;/h2&gt;
-&lt;ol&gt;
-&lt;li&gt;
-&lt;p&gt;默认使用无参构造，然后根据bean中设置的property属性调用对应的Setter方法。&lt;font color=#DC143C&gt;亦可通过p命名空间实现&lt;/font&gt;&lt;/p&gt;
-&lt;/li&gt;
-&lt;li&gt;
-&lt;p&gt;可以采用constructor-arg进行下标赋值&lt;font color=#DC143C&gt;亦可通过c命名空间实现&lt;/font&gt;&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;下标赋值&lt;/li&gt;
-&lt;/ul&gt;
-&lt;pre&gt;&lt;code class=&#34;language-xml&#34;&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt;
-&amp;lt;beans xmlns=&amp;quot;http://www.springframework.org/schema/beans&amp;quot;
-        xmlns:xsi=&amp;quot;http://www.w3.org/2001/XMLSchema-instance&amp;quot;
-        xsi:schemaLocation=&amp;quot;http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans.xsd&amp;quot;&amp;gt;
-    &amp;lt;bean id=&amp;quot;User&amp;quot; class=&amp;quot;com.ray.pojo.User&amp;quot;&amp;gt;
-        &amp;lt;constructor-arg index=&amp;quot;0&amp;quot; value=&amp;quot;Ray&amp;quot;/&amp;gt;
-        &amp;lt;constructor-arg index=&amp;quot;1&amp;quot; value=&amp;quot;123&amp;quot;/&amp;gt;
-    &amp;lt;/bean&amp;gt;
-&amp;lt;/beans&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;运行结果：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;/Users/ray/Library/Java/JavaVirtualMachines/openjdk-15.0.2/Contents/Home/bin/java -javaagent:/Users/ray/Library/Application Support/JetBrains/Toolbox/apps/IDEA-U/ch-0/211.7142.45/IntelliJ IDEA.app/Contents/lib/idea_rt.jar=61025:/Users/ray/Library/Application Support/JetBrains/Toolbox/apps/IDEA-U/ch-0/211.7142.45/IntelliJ IDEA.app/Contents/bin -Dfile.encoding=UTF-8 -classpath /Users/ray/Downloads/Spring/target/test-classes:/Users/ray/Downloads/Spring/target/classes:/Users/ray/.m2/repository/org/springframework/spring-context/5.2.12.RELEASE/spring-context-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-aop/5.2.12.RELEASE/spring-aop-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-beans/5.2.12.RELEASE/spring-beans-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-core/5.2.12.RELEASE/spring-core-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-jcl/5.2.12.RELEASE/spring-jcl-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-expression/5.2.12.RELEASE/spring-expression-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/junit/junit/4.12/junit-4.12.jar:/Users/ray/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar Test
-调用有参构造
-User{name=&#39;Ray&#39;, id=123}
-
-Process finished with exit code 0
-&lt;/code&gt;&lt;/pre&gt;
-&lt;ul&gt;
-&lt;li&gt;类型赋值&lt;br&gt;
-根据args类型进行赋值（不建议使用）&lt;/li&gt;
-&lt;/ul&gt;
-&lt;pre&gt;&lt;code class=&#34;language-xml&#34;&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt;
-&amp;lt;beans xmlns=&amp;quot;http://www.springframework.org/schema/beans&amp;quot;
-        xmlns:xsi=&amp;quot;http://www.w3.org/2001/XMLSchema-instance&amp;quot;
-        xsi:schemaLocation=&amp;quot;http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans.xsd&amp;quot;&amp;gt;
-    &amp;lt;bean id=&amp;quot;User&amp;quot; class=&amp;quot;com.ray.pojo.User&amp;quot;&amp;gt;
-        &amp;lt;constructor-arg type=&amp;quot;java.lang.String&amp;quot; value=&amp;quot;Ray&amp;quot;/&amp;gt;
-        &amp;lt;constructor-arg type=&amp;quot;java.lang.Integer&amp;quot; value=&amp;quot;123&amp;quot;/&amp;gt;
-    &amp;lt;/bean&amp;gt;
-&amp;lt;/beans&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;运行结果：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;/Users/ray/Library/Java/JavaVirtualMachines/openjdk-15.0.2/Contents/Home/bin/java -javaagent:/Users/ray/Library/Application Support/JetBrains/Toolbox/apps/IDEA-U/ch-0/211.7142.45/IntelliJ IDEA.app/Contents/lib/idea_rt.jar=51746:/Users/ray/Library/Application Support/JetBrains/Toolbox/apps/IDEA-U/ch-0/211.7142.45/IntelliJ IDEA.app/Contents/bin -Dfile.encoding=UTF-8 -classpath /Users/ray/Downloads/Spring/target/test-classes:/Users/ray/Downloads/Spring/target/classes:/Users/ray/.m2/repository/org/springframework/spring-context/5.2.12.RELEASE/spring-context-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-aop/5.2.12.RELEASE/spring-aop-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-beans/5.2.12.RELEASE/spring-beans-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-core/5.2.12.RELEASE/spring-core-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-jcl/5.2.12.RELEASE/spring-jcl-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-expression/5.2.12.RELEASE/spring-expression-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/junit/junit/4.12/junit-4.12.jar:/Users/ray/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar Test
-调用有参构造
-User{name=&#39;Ray&#39;, id=123}
-
-Process finished with exit code 0
-&lt;/code&gt;&lt;/pre&gt;
-&lt;ul&gt;
-&lt;li&gt;参数名赋值&lt;/li&gt;
-&lt;/ul&gt;
-&lt;pre&gt;&lt;code class=&#34;language-xml&#34;&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt;
-&amp;lt;beans xmlns=&amp;quot;http://www.springframework.org/schema/beans&amp;quot;
-        xmlns:xsi=&amp;quot;http://www.w3.org/2001/XMLSchema-instance&amp;quot;
-        xsi:schemaLocation=&amp;quot;http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans.xsd&amp;quot;&amp;gt;
-    &amp;lt;bean id=&amp;quot;User&amp;quot; class=&amp;quot;com.ray.pojo.User&amp;quot;&amp;gt;
-        &amp;lt;constructor-arg name=&amp;quot;name&amp;quot; value=&amp;quot;Ray&amp;quot;/&amp;gt;
-        &amp;lt;constructor-arg name=&amp;quot;id&amp;quot; value=&amp;quot;123&amp;quot;/&amp;gt;
-    &amp;lt;/bean&amp;gt;
-&amp;lt;/beans&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;运行结果：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;/Users/ray/Library/Java/JavaVirtualMachines/openjdk-15.0.2/Contents/Home/bin/java -javaagent:/Users/ray/Library/Application Support/JetBrains/Toolbox/apps/IDEA-U/ch-0/211.7142.45/IntelliJ IDEA.app/Contents/lib/idea_rt.jar=53590:/Users/ray/Library/Application Support/JetBrains/Toolbox/apps/IDEA-U/ch-0/211.7142.45/IntelliJ IDEA.app/Contents/bin -Dfile.encoding=UTF-8 -classpath /Users/ray/Downloads/Spring/target/test-classes:/Users/ray/Downloads/Spring/target/classes:/Users/ray/.m2/repository/org/springframework/spring-context/5.2.12.RELEASE/spring-context-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-aop/5.2.12.RELEASE/spring-aop-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-beans/5.2.12.RELEASE/spring-beans-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-core/5.2.12.RELEASE/spring-core-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-jcl/5.2.12.RELEASE/spring-jcl-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/org/springframework/spring-expression/5.2.12.RELEASE/spring-expression-5.2.12.RELEASE.jar:/Users/ray/.m2/repository/junit/junit/4.12/junit-4.12.jar:/Users/ray/.m2/repository/org/hamcrest/hamcrest-core/1.3/hamcrest-core-1.3.jar Test
-调用有参构造
-User{name=&#39;Ray&#39;, id=123}
-
-Process finished with exit code 0
-&lt;/code&gt;&lt;/pre&gt;
-&lt;/li&gt;
-&lt;/ol&gt;
-&lt;h2 id=&#34;bean的作用域&#34;&gt;Bean的作用域&lt;/h2&gt;
-&lt;ol&gt;
-&lt;li&gt;singleton&lt;br&gt;
-在SpringIOC容器中仅存在唯一一个Bean实例，Bean以单实例的方式存在&lt;/li&gt;
-&lt;li&gt;prototype&lt;br&gt;
-每次调用getBean（）是都会返回一个新的实例&lt;/li&gt;
-&lt;li&gt;request（创建一个新的bean）&lt;br&gt;
-每次HTTP请求都会创建一个新的Bean，作用域仅适用于WebApplicationContext环境&lt;/li&gt;
-&lt;li&gt;session（一个会话中共享bean）&lt;br&gt;
-同一个HTTP Session 共享一个Bean，不同的HTTP Session 使用不同的Bean。该作用域适用于WebApplicationContext环境&lt;br&gt;
-示例：&lt;/li&gt;
-&lt;/ol&gt;
-&lt;pre&gt;&lt;code class=&#34;language-xml&#34;&gt;&amp;lt;bean id=&amp;quot;User&amp;quot; class=&amp;quot;com.ray.pojo.User&amp;quot; scope=&amp;quot;singleton&amp;quot;&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;h2 id=&#34;bean的生命周期&#34;&gt;Bean的生命周期&lt;/h2&gt;
-&lt;h3 id=&#34;四个阶段&#34;&gt;四个阶段&lt;/h3&gt;
-&lt;ol&gt;
-&lt;li&gt;实例化 Instantiation&lt;/li&gt;
-&lt;li&gt;属性赋值 Populate&lt;/li&gt;
-&lt;li&gt;初始化 Initialization&lt;/li&gt;
-&lt;li&gt;销毁 Destruction&lt;/li&gt;
-&lt;/ol&gt;
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;protected Object doCreateBean(String beanName, RootBeanDefinition mbd, @Nullable Object[] args) throws BeanCreationException {
-        BeanWrapper instanceWrapper = null;
-        if (mbd.isSingleton()) {
-            instanceWrapper = (BeanWrapper)this.factoryBeanInstanceCache.remove(beanName);
-        }
-
-        if (instanceWrapper == null) {
-            instanceWrapper = this.createBeanInstance(beanName, mbd, args);
-        }
-
-        Object bean = instanceWrapper.getWrappedInstance();
-        Class&amp;lt;?&amp;gt; beanType = instanceWrapper.getWrappedClass();
-        if (beanType != NullBean.class) {
-            mbd.resolvedTargetType = beanType;
-        }
-
-        synchronized(mbd.postProcessingLock) {
-            if (!mbd.postProcessed) {
-                try {
-                    this.applyMergedBeanDefinitionPostProcessors(mbd, beanType, beanName);
-                } catch (Throwable var17) {
-                    throw new BeanCreationException(mbd.getResourceDescription(), beanName, &amp;quot;Post-processing of merged bean definition failed&amp;quot;, var17);
-                }
-
-                mbd.postProcessed = true;
-            }
-        }
-
-        boolean earlySingletonExposure = mbd.isSingleton() &amp;amp;&amp;amp; this.allowCircularReferences &amp;amp;&amp;amp; this.isSingletonCurrentlyInCreation(beanName);
-        if (earlySingletonExposure) {
-            if (this.logger.isTraceEnabled()) {
-                this.logger.trace(&amp;quot;Eagerly caching bean &#39;&amp;quot; + beanName + &amp;quot;&#39; to allow for resolving potential circular references&amp;quot;);
-            }
-
-            this.addSingletonFactory(beanName, () -&amp;gt; {
-                return this.getEarlyBeanReference(beanName, mbd, bean);
-            });
-        }
-
-        Object exposedObject = bean;
-
-        try {
-            this.populateBean(beanName, mbd, instanceWrapper);
-            exposedObject = this.initializeBean(beanName, exposedObject, mbd);
-        } catch (Throwable var18) {
-            if (var18 instanceof BeanCreationException &amp;amp;&amp;amp; beanName.equals(((BeanCreationException)var18).getBeanName())) {
-                throw (BeanCreationException)var18;
-            }
-
-            throw new BeanCreationException(mbd.getResourceDescription(), beanName, &amp;quot;Initialization of bean failed&amp;quot;, var18);
-        }
-
-        if (earlySingletonExposure) {
-            Object earlySingletonReference = this.getSingleton(beanName, false);
-            if (earlySingletonReference != null) {
-                if (exposedObject == bean) {
-                    exposedObject = earlySingletonReference;
-                } else if (!this.allowRawInjectionDespiteWrapping &amp;amp;&amp;amp; this.hasDependentBean(beanName)) {
-                    String[] dependentBeans = this.getDependentBeans(beanName);
-                    Set&amp;lt;String&amp;gt; actualDependentBeans = new LinkedHashSet(dependentBeans.length);
-                    String[] var12 = dependentBeans;
-                    int var13 = dependentBeans.length;
-
-                    for(int var14 = 0; var14 &amp;lt; var13; ++var14) {
-                        String dependentBean = var12[var14];
-                        if (!this.removeSingletonIfCreatedForTypeCheckOnly(dependentBean)) {
-                            actualDependentBeans.add(dependentBean);
-                        }
-                    }
-
-                    if (!actualDependentBeans.isEmpty()) {
-                        throw new BeanCurrentlyInCreationException(beanName, &amp;quot;Bean with name &#39;&amp;quot; + beanName + &amp;quot;&#39; has been injected into other beans [&amp;quot; + StringUtils.collectionToCommaDelimitedString(actualDependentBeans) + &amp;quot;] in its raw version as part of a circular reference, but has eventually been wrapped. This means that said other beans do not use the final version of the bean. This is often the result of over-eager type matching - consider using &#39;getBeanNamesForType&#39; with the &#39;allowEagerInit&#39; flag turned off, for example.&amp;quot;);
-                    }
-                }
-            }
-        }
-
-        try {
-            this.registerDisposableBeanIfNecessary(beanName, bean, mbd);
-            return exposedObject;
-        } catch (BeanDefinitionValidationException var16) {
-            throw new BeanCreationException(mbd.getResourceDescription(), beanName, &amp;quot;Invalid destruction signature&amp;quot;, var16);
-        }
-    }
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;doCreateBean()方法中调用了以下三个方法&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;createBeanInstance() -&amp;gt; 实例化&lt;/li&gt;
-&lt;li&gt;populateBean() -&amp;gt; 属性赋值&lt;/li&gt;
-&lt;li&gt;initializeBean() -&amp;gt; 初始化&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;销毁是在ConfigurableApplicationContext#close()中使用的，是在容器关闭时调用的&lt;/p&gt;
-&lt;h3 id=&#34;拓展点&#34;&gt;拓展点&lt;/h3&gt;
-&lt;p&gt;&lt;img src=&#34;https://rayzhang13.github.io/post-images/1622680458805.webp&#34; alt=&#34;&#34; loading=&#34;lazy&#34;&gt;&lt;br&gt;
-后置处理器：InstantiationAwareBeanPostProcessor作用于实例化阶段的前后，BeanPostProcessor作用于初始化阶段的前后。正好和第一、第三个生命周期阶段对应。&lt;/p&gt;
-&lt;p&gt;InstantiationAwareBeanPostProcessor实际上继承了BeanPostProcessor接口，严格意义上来看他们不是两兄弟，而是两父子。但是从生命周期角度我们重点关注其特有的对实例化阶段的影响&lt;/p&gt;
-&lt;h2 id=&#34;bean自动装配&#34;&gt;Bean自动装配&lt;/h2&gt;
-&lt;h3 id=&#34;装配模式介绍&#34;&gt;装配模式介绍&lt;/h3&gt;
-&lt;p&gt;Spring 容器可以在不使用&lt;constructor-arg&gt;和&lt;property&gt; 元素的情况下自动装配相互协作的 bean 之间的关系，这有助于减少编写一个大的基于 Spring 的应用程序的 XML 配置的数量。&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public interface AutowireCapableBeanFactory{
-	//无需自动装配
-	int AUTOWIRE_NO = 0;
-	//按名称自动装配bean属性
-	int AUTOWIRE_BY_NAME = 1;
-	//按类型自动装配bean属性
-	int AUTOWIRE_BY_TYPE = 2;
-	//按构造器自动装配
-	int AUTOWIRE_CONSTRUCTOR = 3;
-	//过时方法，Spring3.0之后不再支持
-	@Deprecated
-	int AUTOWIRE_AUTODETECT = 4;
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;下列自动装配模式，它们可用于指示 Spring 容器为来使用自动装配进行依赖注入。你可以使用&lt;bean&gt;元素的 autowire 属性为一个 bean 定义指定自动装配模式。&lt;/p&gt;
-&lt;ol&gt;
-&lt;li&gt;no	这是默认的设置，它意味着没有自动装配，你应该使用显式的bean引用来连线。你不用为了连线做特殊的事。&lt;/li&gt;
-&lt;li&gt;byName	由属性名自动装配。Spring 容器看到在 XML 配置文件中 bean 的自动装配的属性设置为 byName。然后尝试匹配，并且将它的属性与在配置文件中被定义为相同名称的 beans 的属性进行连接。&lt;/li&gt;
-&lt;li&gt;byType	由属性数据类型自动装配。Spring 容器看到在 XML 配置文件中 bean 的自动装配的属性设置为 byType。然后如果它的类型匹配配置文件中的一个确切的 bean 名称，它将尝试匹配和连接属性的类型。&lt;font color=#DC143C&gt;如果存在不止一个这样的 bean，则一个致命的异常将会被抛出。&lt;/font&gt;&lt;/li&gt;
-&lt;li&gt;constructor	类似于 byType，但该类型适用于构造函数参数类型。如果在容器中没有一个构造函数参数类型的 bean，则一个致命错误将会发生。&lt;/li&gt;
-&lt;li&gt;&lt;font color=#00FF00&gt;autodetect（3.0版本不支持deprecated）&lt;/font&gt;Spring首先尝试通过 constructor 使用自动装配来连接，如果它不执行，Spring 尝试通过 byType 来自动装配。&lt;/li&gt;
-&lt;/ol&gt;
-&lt;h3 id=&#34;示例&#34;&gt;示例&lt;/h3&gt;
-&lt;h4 id=&#34;byname&#34;&gt;byName&lt;/h4&gt;
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;package com.ray.pojo;
-public class Role {
-    public User user;
-    public void setUser(User user) {
-        this.user = user;
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;package com.ray.pojo;
-public class Role {
-    public User user;
-    public void setUser(User user) {
-        this.user = user;
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code class=&#34;language-xml&#34;&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt;
-&amp;lt;beans xmlns=&amp;quot;http://www.springframework.org/schema/beans&amp;quot;
-       xmlns:xsi=&amp;quot;http://www.w3.org/2001/XMLSchema-instance&amp;quot;
-       xsi:schemaLocation=&amp;quot;http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans.xsd&amp;quot;&amp;gt;
-    &amp;lt;bean id=&amp;quot;user&amp;quot; class=&amp;quot;com.ray.pojo.User&amp;quot;&amp;gt;
-        &amp;lt;property name=&amp;quot;name&amp;quot; value=&amp;quot;Ray&amp;quot;/&amp;gt;
-        &amp;lt;property name=&amp;quot;id&amp;quot; value=&amp;quot;123&amp;quot;/&amp;gt;
-    &amp;lt;/bean&amp;gt;
-    &amp;lt;bean id=&amp;quot;role&amp;quot; class=&amp;quot;com.ray.pojo.Role&amp;quot; autowire=&amp;quot;byName&amp;quot;/&amp;gt;
-&amp;lt;/beans&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;结果：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;调用无参构造
-调用setName
-调用setId
-User{name=&#39;Ray&#39;, id=123}
-
-Process finished with exit code 0
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;值得注意的是自动装配使用byName时，其id值为&lt;code&gt;&amp;quot;user&amp;quot;&lt;/code&gt;与&lt;code&gt;Role&lt;/code&gt;中的属性名称&lt;code&gt;&amp;quot;user&amp;quot;&lt;/code&gt;相对应，若不对应则无法将对应参数进行填充。参数填充时需要与setter方法配合。&lt;/p&gt;
-&lt;h4 id=&#34;bytype&#34;&gt;byType&lt;/h4&gt;
-&lt;p&gt;类似的：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;package com.ray.pojo;
-public class Role {
-    public User user;
-    public void setUser(User user) {
-        this.user = user;
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;package com.ray.pojo;
-public class Role {
-    public User user;
-    public void setUser(User user) {
-        this.user = user;
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code class=&#34;language-xml&#34;&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt;
-&amp;lt;beans xmlns=&amp;quot;http://www.springframework.org/schema/beans&amp;quot;
-       xmlns:xsi=&amp;quot;http://www.w3.org/2001/XMLSchema-instance&amp;quot;
-       xsi:schemaLocation=&amp;quot;http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans.xsd&amp;quot;&amp;gt;
-    &amp;lt;bean id=&amp;quot;user&amp;quot; class=&amp;quot;com.ray.pojo.User&amp;quot;&amp;gt;
-        &amp;lt;property name=&amp;quot;name&amp;quot; value=&amp;quot;Ray&amp;quot;/&amp;gt;
-        &amp;lt;property name=&amp;quot;id&amp;quot; value=&amp;quot;123&amp;quot;/&amp;gt;
-    &amp;lt;/bean&amp;gt;
-    &amp;lt;bean id=&amp;quot;role&amp;quot; class=&amp;quot;com.ray.pojo.Role&amp;quot; autowire=&amp;quot;byType&amp;quot;/&amp;gt;
-&amp;lt;/beans&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;结果：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;调用无参构造
-调用setName
-调用setId
-User{name=&#39;Ray&#39;, id=123}
-
-Process finished with exit code 0
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;如果bean的类型匹配配置文件中的一个确切的 bean 名称，它将尝试匹配和连接属性的类型。例如通过&lt;code&gt;Roles&lt;/code&gt;类中的&lt;code&gt;com.ray.pojo.User&lt;/code&gt;匹配到bean.xml中的&lt;code&gt;user&lt;/code&gt; bean。参数填充时需要与setter方法配合。&lt;/p&gt;
-&lt;h4 id=&#34;constructor&#34;&gt;constructor&lt;/h4&gt;
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;package com.ray.pojo;
-public class Role {
-    public User user;
-    public void setUser(User user) {
-        this.user = user;
-    }
-    public Role() {
-    }
-    public Role(User user) {
-        this.user = user;
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;pre&gt;&lt;code class=&#34;language-xml&#34;&gt;&amp;lt;?xml version=&amp;quot;1.0&amp;quot; encoding=&amp;quot;UTF-8&amp;quot;?&amp;gt;
-&amp;lt;beans xmlns=&amp;quot;http://www.springframework.org/schema/beans&amp;quot;
-       xmlns:xsi=&amp;quot;http://www.w3.org/2001/XMLSchema-instance&amp;quot;
-       xsi:schemaLocation=&amp;quot;http://www.springframework.org/schema/beans
-        http://www.springframework.org/schema/beans/spring-beans.xsd&amp;quot;&amp;gt;
-    &amp;lt;bean id=&amp;quot;user&amp;quot; class=&amp;quot;com.ray.pojo.User&amp;quot;&amp;gt;
-        &amp;lt;property name=&amp;quot;name&amp;quot; value=&amp;quot;Ray&amp;quot;/&amp;gt;
-        &amp;lt;property name=&amp;quot;id&amp;quot; value=&amp;quot;123&amp;quot;/&amp;gt;
-    &amp;lt;/bean&amp;gt;
-    &amp;lt;bean id=&amp;quot;role&amp;quot; class=&amp;quot;com.ray.pojo.Role&amp;quot; autowire=&amp;quot;constructor&amp;quot;/&amp;gt;
-&amp;lt;/beans&amp;gt;
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;类似byType，按照类型进行匹配，但是不完全一样&lt;br&gt;
-填充属性时，调用构造contructor方法，因此bean.xml中必须有与constructor方法参数中对应的已注册的bean，否则会发生错误&lt;/p&gt;
-&lt;h4 id=&#34;default-autowire&#34;&gt;default-autowire&lt;/h4&gt;
-&lt;p&gt;默认情况下，default-autowire属性被设置为none，标示所有的Bean都不使用自动装配，除非Bean上配置了autowire属性。 如果你需要为所有的Bean配置相同的autowire属性，有个办法可以简化这一操作。&lt;br&gt;
-在配置文件中加入&lt;code&gt;&amp;lt;beans default-autowire=&amp;quot;byType&amp;quot;&amp;gt;&lt;/code&gt;&lt;/p&gt;
-&lt;h2 id=&#34;自动装配中的循环依赖&#34;&gt;自动装配中的循环依赖&lt;/h2&gt;
-&lt;p&gt;依赖注入稍不注意就会出现循环依赖：&lt;br&gt;
-Bean之间的依赖顺序： BeanA -&amp;gt; BeanB -&amp;gt; BeanA&lt;br&gt;
-即BeanA对象中引用了BeanB对象，而BeanB对象中又引用了BeanA&lt;/p&gt;
-&lt;p&gt;&lt;font color=#DC143C&gt;&lt;b&gt;解决方法：递归，三级缓存&lt;/b&gt;&lt;/font&gt;&lt;br&gt;
-类似于执行图的深拷贝等类似的过程，无向图中我们使用&lt;code&gt;Map&amp;lt;Node, Node&amp;gt;&lt;/code&gt;的方式，在遍历未完成节点的同时将已经完成拷贝的节点用Map的形式标记出来，下次再连接时直接从Map中取即可（可以认为是一级缓存？）&lt;/p&gt;
-&lt;p&gt;下面是未解决循环依赖的常规步骤：&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;实例化 A，此时 A 还未完成属性填充和初始化方法（@PostConstruct）的执行。&lt;/li&gt;
-&lt;li&gt;A 对象发现需要注入 B 对象，但是容器中并没有 B 对象（如果对象创建完成并且属性注入完成和执行完初始化方法就会放入容器中）。&lt;/li&gt;
-&lt;li&gt;实例化 B，此时 B 还未完成属性填充和初始化方法（@PostConstruct）的执行。&lt;/li&gt;
-&lt;li&gt;B 对象发现需要注入 A 对象，但是容器中并没有 A 对象。&lt;/li&gt;
-&lt;li&gt;重复步骤 1。&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;我们很容易的能够看出常规的解决循环依赖的步骤在这里并不起作用&lt;/p&gt;
-&lt;p&gt;从而引入&lt;strong&gt;三级缓存&lt;/strong&gt;的概念&lt;/p&gt;
-&lt;h3 id=&#34;三级缓存&#34;&gt;三级缓存&lt;/h3&gt;
-&lt;p&gt;Spring解决循环依赖的核心思想在于&lt;strong&gt;提前曝光&lt;/strong&gt;&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;/** Cache of singleton objects: bean name to bean instance. */
-private final Map&amp;lt;String, Object&amp;gt; singletonObjects = new ConcurrentHashMap&amp;lt;&amp;gt;(256);
-/** Cache of early singleton objects: bean name to bean instance. */
-private final Map&amp;lt;String, Object&amp;gt; earlySingletonObjects = new HashMap&amp;lt;&amp;gt;(16);
-/** Cache of singleton factories: bean name to ObjectFactory. */
-private final Map&amp;lt;String, ObjectFactory&amp;lt;?&amp;gt;&amp;gt; singletonFactories = new HashMap&amp;lt;&amp;gt;(16);
-/** Names of beans that are currently in creation. */
-// 这个缓存也十分重要：它表示bean创建过程中都会在里面呆着~
-// 它在Bean开始创建时放值，创建完成时会将其移出~
-private final Set&amp;lt;String&amp;gt; singletonsCurrentlyInCreation = Collections.newSetFromMap(new ConcurrentHashMap&amp;lt;&amp;gt;(16));
-/** Names of beans that have already been created at least once. */
-// 当这个Bean被创建完成后，会标记为这个 注意：这里是set集合 不会重复
-// 至少被创建了一次的  都会放进这里~~~~
-private final Set&amp;lt;String&amp;gt; alreadyCreated = Collections.newSetFromMap(new ConcurrentHashMap&amp;lt;&amp;gt;(256));
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;以下为三级缓存的对应作用&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;singletonObjects 一级缓存，存放完整的 Bean。&lt;/li&gt;
-&lt;li&gt;earlySingletonObjects 二级缓存，存放提前暴露的Bean，Bean 是不完整的，未完成属性注入和执行 init 方法。&lt;strong&gt;用以解决循环依赖。&lt;/strong&gt;&lt;/li&gt;
-&lt;li&gt;singletonFactories 三级缓存，存放的是 Bean 工厂，主要是生产 Bean，存放到二级缓存中。&lt;strong&gt;用以解决循环依赖。&lt;/strong&gt;&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;获取单例Bean的源码如下：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public class DefaultSingletonBeanRegistry extends SimpleAliasRegistry implements SingletonBeanRegistry {
-	...
-	@Override
-	@Nullable
-	public Object getSingleton(String beanName) {
-		return getSingleton(beanName, true);
-	}
-	@Nullable
-	protected Object getSingleton(String beanName, boolean allowEarlyReference) {
-		Object singletonObject = this.singletonObjects.get(beanName);
-		if (singletonObject == null &amp;amp;&amp;amp; isSingletonCurrentlyInCreation(beanName)) {
-			synchronized (this.singletonObjects) {
-				singletonObject = this.earlySingletonObjects.get(beanName);
-				if (singletonObject == null &amp;amp;&amp;amp; allowEarlyReference) {
-					ObjectFactory&amp;lt;?&amp;gt; singletonFactory = this.singletonFactories.get(beanName);
-					if (singletonFactory != null) {
-						singletonObject = singletonFactory.getObject();
-						this.earlySingletonObjects.put(beanName, singletonObject);
-						this.singletonFactories.remove(beanName);
-					}
-				}
-			}
-		}
-		return singletonObject;
-	}
-	...
-	public boolean isSingletonCurrentlyInCreation(String beanName) {
-		return this.singletonsCurrentlyInCreation.contains(beanName);
-	}
-	protected boolean isActuallyInCreation(String beanName) {
-		return isSingletonCurrentlyInCreation(beanName);
-	}
-	...
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;ul&gt;
-&lt;li&gt;A半成品加入第三级缓存&lt;/li&gt;
-&lt;li&gt;A填充属性注入B -&amp;gt; 创建B对象 -&amp;gt; B半成品加入第三级缓存&lt;/li&gt;
-&lt;li&gt;B填充属性注入A -&amp;gt; 创建A代理对象，从第三级缓存移除A对象，A代理对象加入第二级缓存（此时A还是半成品，B注入的是A代理对象）&lt;/li&gt;
-&lt;li&gt;创建B代理对象（此时B是完成品） -&amp;gt; 从第三级缓存移除B对象，B代理对象加入第一级缓存&lt;/li&gt;
-&lt;li&gt;A半成品注入B代理对象&lt;/li&gt;
-&lt;li&gt;从第二级缓存移除A代理对象，A代理对象加入第一级缓存&lt;/li&gt;
-&lt;/ul&gt;
-&lt;p&gt;&lt;font color=#DC143C&gt;&lt;b&gt;PS: 加入singletonFactories三级缓存的前提是执行了构造器，所以构造器的循环依赖没法解决&lt;/b&gt;&lt;/font&gt;&lt;/p&gt;
-&lt;p&gt;附上一张偷来的图：&lt;br&gt;
-&lt;img src=&#34;https://rayzhang13.github.io/post-images/1622815064103.png&#34; alt=&#34;&#34; loading=&#34;lazy&#34;&gt;&lt;/p&gt;
-&lt;h3 id=&#34;是否可以去掉第二级缓存&#34;&gt;是否可以去掉第二级缓存？&lt;/h3&gt;
-&lt;p&gt;&lt;font color=#DC143C&gt;&lt;b&gt;关键在于AOP&lt;/b&gt;&lt;/font&gt;&lt;br&gt;
-现在有A的field或者setter依赖B的实例对象，同时B的field或者setter依赖了A的实例，A首先开始创建，并将自己暴露到 earlySingletonObjects 中，开始填充属性，此时发现自己依赖B的属性，尝试去get(B)，发现B还没有被创建，所以开始创建B，在进行属性填充时初始化A，就从earlySingletonObjects 中获取到了实例化但没有任何属性的A，B拿到A后完成了初始化阶段，将自己放到singletonObjects中,此时返回A，A拿到B的对象继续完成初始化，完成后将自己放到singletonObjects中，由A与B中所表示的A的属性地址是一样的，所以A的属性填充完后，B也获取了A的属性，这样就解决了循环的问题。&lt;br&gt;
-似乎完美解决，如果就这么使用的话也没什么问题，但是再加上AOP情况就不同了，被AOP增强的Bean会在初始化后代理成为一个新的对象，也就是说：如果有AOP，A依赖于B，B依赖于A，A实例化完成暴露出去，开始注入属性，发现引用B，B开始实例化，使用A暴露的对象，&lt;strong&gt;初始化完成后封装成代理对象&lt;/strong&gt;，A再将代理后的B注入，再做代理，那么&lt;strong&gt;代理A中的B就是代理后的B，但是代理后的B中的A是没用代理的A&lt;/strong&gt;。&lt;br&gt;
-显然这是不对的，所以在Spring中存在第三级缓存，在创建对象时判断是否是单例，允许循环依赖，正在创建中，就将其从earlySingletonObjects中移除掉，并在singletonFactories放入新的对象，这样后续再查询beanName时会走到singletonFactory.getObject()，其中就会去调用各个beanPostProcessor的getEarlyBeanReference方法，返回的对象就是代理后的对象。&lt;/p&gt;
-&lt;h3 id=&#34;是否可以去掉第三级缓存&#34;&gt;是否可以去掉第三级缓存？&lt;/h3&gt;
-&lt;p&gt;是否可以：不管有没有循环依赖，都提前创建好代理对象，并将代理对象放入缓存，出现循环依赖时，其他对象直接就可以取到代理对象并注入。&lt;br&gt;
-每次实例化完 Bean 之后就直接去创建代理对象，并添加到二级缓存中。测试结果是完全正常的，Spring 的初始化时间应该也是不会有太大的影响，因为如果 Bean 本身不需要代理的话，是直接返回原始 Bean 的，并不需要走复杂的创建代理 Bean 的流程。&lt;br&gt;
-如果要使用二级缓存解决循环依赖，意味着Bean在构造完后就创建代理对象，这样违背了Spring设计原则。Spring结合AOP跟Bean的生命周期，是在Bean创建完全之后通过AnnotationAwareAspectJAutoProxyCreator这个后置处理器来完成的，在这个后置处理的postProcessAfterInitialization方法中对初始化后的Bean完成AOP代理。如果出现了循环依赖，那没有办法，只有给Bean先创建代理，但是没有出现循环依赖的情况下，设计之初就是让Bean在生命周期的最后一步完成代理而不是在实例化后就立马完成代理。&lt;/p&gt;
-&lt;h1 id=&#34;spring-aop&#34;&gt;Spring AOP&lt;/h1&gt;
-&lt;h2 id=&#34;基本概念&#34;&gt;基本概念&lt;/h2&gt;
-&lt;p&gt;在 spring 中 Aspect 通过&lt;code&gt;@Aspect&lt;/code&gt;、&lt;code&gt;@Pointcut&lt;/code&gt;和一系列 advice（&lt;code&gt;@Before&lt;/code&gt;、&lt;code&gt;@after&lt;/code&gt;、&lt;code&gt;@afterReturning&lt;/code&gt;、&lt;code&gt;@Around&lt;/code&gt;）组成。&lt;/p&gt;
-&lt;ul&gt;
-&lt;li&gt;&lt;code&gt;@Aspect&lt;/code&gt; 切面，声明当前 class 为一个切面&lt;/li&gt;
-&lt;li&gt;&lt;code&gt;@Pointcut&lt;/code&gt; 切入点，通过 execution 表达式描述切入规则，&lt;/li&gt;
-&lt;li&gt;advice 通知，定义了切面是什么以及何时使用。&lt;/li&gt;
-&lt;li&gt;advice 中还包含了 连接点（joinpoint）&lt;/li&gt;
-&lt;li&gt;weave 织入，将切面应用到目标对象并导致代理对象创建的过程&lt;/li&gt;
-&lt;li&gt;introduction 引入，在不修改代码的前提下，引入可以在运行期为类动态地添加一些方法或字段&lt;/li&gt;
-&lt;/ul&gt;
-&lt;h2 id=&#34;advice类型&#34;&gt;advice类型&lt;/h2&gt;
-&lt;h3 id=&#34;before&#34;&gt;@Before&lt;/h3&gt;
-&lt;p&gt;前置通知（Before advice）：在某连接点（JoinPoint）——被切入代码（类或者方法）之前执行的通知，但这个通知不能阻止连接点前的执行。因为&lt;code&gt;@Before&lt;/code&gt; 注解的方法入参不能传 ProceedingJoinPoint，而只能传入 JoinPoint。而从 aop 走到核心代码就是通过调用 ProceedingJionPoint 的 proceed()方法。而 JoinPoint 没有这个方法。&lt;br&gt;
-这里牵扯区别这两个类：Proceedingjoinpoint 继承了 JoinPoint 。是在 JoinPoint 的基础上暴露出 proceed 这个方法。proceed 很重要，这个是 aop 代理链执行的方法。暴露出这个方法，就能支持 aop:around 这种切面（而其他的几种切面只需要用到 JoinPoint，这跟切面类型有关）， 能决定是否走代理链还是走自己拦截的其他逻辑。&lt;/p&gt;
-&lt;h3 id=&#34;after&#34;&gt;@After&lt;/h3&gt;
-&lt;p&gt;后通知（After advice）：当某连接点退出的时候执行的通知（不论是正常返回还是异常退出）。&lt;/p&gt;
-&lt;h3 id=&#34;afterreturning&#34;&gt;@AfterReturning&lt;/h3&gt;
-&lt;p&gt;返回后通知（After return advice）：在某连接点正常完成后执行的通知，不包括抛出异常的情况。&lt;/p&gt;
-&lt;h3 id=&#34;around&#34;&gt;@Around&lt;/h3&gt;
-&lt;p&gt;环绕通知（Around advice）：包围一个连接点的通知，类似 Web 中 Servlet 规范中的 Filter 的 doFilter 方法。可以在方法的调用前后完成自定义的行为，也可以选择不执行。这时 aop 的最重要的，最常用的注解。用这个注解的方法入参传的是 ProceedingJionPoint pjp，可以决定当前线程能否进入核心方法中——通过调用 &lt;code&gt;pjp.proceed();&lt;/code&gt;&lt;/p&gt;
-&lt;h3 id=&#34;afterthrowing&#34;&gt;@AfterThrowing&lt;/h3&gt;
-&lt;p&gt;抛出异常后通知（After throwing advice）：在方法抛出异常退出时执行的通知。&lt;/p&gt;
-&lt;h2 id=&#34;advice-注解的执行先后顺序&#34;&gt;advice 注解的执行先后顺序&lt;/h2&gt;
-&lt;p&gt;单个执行：&lt;br&gt;
-&lt;img src=&#34;https://rayzhang13.github.io/post-images/1624189595455.png&#34; alt=&#34;&#34; loading=&#34;lazy&#34;&gt;&lt;br&gt;
-多个切面执行：&lt;br&gt;
-&lt;img src=&#34;https://rayzhang13.github.io/post-images/1624189647566.png&#34; alt=&#34;&#34; loading=&#34;lazy&#34;&gt;&lt;/p&gt;
-&lt;p&gt;其实我们可以将aop视作同心圆&lt;br&gt;
-&lt;img src=&#34;https://rayzhang13.github.io/post-images/1624189778815.png&#34; alt=&#34;&#34; loading=&#34;lazy&#34;&gt;&lt;br&gt;
-spring aop就是一个同心圆，要执行的方法为圆心，最外层的order最小。从最外层按照AOP1、AOP2的顺序依次执行doAround方法，doBefore方法。然后执行method方法，最后按照AOP2、AOP1的顺序依次执行doAfter、doAfterReturn方法。也就是说对多个AOP来说，先before的，一定后after。&lt;br&gt;
-如果我们要在同一个方法事务提交后执行自己的AOP，那么把事务的AOP order设置为2，自己的AOP order设置为1，然后在doAfterReturn里边处理自己的业务逻辑。&lt;br&gt;
-order越小越是最先执行，但更重要的是最先执行的最后结束。&lt;/p&gt;
-&lt;h2 id=&#34;代码实例&#34;&gt;代码实例&lt;/h2&gt;
-&lt;p&gt;如下为Ascpect类&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;@Aspect
-@Component
-@Log4j2
-public class LogAspect {
-    @Pointcut(&amp;quot;execution(* com.ray.blog.web.*.*(..))&amp;quot;)
-    //表示匹配 所有返回类型（*含义） 下的com.ray.web下面的所有类（.*含义）
-    //匹配所有方法（.*）任何参数（(..)含义）
-    public void log(){}
-
-    @Before(&amp;quot;log()&amp;quot;)
-    public void doBefore(JoinPoint joinPoint){
-        log.info(&amp;quot;-----------doBefore-------------&amp;quot;);
-    }
-    @After(&amp;quot;log()&amp;quot;)
-    public void doAfter(){
-        log.info(&amp;quot;-------------doAfter-----------------&amp;quot;);
-    }
-    @AfterReturning(returning = &amp;quot;result&amp;quot;, pointcut = &amp;quot;log()&amp;quot;)
-    public void doAfterReturn(Object result){
-        log.info(&amp;quot;Result: {}&amp;quot;, result);
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;如下为对应的Servlet Controller类：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;@Controller
-public class IndexController {
-    @GetMapping(&amp;quot;/&amp;quot;)
-    public String index(){
-        System.out.println(&amp;quot;-----------index-----------&amp;quot;);
-        return &amp;quot;index&amp;quot;;
-    }
-}
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;访问&lt;code&gt;127.0.0.1:8080&lt;/code&gt;得到如下日志：&lt;/p&gt;
-&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;20:00:22.415 [http-nio-8080-exec-1] INFO  com.ray.blog.aspect.LogAspect - -----------doBefore-------------
------------index-----------
-20:00:22.421 [http-nio-8080-exec-1] INFO  com.ray.blog.aspect.LogAspect - Result: index
-20:00:22.421 [http-nio-8080-exec-1] INFO  com.ray.blog.aspect.LogAspect - -------------doAfter-----------------
-&lt;/code&gt;&lt;/pre&gt;
-&lt;p&gt;验证了aop切面的运行顺序&lt;/p&gt;
-">Spring 学习笔记（持续更新）</a>
       </div>
       
       <div class="item">
