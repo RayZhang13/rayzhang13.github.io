@@ -9,7 +9,7 @@
 <meta name="description" content="Everything&#39;s gonna be just fine.">
 <meta name="theme-color" content="#000">
 <title>Ray&#39;s Blog</title>
-<link rel="shortcut icon" href="/favicon.ico?v=1624191965359">
+<link rel="shortcut icon" href="/favicon.ico?v=1624195356894">
 <link rel="stylesheet" href="/media/css/pisces.css">
 <link rel="stylesheet" href="/media/fonts/font-awesome.css">
 <link
@@ -193,7 +193,7 @@
     <div class="sidebar-item-box">
       <a href="/archives/">
         
-        <span class="site-item-stat-count">12</span>
+        <span class="site-item-stat-count">13</span>
         <span class="site-item-stat-name language" data-lan="article">文章</span>
       </a>
     </div>
@@ -256,6 +256,21 @@
           <small class="language" data-lan="tag">标签</small>
         </h2>
       </div>
+      
+      
+      
+      <a href="https://rayzhang13.github.io/post/exception-handler-interceptor/">
+        <div class="motion-warpper">
+          <div class="tag-post-node">
+            <h1>
+              06-20
+              <small>使用@ControllerAdvice与@ExceptionHandler拦截异常</small>
+            </h1>
+          </div>
+        </div>
+      </a>
+      
+      
       
       
       
@@ -609,6 +624,175 @@
       <hr>
     </div>
     <div class="result" id="result">
+      
+      <div class="item">
+        <a class="result-title" style="opacity: 0;" href="https://rayzhang13.github.io/post/exception-handler-interceptor/"" data-c="
+          &lt;p&gt;本文将结合项目简单介绍如何对Controller层异常进行拦截&lt;/p&gt;
+&lt;!-- more --&gt;
+&lt;p&gt;正常情况下，如果访问发生异常错误，Spring Boot自动配置的默认错误处理器会查找名为error的视图，如果找不到就用默认的白标错误视图，如下图所示。&lt;br&gt;
+&lt;img src=&#34;https://rayzhang13.github.io/post-images/1624192927051.webp&#34; alt=&#34;&#34; loading=&#34;lazy&#34;&gt;&lt;/p&gt;
+&lt;p&gt;如果我们在&lt;code&gt;/templates/error&lt;/code&gt;目录下预先放置了&lt;code&gt;404.html&lt;/code&gt; &lt;code&gt;500.html&lt;/code&gt;等错误静态页面，Springboot会自动进行对应跳转，显得十分便利。&lt;br&gt;
+&lt;img src=&#34;https://rayzhang13.github.io/post-images/1624194092842.png&#34; alt=&#34;&#34; loading=&#34;lazy&#34;&gt;&lt;/p&gt;
+&lt;p&gt;而 为了自定义错误界面，我们可能需要对Controller类产生的异常进行拦截，在此我们使用到了两个注解：&lt;code&gt;@ControllerAdvice&lt;/code&gt; &lt;code&gt;@ExceptionHandler&lt;/code&gt;&lt;/p&gt;
+&lt;h1 id=&#34;controlleradvice注解&#34;&gt;&lt;code&gt;@ControllerAdvice&lt;/code&gt;注解&lt;/h1&gt;
+&lt;p&gt;&lt;code&gt;@ControllerAdvice&lt;/code&gt;是控制器增强注解。可以用于定义&lt;code&gt;@ExceptionHandler&lt;/code&gt;、&lt;code&gt;@InitBinder&lt;/code&gt;、&lt;code&gt;@ModelAttribute&lt;/code&gt;，并应用到所有&lt;code&gt;@RequestMapping&lt;/code&gt;中。&lt;br&gt;
+启动应用后，被 &lt;code&gt;@ExceptionHandler&lt;/code&gt;、&lt;code&gt;@InitBinder&lt;/code&gt;、&lt;code&gt;@ModelAttribute&lt;/code&gt; 注解的方法，都会作用在 被 &lt;code&gt;@RequestMapping&lt;/code&gt; 注解的方法上。&lt;br&gt;
+&lt;code&gt;@ExceptionHandler&lt;/code&gt; 拦截了异常，我们可以通过该注解实现自定义异常处理。其中，&lt;code&gt;@ExceptionHandler&lt;/code&gt; 配置的 value 指定需要拦截的异常类型，下面拦截了 Exception.class 这种异常。&lt;/p&gt;
+&lt;h1 id=&#34;代码实例&#34;&gt;代码实例&lt;/h1&gt;
+&lt;h2 id=&#34;全局处理&#34;&gt;全局处理&lt;/h2&gt;
+&lt;p&gt;Handler类：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;package com.ray.blog.handler;
+
+import lombok.extern.log4j.Log4j2;
+import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.servlet.ModelAndView;
+import javax.servlet.http.HttpServletRequest;
+@ControllerAdvice
+@Log4j2
+public class ControllerExceptionHandler {
+    @ExceptionHandler(Exception.class) //拦截所有Exception类
+    public ModelAndView exceptionHandler(HttpServletRequest httpServletRequest, Exception e) throws Exception {
+        log.error(&amp;quot;find exception:e={}&amp;quot;,e.getMessage());  //log4j2在日志中打印错误信息
+        ModelAndView mv = new ModelAndView();
+        //将访问信息和异常写入参数中
+        mv.addObject(&amp;quot;url&amp;quot;, httpServletRequest.getRequestURL());
+        mv.addObject(&amp;quot;exception&amp;quot;, e);
+        //重定向到error/error中
+        mv.setViewName(&amp;quot;error/error&amp;quot;);
+        return mv;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;我们故意将Controller类中加入报错代码：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;package com.ray.blog.web;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller
+public class IndexController {
+    @GetMapping(&amp;quot;/&amp;quot;)
+    public String index(){
+        int a = 7/0; //报错代码
+        return &amp;quot;index&amp;quot;;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;访问&lt;code&gt;127.0.0.1:8080&lt;/code&gt;后，产生异常，随后被拦截重定向到error页面，达到了我们的预期效果&lt;br&gt;
+为了调试方便，我们将&lt;code&gt;error.html&lt;/code&gt;套用了Thymeleaf，以注释的方式将具体异常信息注入到网页中&lt;/p&gt;
+&lt;p&gt;页面如下：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-html&#34;&gt;&amp;lt;!DOCTYPE html&amp;gt;
+&amp;lt;html lang=&amp;quot;en&amp;quot; xmlns:th=&amp;quot;http://www.w3.org/1999/xhtml&amp;quot;&amp;gt;
+&amp;lt;head&amp;gt;
+    &amp;lt;meta charset=&amp;quot;UTF-8&amp;quot;&amp;gt;
+    &amp;lt;title&amp;gt;error&amp;lt;/title&amp;gt;
+&amp;lt;/head&amp;gt;
+&amp;lt;body&amp;gt;
+    &amp;lt;h1&amp;gt;error&amp;lt;/h1&amp;gt;
+    &amp;lt;div th:utext=&amp;quot;${exception.message}&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
+    &amp;lt;!--以注释的形式将异常相关内容打印在网页中--&amp;gt;
+    &amp;lt;div&amp;gt;
+        &amp;lt;div th:utext=&amp;quot;&#39;&amp;amp;lt;!--&#39;&amp;quot; th:remove=&amp;quot;tag&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
+        &amp;lt;div th:utext=&amp;quot;&#39;Failed Request URL: &#39; + ${url}&amp;quot; th:remove=&amp;quot;tag&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
+        &amp;lt;div th:utext=&amp;quot;&#39;ExceptionMessage: &#39; + ${exception.message}&amp;quot; th:remove=&amp;quot;tag&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
+        &amp;lt;ul th:remove=&amp;quot;tag&amp;quot;&amp;gt;
+            &amp;lt;li th:each=&amp;quot;st : ${exception.stackTrace}&amp;quot; th:remove=&amp;quot;tag&amp;quot;&amp;gt;
+                &amp;lt;span th:utext=&amp;quot;${st}&amp;quot; th:remove=&amp;quot;tag&amp;quot;&amp;gt;&amp;lt;/span&amp;gt;
+            &amp;lt;/li&amp;gt;
+        &amp;lt;/ul&amp;gt;
+        &amp;lt;div th:utext=&amp;quot;&#39;--&amp;amp;gt;&#39;&amp;quot; th:remove=&amp;quot;tag&amp;quot;&amp;gt;&amp;lt;/div&amp;gt;
+    &amp;lt;/div&amp;gt;
+&amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;效果如下：&lt;/p&gt;
+&lt;p&gt;日志信息：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-bash&#34;&gt;21:07:40.673 [http-nio-8080-exec-8] ERROR com.ray.blog.handler.ControllerExceptionHandler 
+- find exception:e=/ by zero
+21:07:40.673 [http-nio-8080-exec-8] WARN  org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver 
+- Resolved [java.lang.ArithmeticException: / by zero]
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;页面：&lt;br&gt;
+&lt;img src=&#34;https://rayzhang13.github.io/post-images/1624194537908.png&#34; alt=&#34;&#34; loading=&#34;lazy&#34;&gt;&lt;/p&gt;
+&lt;p&gt;具体异常信息以注释方式被注入：&lt;br&gt;
+&lt;img src=&#34;https://rayzhang13.github.io/post-images/1624194590134.png&#34; alt=&#34;&#34; loading=&#34;lazy&#34;&gt;&lt;/p&gt;
+&lt;p&gt;显然通过&lt;code&gt;@ExceptionHandler&lt;/code&gt;的多重组合，我们可以应用于不同异常的拦截，分别设置重定向的页面&lt;/p&gt;
+&lt;h2 id=&#34;使用注解处理自定义异常&#34;&gt;使用注解处理自定义异常&lt;/h2&gt;
+&lt;p&gt;假设我们自定义异常NotFound：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;package com.ray.blog;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+@ResponseStatus(HttpStatus.NOT_FOUND)
+//使用RsponseStatus注解标注
+public class NotFoundException extends RuntimeException {
+    public NotFoundException(){
+    }
+    public NotFoundException(String message){
+        super(message);
+    }
+    public NotFoundException(String message, Throwable cause){
+        super(message, cause);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;Controller类中特意加入：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;package com.ray.blog.web;
+import com.ray.blog.NotFoundException;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+@Controller
+public class IndexController {
+    @GetMapping(&amp;quot;/&amp;quot;)
+    public String index(){
+        String blog = null;
+        if(blog == null){
+            throw new NotFoundException(&amp;quot;博客不存在&amp;quot;);
+        }
+        return &amp;quot;index&amp;quot;;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;我们在Handler类中加入额外两行：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;package com.ray.blog.handler;
+
+import lombok.extern.log4j.Log4j2;
+import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.servlet.ModelAndView;
+import javax.servlet.http.HttpServletRequest;
+
+
+@ControllerAdvice
+@Log4j2
+public class ControllerExceptionHandler {
+    @ExceptionHandler(Exception.class)
+    public ModelAndView exceptionHandler(HttpServletRequest httpServletRequest, Exception e) throws Exception {
+        log.error(&amp;quot;find exception:e={}&amp;quot;,e.getMessage());
+        if(AnnotationUtils.findAnnotation(e.getClass(), ResponseStatus.class) != null){
+            //若异常对应注解包含ResponseStatus，直接将异常抛出
+            throw e;
+        }
+        //否则跳转到error.html
+        ModelAndView mv = new ModelAndView();
+        mv.addObject(&amp;quot;url&amp;quot;, httpServletRequest.getRequestURL());
+        mv.addObject(&amp;quot;exception&amp;quot;, e);
+        mv.setViewName(&amp;quot;error/error&amp;quot;);
+        return mv;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;随后我们对&lt;code&gt;127.0.0.1:8080&lt;/code&gt;进行访问，会抛出我们自定义的异常，并由Springboot直接跳转到静态的404页面。&lt;br&gt;
+&lt;img src=&#34;https://rayzhang13.github.io/post-images/1624195254082.png&#34; alt=&#34;&#34; loading=&#34;lazy&#34;&gt;&lt;/p&gt;
+">使用@ControllerAdvice与@ExceptionHandler拦截异常</a>
+      </div>
       
       <div class="item">
         <a class="result-title" style="opacity: 0;" href="https://rayzhang13.github.io/post/request-aop-log/"" data-c="

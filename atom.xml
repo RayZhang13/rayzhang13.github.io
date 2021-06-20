@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://rayzhang13.github.io</id>
     <title>Ray&apos;s Blog</title>
-    <updated>2021-06-20T12:26:46.564Z</updated>
+    <updated>2021-06-20T13:22:39.856Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://rayzhang13.github.io"/>
     <link rel="self" href="https://rayzhang13.github.io/atom.xml"/>
@@ -10,6 +10,180 @@
     <logo>https://rayzhang13.github.io/images/avatar.png</logo>
     <icon>https://rayzhang13.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, Ray&apos;s Blog</rights>
+    <entry>
+        <title type="html"><![CDATA[使用@ControllerAdvice与@ExceptionHandler拦截异常]]></title>
+        <id>https://rayzhang13.github.io/post/exception-handler-interceptor/</id>
+        <link href="https://rayzhang13.github.io/post/exception-handler-interceptor/">
+        </link>
+        <updated>2021-06-20T12:31:16.000Z</updated>
+        <summary type="html"><![CDATA[<p>本文将结合项目简单介绍如何对Controller层异常进行拦截</p>
+]]></summary>
+        <content type="html"><![CDATA[<p>本文将结合项目简单介绍如何对Controller层异常进行拦截</p>
+<!-- more -->
+<p>正常情况下，如果访问发生异常错误，Spring Boot自动配置的默认错误处理器会查找名为error的视图，如果找不到就用默认的白标错误视图，如下图所示。<br>
+<img src="https://rayzhang13.github.io/post-images/1624192927051.webp" alt="" loading="lazy"></p>
+<p>如果我们在<code>/templates/error</code>目录下预先放置了<code>404.html</code> <code>500.html</code>等错误静态页面，Springboot会自动进行对应跳转，显得十分便利。<br>
+<img src="https://rayzhang13.github.io/post-images/1624194092842.png" alt="" loading="lazy"></p>
+<p>而 为了自定义错误界面，我们可能需要对Controller类产生的异常进行拦截，在此我们使用到了两个注解：<code>@ControllerAdvice</code> <code>@ExceptionHandler</code></p>
+<h1 id="controlleradvice注解"><code>@ControllerAdvice</code>注解</h1>
+<p><code>@ControllerAdvice</code>是控制器增强注解。可以用于定义<code>@ExceptionHandler</code>、<code>@InitBinder</code>、<code>@ModelAttribute</code>，并应用到所有<code>@RequestMapping</code>中。<br>
+启动应用后，被 <code>@ExceptionHandler</code>、<code>@InitBinder</code>、<code>@ModelAttribute</code> 注解的方法，都会作用在 被 <code>@RequestMapping</code> 注解的方法上。<br>
+<code>@ExceptionHandler</code> 拦截了异常，我们可以通过该注解实现自定义异常处理。其中，<code>@ExceptionHandler</code> 配置的 value 指定需要拦截的异常类型，下面拦截了 Exception.class 这种异常。</p>
+<h1 id="代码实例">代码实例</h1>
+<h2 id="全局处理">全局处理</h2>
+<p>Handler类：</p>
+<pre><code class="language-java">package com.ray.blog.handler;
+
+import lombok.extern.log4j.Log4j2;
+import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.servlet.ModelAndView;
+import javax.servlet.http.HttpServletRequest;
+@ControllerAdvice
+@Log4j2
+public class ControllerExceptionHandler {
+    @ExceptionHandler(Exception.class) //拦截所有Exception类
+    public ModelAndView exceptionHandler(HttpServletRequest httpServletRequest, Exception e) throws Exception {
+        log.error(&quot;find exception:e={}&quot;,e.getMessage());  //log4j2在日志中打印错误信息
+        ModelAndView mv = new ModelAndView();
+        //将访问信息和异常写入参数中
+        mv.addObject(&quot;url&quot;, httpServletRequest.getRequestURL());
+        mv.addObject(&quot;exception&quot;, e);
+        //重定向到error/error中
+        mv.setViewName(&quot;error/error&quot;);
+        return mv;
+    }
+}
+</code></pre>
+<p>我们故意将Controller类中加入报错代码：</p>
+<pre><code class="language-java">package com.ray.blog.web;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+
+@Controller
+public class IndexController {
+    @GetMapping(&quot;/&quot;)
+    public String index(){
+        int a = 7/0; //报错代码
+        return &quot;index&quot;;
+    }
+}
+</code></pre>
+<p>访问<code>127.0.0.1:8080</code>后，产生异常，随后被拦截重定向到error页面，达到了我们的预期效果<br>
+为了调试方便，我们将<code>error.html</code>套用了Thymeleaf，以注释的方式将具体异常信息注入到网页中</p>
+<p>页面如下：</p>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot; xmlns:th=&quot;http://www.w3.org/1999/xhtml&quot;&gt;
+&lt;head&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;title&gt;error&lt;/title&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    &lt;h1&gt;error&lt;/h1&gt;
+    &lt;div th:utext=&quot;${exception.message}&quot;&gt;&lt;/div&gt;
+    &lt;!--以注释的形式将异常相关内容打印在网页中--&gt;
+    &lt;div&gt;
+        &lt;div th:utext=&quot;'&amp;lt;!--'&quot; th:remove=&quot;tag&quot;&gt;&lt;/div&gt;
+        &lt;div th:utext=&quot;'Failed Request URL: ' + ${url}&quot; th:remove=&quot;tag&quot;&gt;&lt;/div&gt;
+        &lt;div th:utext=&quot;'ExceptionMessage: ' + ${exception.message}&quot; th:remove=&quot;tag&quot;&gt;&lt;/div&gt;
+        &lt;ul th:remove=&quot;tag&quot;&gt;
+            &lt;li th:each=&quot;st : ${exception.stackTrace}&quot; th:remove=&quot;tag&quot;&gt;
+                &lt;span th:utext=&quot;${st}&quot; th:remove=&quot;tag&quot;&gt;&lt;/span&gt;
+            &lt;/li&gt;
+        &lt;/ul&gt;
+        &lt;div th:utext=&quot;'--&amp;gt;'&quot; th:remove=&quot;tag&quot;&gt;&lt;/div&gt;
+    &lt;/div&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>效果如下：</p>
+<p>日志信息：</p>
+<pre><code class="language-bash">21:07:40.673 [http-nio-8080-exec-8] ERROR com.ray.blog.handler.ControllerExceptionHandler 
+- find exception:e=/ by zero
+21:07:40.673 [http-nio-8080-exec-8] WARN  org.springframework.web.servlet.mvc.method.annotation.ExceptionHandlerExceptionResolver 
+- Resolved [java.lang.ArithmeticException: / by zero]
+</code></pre>
+<p>页面：<br>
+<img src="https://rayzhang13.github.io/post-images/1624194537908.png" alt="" loading="lazy"></p>
+<p>具体异常信息以注释方式被注入：<br>
+<img src="https://rayzhang13.github.io/post-images/1624194590134.png" alt="" loading="lazy"></p>
+<p>显然通过<code>@ExceptionHandler</code>的多重组合，我们可以应用于不同异常的拦截，分别设置重定向的页面</p>
+<h2 id="使用注解处理自定义异常">使用注解处理自定义异常</h2>
+<p>假设我们自定义异常NotFound：</p>
+<pre><code class="language-java">package com.ray.blog;
+
+import org.springframework.http.HttpStatus;
+import org.springframework.web.bind.annotation.ResponseStatus;
+
+@ResponseStatus(HttpStatus.NOT_FOUND)
+//使用RsponseStatus注解标注
+public class NotFoundException extends RuntimeException {
+    public NotFoundException(){
+    }
+    public NotFoundException(String message){
+        super(message);
+    }
+    public NotFoundException(String message, Throwable cause){
+        super(message, cause);
+    }
+}
+</code></pre>
+<p>Controller类中特意加入：</p>
+<pre><code class="language-java">package com.ray.blog.web;
+import com.ray.blog.NotFoundException;
+import org.springframework.stereotype.Controller;
+import org.springframework.web.bind.annotation.GetMapping;
+@Controller
+public class IndexController {
+    @GetMapping(&quot;/&quot;)
+    public String index(){
+        String blog = null;
+        if(blog == null){
+            throw new NotFoundException(&quot;博客不存在&quot;);
+        }
+        return &quot;index&quot;;
+    }
+}
+</code></pre>
+<p>我们在Handler类中加入额外两行：</p>
+<pre><code class="language-java">package com.ray.blog.handler;
+
+import lombok.extern.log4j.Log4j2;
+import org.springframework.core.annotation.AnnotationUtils;
+import org.springframework.web.bind.annotation.ControllerAdvice;
+import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.ResponseStatus;
+import org.springframework.web.servlet.ModelAndView;
+import javax.servlet.http.HttpServletRequest;
+
+
+@ControllerAdvice
+@Log4j2
+public class ControllerExceptionHandler {
+    @ExceptionHandler(Exception.class)
+    public ModelAndView exceptionHandler(HttpServletRequest httpServletRequest, Exception e) throws Exception {
+        log.error(&quot;find exception:e={}&quot;,e.getMessage());
+        if(AnnotationUtils.findAnnotation(e.getClass(), ResponseStatus.class) != null){
+            //若异常对应注解包含ResponseStatus，直接将异常抛出
+            throw e;
+        }
+        //否则跳转到error.html
+        ModelAndView mv = new ModelAndView();
+        mv.addObject(&quot;url&quot;, httpServletRequest.getRequestURL());
+        mv.addObject(&quot;exception&quot;, e);
+        mv.setViewName(&quot;error/error&quot;);
+        return mv;
+    }
+}
+</code></pre>
+<p>随后我们对<code>127.0.0.1:8080</code>进行访问，会抛出我们自定义的异常，并由Springboot直接跳转到静态的404页面。<br>
+<img src="https://rayzhang13.github.io/post-images/1624195254082.png" alt="" loading="lazy"></p>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[AOP 切面统一打印请求日志（博客项目）]]></title>
         <id>https://rayzhang13.github.io/post/request-aop-log/</id>
@@ -2425,57 +2599,6 @@ STEP: 4
 Process finished with exit code 0
 </code></pre>
 <p>我们得到最终步数为4</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Hanoi问题]]></title>
-        <id>https://rayzhang13.github.io/post/hanoi-problem/</id>
-        <link href="https://rayzhang13.github.io/post/hanoi-problem/">
-        </link>
-        <updated>2021-05-29T07:49:01.000Z</updated>
-        <summary type="html"><![CDATA[<p>Hanoi问题是经典递归问题，本文将描述Hanoi问题的起源和解法原理</p>
-]]></summary>
-        <content type="html"><![CDATA[<p>Hanoi问题是经典递归问题，本文将描述Hanoi问题的起源和解法原理</p>
-<!-- more -->
-<h1 id="起源">起源</h1>
-<p>最早发明这个问题的人是法国数学家爱德华·卢卡斯。</p>
-<p>传说越南河内某间寺院有三根银棒，上串 64 个金盘。寺院里的僧侣依照一个古老的预言，以上述规则移动这些盘子；预言说当这些盘子移动完毕，世界就会灭亡。这个传说叫做梵天寺之塔问题（Tower of Brahma puzzle）。但不知道是卢卡斯自创的这个传说，还是他受他人启发。<br>
-若传说属实，僧侣们需要<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mn>2</mn><mn>64</mn></msup><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">2^{64} - 1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.897438em;vertical-align:-0.08333em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">6</span><span class="mord mtight">4</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span>步才能完成这个任务；若他们每秒可完成一个盘子的移动，就需要 5849 亿年才能完成。整个宇宙现在也不过 137 亿年。</p>
-<p>这个传说有若干变体：寺院换成修道院、僧侣换成修士等等。寺院的地点众说纷纭，其中一说是位于越南的河内，所以被命名为“河内塔”。另外亦有“金盘是创世时所造”、“僧侣们每天移动一盘”之类的背景设定。</p>
-<h1 id="求解思想">求解思想</h1>
-<p><img src="https://rayzhang13.github.io/post-images/1622275695419.jpg" alt="" loading="lazy"><br>
-解法的基本思想是递归。假设有 A、B、C 三个塔，A 塔有<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>N</mi></mrow><annotation encoding="application/x-tex">N</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68333em;vertical-align:0em;"></span><span class="mord mathdefault" style="margin-right:0.10903em;">N</span></span></span></span>块盘，目标是把这些盘全部移到 C 塔。那么先把 A 塔顶部的<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>N</mi><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">N - 1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.76666em;vertical-align:-0.08333em;"></span><span class="mord mathdefault" style="margin-right:0.10903em;">N</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span>块盘移动到 B 塔，再把 A 塔剩下的大盘移到 C，最后把 B 塔的 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>N</mi><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">N - 1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.76666em;vertical-align:-0.08333em;"></span><span class="mord mathdefault" style="margin-right:0.10903em;">N</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span>块盘移到 C。<br>
-<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>f</mi><mo>(</mo><mi>n</mi><mo>)</mo><mo>=</mo><mi>f</mi><mo>(</mo><mi>n</mi><mo>−</mo><mn>1</mn><mo>)</mo><mo>∗</mo><mn>2</mn><mo>+</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">f(n) = f(n - 1) * 2 + 1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathdefault">n</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.10764em;">f</span><span class="mopen">(</span><span class="mord mathdefault">n</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">2</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span><br>
-复杂度应为<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mn>2</mn><mi>n</mi></msup><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">2^n - 1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.747722em;vertical-align:-0.08333em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.664392em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mathdefault mtight">n</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">−</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span></span></span></span></p>
-<p>如此递归地使用下去, 就可以求解。</p>
-<h1 id="递归解">递归解</h1>
-<p>盘子自上到下编号依次为1、2、3 ..... n</p>
-<pre><code class="language-java">public class Main {
-    public void hanoi(int n, char a, char b, char c){       //目标操作a-&gt;c, 中间变量b
-        if(n == 1) System.out.println(&quot;1th plate: &quot; + a + &quot;-&gt;&quot; + c);
-        else{
-            hanoi(n - 1, a, c, b); //现将1~ n-1从a移到b
-            System.out.println(n + &quot;th plate: &quot; + a + &quot;-&gt;&quot; + c); //将n移到c
-            hanoi(n - 1, b, a, c); //将1~ n-1从b移到c
-        }
-    }
-    public static void main(String[] args) {
-        new Main().hanoi(3, 'a', 'b', 'c');
-    }
-}
-</code></pre>
-<p>运行结果：</p>
-<pre><code class="language-bash">/Users/ray/Library/Java/JavaVirtualMachines/openjdk-15.0.2/Contents/Home/bin/java -javaagent:/Users/ray/Library/Application Support/JetBrains/Toolbox/apps/IDEA-U/ch-0/211.7142.45/IntelliJ IDEA.app/Contents/lib/idea_rt.jar=63346:/Users/ray/Library/Application Support/JetBrains/Toolbox/apps/IDEA-U/ch-0/211.7142.45/IntelliJ IDEA.app/Contents/bin -Dfile.encoding=UTF-8 -classpath /Users/ray/IdeaProjects/oj/out/production/oj com.company.Main
-1th plate: a-&gt;c
-2th plate: a-&gt;b
-1th plate: c-&gt;b
-3th plate: a-&gt;c
-1th plate: b-&gt;a
-2th plate: b-&gt;c
-1th plate: a-&gt;c
-
-Process finished with exit code 0
-</code></pre>
 ]]></content>
     </entry>
 </feed>
