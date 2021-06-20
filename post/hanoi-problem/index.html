@@ -9,7 +9,7 @@
 <meta name="description" content="Everything&#39;s gonna be just fine.">
 <meta name="theme-color" content="#000">
 <title>Hanoi问题 | Ray&#39;s Blog</title>
-<link rel="shortcut icon" href="/favicon.ico?v=1623039196181">
+<link rel="shortcut icon" href="/favicon.ico?v=1624167270516">
 <link rel="stylesheet" href="/media/css/pisces.css">
 <link rel="stylesheet" href="/media/fonts/font-awesome.css">
 <link
@@ -211,7 +211,7 @@
     <div class="sidebar-item-box">
       <a href="/archives/">
         
-        <span class="site-item-stat-count">10</span>
+        <span class="site-item-stat-count">11</span>
         <span class="site-item-stat-name language" data-lan="article">文章</span>
       </a>
     </div>
@@ -1192,6 +1192,272 @@ Process finished with exit code 0
       <hr>
     </div>
     <div class="result" id="result">
+      
+      <div class="item">
+        <a class="result-title" style="opacity: 0;" href="https://rayzhang13.github.io/post/leetcode-weekly-contest-round-246/"" data-c="
+          &lt;p&gt;久违的AK，题目不难，贴完代码就跑（狗头）&lt;br&gt;
+&lt;img src=&#34;https://rayzhang13.github.io/post-images/1624164938921.png&#34; alt=&#34;&#34; loading=&#34;lazy&#34;&gt;&lt;/p&gt;
+&lt;!-- more --&gt;
+&lt;h1 id=&#34;t1-5788-字符串中的最大奇数&#34;&gt;T1 &lt;a href=&#34;https://leetcode-cn.com/problems/largest-odd-number-in-string/&#34;&gt;5788. 字符串中的最大奇数&lt;/a&gt;&lt;/h1&gt;
+&lt;h2 id=&#34;题目&#34;&gt;题目&lt;/h2&gt;
+&lt;p&gt;给你一个字符串 num ，表示一个大整数。请你在字符串 num 的所有 &lt;strong&gt;非空子字符串&lt;/strong&gt; 中找出 &lt;strong&gt;值最大的奇数&lt;/strong&gt; ，并以字符串形式返回。如果不存在奇数，则返回一个空字符串 &amp;quot;&amp;quot; 。&lt;br&gt;
+&lt;strong&gt;子字符串&lt;/strong&gt; 是字符串中的一个连续的字符序列。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;示例 1：&lt;br&gt;
+输入：num = &amp;quot;52&amp;quot;&lt;br&gt;
+输出：&amp;quot;5&amp;quot;&lt;br&gt;
+解释：非空子字符串仅有 &amp;quot;5&amp;quot;、&amp;quot;2&amp;quot; 和 &amp;quot;52&amp;quot; 。&amp;quot;5&amp;quot; 是其中唯一的奇数。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;示例 2：&lt;br&gt;
+输入：num = &amp;quot;4206&amp;quot;&lt;br&gt;
+输出：&amp;quot;&amp;quot;&lt;br&gt;
+解释：在 &amp;quot;4206&amp;quot; 中不存在奇数。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;示例 3：&lt;br&gt;
+输入：num = &amp;quot;35427&amp;quot;&lt;br&gt;
+输出：&amp;quot;35427&amp;quot;&lt;br&gt;
+解释：&amp;quot;35427&amp;quot; 本身就是一个奇数。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;提示：&lt;br&gt;
+1 &amp;lt;= num.length &amp;lt;= 10^5&lt;br&gt;
+num 仅由数字组成且不含前导零&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;题解&#34;&gt;题解&lt;/h2&gt;
+&lt;p&gt;贪心，没啥悬念，找到最后一个奇数位，从头到这个位置能确保长度最大化，必为最大奇数&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;class Solution {
+    public String largestOddNumber(String num) {
+        int len = num.length();
+        int flag = -1;
+        for(int i = 0; i &amp;lt; len; i++){
+            if((int)(num.charAt(i) - &#39;0&#39;) % 2 == 1) flag = i;
+        }
+        if(flag == -1) return &amp;quot;&amp;quot;;
+        else return num.substring(0, flag + 1);
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h1 id=&#34;t2-5789-你完成的完整对局数&#34;&gt;T2 &lt;a href=&#34;https://leetcode-cn.com/problems/the-number-of-full-rounds-you-have-played/&#34;&gt;5789. 你完成的完整对局数&lt;/a&gt;&lt;/h1&gt;
+&lt;h2 id=&#34;题目-2&#34;&gt;题目&lt;/h2&gt;
+&lt;p&gt;一款新的在线电子游戏在近期发布，在该电子游戏中，以 &lt;strong&gt;刻钟&lt;/strong&gt; 为周期规划若干时长为 &lt;strong&gt;15 分钟&lt;/strong&gt; 的游戏对局。这意味着，在 &lt;code&gt;HH:00&lt;/code&gt;、&lt;code&gt;HH:15&lt;/code&gt;、&lt;code&gt;HH:30&lt;/code&gt; 和 &lt;code&gt;HH:45&lt;/code&gt; ，将会开始一个新的对局，其中 &lt;code&gt;HH&lt;/code&gt; 用一个从 &lt;code&gt;00&lt;/code&gt; 到 &lt;code&gt;23&lt;/code&gt; 的整数表示。游戏中使用 &lt;strong&gt;24 小时制的时钟&lt;/strong&gt; ，所以一天中最早的时间是 &lt;code&gt;00:00&lt;/code&gt; ，最晚的时间是 &lt;code&gt;23:59&lt;/code&gt; 。&lt;br&gt;
+给你两个字符串 &lt;code&gt;startTime&lt;/code&gt; 和 &lt;code&gt;finishTime&lt;/code&gt; ，均符合 &lt;code&gt;&amp;quot;HH:MM&amp;quot;&lt;/code&gt; 格式，分别表示你 &lt;strong&gt;进入&lt;/strong&gt; 和 &lt;strong&gt;退出&lt;/strong&gt; 游戏的确切时间，请计算在整个游戏会话期间，你完成的 &lt;strong&gt;完整对局的对局数&lt;/strong&gt; 。&lt;br&gt;
+例如，如果 &lt;code&gt;startTime = &amp;quot;05:20&amp;quot;&lt;/code&gt; 且 &lt;code&gt;finishTime = &amp;quot;05:59&amp;quot;&lt;/code&gt; ，这意味着你仅仅完成从 &lt;code&gt;05:30&lt;/code&gt; 到 &lt;code&gt;05:45&lt;/code&gt; 这一个完整对局。而你没有完成从 &lt;code&gt;05:15&lt;/code&gt; 到 &lt;code&gt;05:30&lt;/code&gt; 的完整对局，因为你是在对局开始后进入的游戏；同时，你也没有完成从 &lt;code&gt;05:45&lt;/code&gt; 到 &lt;code&gt;06:00&lt;/code&gt; 的完整对局，因为你是在对局结束前退出的游戏。&lt;br&gt;
+如果 &lt;code&gt;finishTime&lt;/code&gt; 早于 &lt;code&gt;startTime&lt;/code&gt; ，这表示你玩了个通宵（也就是从 &lt;code&gt;startTime&lt;/code&gt; 到午夜，再从午夜到 &lt;code&gt;finishTime&lt;/code&gt;）。&lt;/p&gt;
+&lt;p&gt;假设你是从 &lt;code&gt;startTime&lt;/code&gt; 进入游戏，并在 &lt;code&gt;finishTime&lt;/code&gt; 退出游戏，请计算并返回你完成的 &lt;strong&gt;完整对局的对局数&lt;/strong&gt; 。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;示例 1：&lt;br&gt;
+输入：startTime = &amp;quot;12:01&amp;quot;, finishTime = &amp;quot;12:44&amp;quot;&lt;br&gt;
+输出：1&lt;br&gt;
+解释：你完成了从 12:15 到 12:30 的一个完整对局。&lt;br&gt;
+你没有完成从 12:00 到 12:15 的完整对局，因为你是在对局开始后的 12:01 进入的游戏。&lt;br&gt;
+你没有完成从 12:30 到 12:45 的完整对局，因为你是在对局结束前的 12:44 退出的游戏。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;示例 2：&lt;br&gt;
+输入：startTime = &amp;quot;20:00&amp;quot;, finishTime = &amp;quot;06:00&amp;quot;&lt;br&gt;
+输出：40&lt;br&gt;
+解释：你完成了从 20:00 到 00:00 的 16 个完整的对局，以及从 00:00 到 06:00 的 24 个完整的对局。&lt;br&gt;
+16 + 24 = 40&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;示例 3：&lt;br&gt;
+输入：startTime = &amp;quot;00:00&amp;quot;, finishTime = &amp;quot;23:59&amp;quot;&lt;br&gt;
+输出：95&lt;br&gt;
+解释：除最后一个小时你只完成了 3 个完整对局外，其余每个小时均完成了 4 场完整对局。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;提示：&lt;br&gt;
+startTime 和 finishTime 的格式为 HH:MM&lt;br&gt;
+00 &amp;lt;= HH &amp;lt;= 23&lt;br&gt;
+00 &amp;lt;= MM &amp;lt;= 59&lt;br&gt;
+startTime 和 finishTime 不相等&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;题解-2&#34;&gt;题解&lt;/h2&gt;
+&lt;p&gt;基本思路：考虑将开始时刻修正为首轮开始的有效时刻，即&lt;code&gt;00&lt;/code&gt; &lt;code&gt;15&lt;/code&gt; &lt;code&gt;30&lt;/code&gt; &lt;code&gt;45&lt;/code&gt;时刻，随后计算修正后的总时间，将总时间除以15即可得到有效场次&lt;/p&gt;
+&lt;p&gt;我们先计算修正前的时间，若&lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mi&gt;r&lt;/mi&gt;&lt;mi&gt;e&lt;/mi&gt;&lt;mi&gt;s&lt;/mi&gt;&lt;mo&gt;&amp;lt;&lt;/mo&gt;&lt;mn&gt;0&lt;/mn&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;res &amp;lt; 0&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.5782em;vertical-align:-0.0391em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34; style=&#34;margin-right:0.02778em;&#34;&gt;r&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;e&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;s&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.2777777777777778em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mrel&#34;&gt;&amp;lt;&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.2777777777777778em;&#34;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.64444em;vertical-align:0em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;0&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;即 &lt;code&gt;startTime&lt;/code&gt; 大于 &lt;code&gt;finishTime&lt;/code&gt;，我们认为对局将跨越午夜，故加上&lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mn&gt;24&lt;/mn&gt;&lt;mo&gt;∗&lt;/mo&gt;&lt;mn&gt;60&lt;/mn&gt;&lt;mi&gt;m&lt;/mi&gt;&lt;mi&gt;i&lt;/mi&gt;&lt;mi&gt;n&lt;/mi&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;24 * 60 min&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.64444em;vertical-align:0em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;2&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;4&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.2222222222222222em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mbin&#34;&gt;∗&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.2222222222222222em;&#34;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.65952em;vertical-align:0em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;6&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;m&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;n&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;即一天的时间。随后我们对开始时间进行修正，从总时间中扣除余量&lt;/p&gt;
+&lt;p&gt;在此需要注意两个操作的顺序，切勿颠倒&lt;/p&gt;
+&lt;p&gt;代码如下：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;class Solution {
+    public int numberOfRounds(String startTime, String finishTime) {
+        int s_hour = Integer.parseInt(startTime.substring(0, 2));
+        int s_minute = Integer.parseInt(startTime.substring(3, 5));
+        int f_hour = Integer.parseInt(finishTime.substring(0, 2));
+        int f_minute = Integer.parseInt(finishTime.substring(3, 5));
+        int res = f_minute - s_minute + 60 * (f_hour - s_hour);
+        if(res &amp;lt; 0) res += 24 * 60;
+        if(s_minute == 0){
+            
+        }
+        else if(s_minute &amp;lt;= 15){
+            res -= 15 - s_minute;
+        }
+        else if(s_minute &amp;lt;= 30){
+            res -= 30 - s_minute;
+        }
+        else if(s_minute &amp;lt;= 45){
+            res -= 45 - s_minute;
+        }
+        else if(s_minute &amp;lt;= 60){
+            res -= 60 - s_minute;
+        }
+        return res &amp;gt;= 0 ? res / 15: 0;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h1 id=&#34;t3-5791-统计子岛屿&#34;&gt;T3 &lt;a href=&#34;https://leetcode-cn.com/problems/count-sub-islands/&#34;&gt;5791. 统计子岛屿&lt;/a&gt;&lt;/h1&gt;
+&lt;h2 id=&#34;题目-3&#34;&gt;题目&lt;/h2&gt;
+&lt;p&gt;给你两个 &lt;code&gt;m x n&lt;/code&gt; 的二进制矩阵 &lt;code&gt;grid1&lt;/code&gt; 和 &lt;code&gt;grid2&lt;/code&gt; ，它们只包含 &lt;code&gt;0&lt;/code&gt; （表示水域）和 &lt;code&gt;1&lt;/code&gt; （表示陆地）。一个 &lt;strong&gt;岛屿&lt;/strong&gt; 是由 &lt;strong&gt;四个方向&lt;/strong&gt; （水平或者竖直）上相邻的 &lt;code&gt;1&lt;/code&gt; 组成的区域。任何矩阵以外的区域都视为水域。&lt;br&gt;
+如果 &lt;code&gt;grid2&lt;/code&gt; 的一个岛屿，被 &lt;code&gt;grid1&lt;/code&gt; 的一个岛屿 &lt;strong&gt;完全&lt;/strong&gt; 包含，也就是说 &lt;code&gt;grid2&lt;/code&gt; 中该岛屿的每一个格子都被 &lt;code&gt;grid1&lt;/code&gt; 中同一个岛屿完全包含，那么我们称 &lt;code&gt;grid2&lt;/code&gt; 中的这个岛屿为 &lt;strong&gt;子岛屿&lt;/strong&gt; 。&lt;br&gt;
+请你返回 &lt;code&gt;grid2&lt;/code&gt; 中 &lt;strong&gt;子岛屿&lt;/strong&gt; 的 &lt;strong&gt;数目&lt;/strong&gt; 。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;示例 1：&lt;br&gt;
+&lt;img src=&#34;https://rayzhang13.github.io/post-images/1624166493940.png&#34; alt=&#34;&#34; loading=&#34;lazy&#34;&gt;&lt;br&gt;
+输入：&lt;code&gt;grid1 = [[1,1,1,0,0],[0,1,1,1,1],[0,0,0,0,0],[1,0,0,0,0],[1,1,0,1,1]]&lt;/code&gt;, &lt;code&gt;grid2 = [[1,1,1,0,0],[0,0,1,1,1],[0,1,0,0,0],[1,0,1,1,0],[0,1,0,1,0]]&lt;/code&gt;&lt;br&gt;
+输出：3&lt;br&gt;
+解释：如上图所示，左边为 &lt;code&gt;grid1&lt;/code&gt; ，右边为 &lt;code&gt;grid2&lt;/code&gt; 。&lt;br&gt;
+&lt;code&gt;grid2&lt;/code&gt; 中标红的 &lt;code&gt;1&lt;/code&gt; 区域是子岛屿，总共有 3 个子岛屿。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;示例 2：&lt;br&gt;
+&lt;img src=&#34;https://rayzhang13.github.io/post-images/1624166520829.png&#34; alt=&#34;&#34; loading=&#34;lazy&#34;&gt;&lt;br&gt;
+输入：&lt;code&gt;grid1 = [[1,0,1,0,1],[1,1,1,1,1],[0,0,0,0,0],[1,1,1,1,1],[1,0,1,0,1]]&lt;/code&gt;, &lt;code&gt;grid2 = [[0,0,0,0,0],[1,1,1,1,1],[0,1,0,1,0],[0,1,0,1,0],[1,0,0,0,1]]&lt;/code&gt;&lt;br&gt;
+输出：2&lt;br&gt;
+解释：如上图所示，左边为 &lt;code&gt;grid1&lt;/code&gt; ，右边为 &lt;code&gt;grid2&lt;/code&gt; 。&lt;br&gt;
+&lt;code&gt;grid2&lt;/code&gt; 中标红的 &lt;code&gt;1&lt;/code&gt; 区域是子岛屿，总共有 2 个子岛屿。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;提示：&lt;br&gt;
+m == grid1.length == grid2.length&lt;br&gt;
+n == grid1[i].length == grid2[i].length&lt;br&gt;
+1 &amp;lt;= m, n &amp;lt;= 500&lt;br&gt;
+&lt;code&gt;grid1[i][j]&lt;/code&gt; 和 &lt;code&gt;grid2[i][j]&lt;/code&gt; 都要么是 0 要么是 1 。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;题解-3&#34;&gt;题解&lt;/h2&gt;
+&lt;p&gt;非常常规的遍历，BFS和DFS在这道题目中都可以，全看阅读理解&lt;br&gt;
+grid2按块遍历，全部抹成0，过程中和grid1比较，如果grid1有0，这块就不算&lt;/p&gt;
+&lt;p&gt;代码如下：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;class Solution {
+    public int countSubIslands(int[][] grid1, int[][] grid2) {
+        int rows = grid1.length;
+        int cols = grid1[0].length;
+        int cnt = 0;
+        int[] dir = new int[]{-1, 0, 1, 0, -1};
+        for(int i = 0; i &amp;lt; rows; i++){
+            for(int j = 0; j &amp;lt; cols; j++){
+                boolean flag = true;
+                if(grid2[i][j] == 1){
+                    Queue&amp;lt;int[]&amp;gt; queue = new ArrayDeque&amp;lt;&amp;gt;();
+                    queue.offer(new int[]{i, j});
+                    grid2[i][j] = 0;
+                    while(!queue.isEmpty()){
+                        int[] cur = queue.poll();
+                        int x = cur[0], y = cur[1];
+                        if(grid1[x][y] != 1){
+                            flag = false;
+                        }
+                        for(int t = 0; t &amp;lt; 4; t++){
+                            int nx = x + dir[t], ny = y + dir[t + 1];
+                            if(nx &amp;gt;= 0 &amp;amp;&amp;amp; nx &amp;lt; rows &amp;amp;&amp;amp; ny &amp;gt;= 0 &amp;amp;&amp;amp; ny &amp;lt; cols &amp;amp;&amp;amp; grid2[nx][ny] == 1){
+                                grid2[nx][ny] = 0;
+                                queue.offer(new int[]{nx, ny});
+                            }
+                        }
+                    }
+                }
+                else continue;
+                if(flag) {
+                    cnt++;
+                }
+            }
+        }
+        return cnt;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h1 id=&#34;t4-5790-查询差绝对值的最小值&#34;&gt;T4 &lt;a href=&#34;https://leetcode-cn.com/problems/minimum-absolute-difference-queries/&#34;&gt;5790. 查询差绝对值的最小值&lt;/a&gt;&lt;/h1&gt;
+&lt;h2 id=&#34;题目-4&#34;&gt;题目&lt;/h2&gt;
+&lt;p&gt;一个数组 a 的 &lt;strong&gt;差绝对值的最小值&lt;/strong&gt; 定义为：&lt;code&gt;0 &amp;lt;= i &amp;lt; j &amp;lt; a.length&lt;/code&gt; 且 &lt;code&gt;a[i] != a[j]&lt;/code&gt; 的 &lt;code&gt;|a[i] - a[j]|&lt;/code&gt; 的 &lt;strong&gt;最小值&lt;/strong&gt;。如果 a 中所有元素都 &lt;strong&gt;相同&lt;/strong&gt; ，那么差绝对值的最小值为 &lt;code&gt;-1&lt;/code&gt; 。&lt;br&gt;
+比方说，数组 &lt;code&gt;[5,2,3,7,2]&lt;/code&gt; 差绝对值的最小值是 &lt;code&gt;|2 - 3| = 1&lt;/code&gt; 。注意答案不为 &lt;code&gt;0&lt;/code&gt; ，因为 &lt;code&gt;a[i]&lt;/code&gt; 和 &lt;code&gt;a[j]&lt;/code&gt; 必须不相等。&lt;br&gt;
+给你一个整数数组 &lt;code&gt;nums&lt;/code&gt; 和查询数组 &lt;code&gt;queries&lt;/code&gt; ，其中 &lt;code&gt;queries[i] = [li, ri]&lt;/code&gt; 。对于每个查询 &lt;code&gt;i&lt;/code&gt; ，计算 &lt;strong&gt;子数组&lt;/strong&gt; &lt;code&gt;nums[li...ri]&lt;/code&gt; 中 &lt;strong&gt;差绝对值的最小值&lt;/strong&gt; ，子数组 &lt;code&gt;nums[li...ri]&lt;/code&gt; 包含 &lt;code&gt;nums&lt;/code&gt; 数组（下标从 &lt;strong&gt;0&lt;/strong&gt; 开始）中下标在 &lt;code&gt;li&lt;/code&gt; 和 &lt;code&gt;ri&lt;/code&gt; 之间的所有元素（包含 &lt;code&gt;li&lt;/code&gt; 和 &lt;code&gt;ri&lt;/code&gt; 在内）。&lt;br&gt;
+请你返回 &lt;code&gt;ans&lt;/code&gt; 数组，其中 &lt;code&gt;ans[i]&lt;/code&gt; 是第 &lt;code&gt;i&lt;/code&gt; 个查询的答案。&lt;br&gt;
+&lt;strong&gt;子数组&lt;/strong&gt; 是一个数组中连续的一段元素。&lt;br&gt;
+&lt;code&gt;|x|&lt;/code&gt; 的值定义为：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;如果 &lt;code&gt;x &amp;gt;= 0&lt;/code&gt; ，那么值为 &lt;code&gt;x&lt;/code&gt; 。&lt;/li&gt;
+&lt;li&gt;如果 &lt;code&gt;x &amp;lt; 0&lt;/code&gt; ，那么值为 &lt;code&gt;-x&lt;/code&gt; 。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;示例 1：&lt;br&gt;
+输入：&lt;code&gt;nums = [1,3,4,8]&lt;/code&gt;, &lt;code&gt;queries = [[0,1],[1,2],[2,3],[0,3]]&lt;/code&gt;&lt;br&gt;
+输出：&lt;code&gt;[2,1,4,1]&lt;/code&gt;&lt;br&gt;
+解释：查询结果如下：&lt;br&gt;
+&lt;code&gt;queries[0] = [0,1]&lt;/code&gt;：子数组是 &lt;code&gt;[1,3]&lt;/code&gt; ，差绝对值的最小值为 &lt;code&gt;|1-3| = 2&lt;/code&gt; 。&lt;br&gt;
+&lt;code&gt;queries[1] = [1,2]&lt;/code&gt;：子数组是 &lt;code&gt;[3,4]&lt;/code&gt; ，差绝对值的最小值为 &lt;code&gt;|3-4| = 1&lt;/code&gt; 。&lt;br&gt;
+&lt;code&gt;queries[2] = [2,3]&lt;/code&gt;：子数组是 &lt;code&gt;[4,8]&lt;/code&gt; ，差绝对值的最小值为 &lt;code&gt;|4-8| = 4&lt;/code&gt; 。&lt;br&gt;
+&lt;code&gt;queries[3] = [0,3]&lt;/code&gt;：子数组是 &lt;code&gt;[1,3,4,8]&lt;/code&gt; ，差的绝对值的最小值为 &lt;code&gt;|3-4| = 1&lt;/code&gt; 。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;示例 2：&lt;br&gt;
+输入：&lt;code&gt;nums = [4,5,2,2,7,10]&lt;/code&gt;, &lt;code&gt;queries = [[2,3],[0,2],[0,5],[3,5]]&lt;/code&gt;&lt;br&gt;
+输出：&lt;code&gt;[-1,1,1,3]&lt;/code&gt;&lt;br&gt;
+解释：查询结果如下：&lt;br&gt;
+&lt;code&gt;queries[0] = [2,3]&lt;/code&gt;：子数组是 &lt;code&gt;[2,2]&lt;/code&gt; ，差绝对值的最小值为 &lt;code&gt;-1&lt;/code&gt; ，因为所有元素相等。&lt;br&gt;
+&lt;code&gt;queries[1] = [0,2]&lt;/code&gt;：子数组是 &lt;code&gt;[4,5,2]&lt;/code&gt; ，差绝对值的最小值为 &lt;code&gt;|4-5| = 1&lt;/code&gt; 。&lt;br&gt;
+&lt;code&gt;queries[2] = [0,5]&lt;/code&gt;：子数组是 &lt;code&gt;[4,5,2,2,7,10]&lt;/code&gt; ，差绝对值的最小值为 &lt;code&gt;|4-5| = 1&lt;/code&gt; 。&lt;br&gt;
+&lt;code&gt;queries[3] = [3,5]&lt;/code&gt;：子数组是 &lt;code&gt;[2,7,10]&lt;/code&gt; ，差绝对值的最小值为 &lt;code&gt;|7-10| = 3&lt;/code&gt; 。&lt;br&gt;
+ &lt;br&gt;
+提示：&lt;br&gt;
+&lt;code&gt;2 &amp;lt;= nums.length &amp;lt;= 10^5&lt;/code&gt;&lt;br&gt;
+&lt;code&gt;1 &amp;lt;= nums[i] &amp;lt;= 100&lt;/code&gt;&lt;br&gt;
+&lt;code&gt;1 &amp;lt;= queries.length &amp;lt;= 2 * 10^4&lt;/code&gt;&lt;br&gt;
+&lt;code&gt;0 &amp;lt;= li &amp;lt; ri &amp;lt; nums.length&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;题解-4&#34;&gt;题解&lt;/h2&gt;
+&lt;p&gt;这道题初看很吓人，关键点在于&lt;code&gt;1 &amp;lt;= nums[i] &amp;lt;= 100&lt;/code&gt;，由此我们想到&lt;strong&gt;前缀和&lt;/strong&gt;，创建一个数组&lt;code&gt;new int[len][101]&lt;/code&gt;，在每个位置用一个&lt;strong&gt;100长度的数组&lt;/strong&gt; 表示 100以内各个数字从头开始出现的个数，当我们要计算区间时，只需要抽出 对应的两条100长度的数组 相减 即可获得 &lt;strong&gt;此区间内的各数出现次数&lt;/strong&gt;&lt;br&gt;
+随后我们只需要在生成的100长度的数组中，计算非0元素间的最短距离&lt;/p&gt;
+&lt;p&gt;代码如下：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;class Solution {
+    public int[] minDifference(int[] nums, int[][] queries) {
+        int len = nums.length;
+        int[][] arr = new int[len][101];
+        for(int i = 0; i &amp;lt; len; i++){
+            for(int j = 0; j &amp;lt; 101; j++){
+                arr[i][j] = (i &amp;gt; 0) ? arr[i - 1][j] : 0;
+            }
+            arr[i][nums[i]] = (i &amp;gt; 0 ? arr[i - 1][nums[i]] : 0) + 1;
+        }
+        int[] res = new int[queries.length];
+        int a = 0;
+        for(int[] query: queries){
+            int[] tmp = new int[101];
+            for(int i = 0; i &amp;lt; 101; i++){
+                tmp[i] = arr[query[1]][i] - (query[0] == 0 ? 0 : (arr[query[0] - 1][i]));
+            }
+            int prev = -1;
+            int min = Integer.MAX_VALUE;
+            for(int i = 1; i &amp;lt;= 100; i++){
+                if(tmp[i] != 0){
+                    if(prev == -1){
+                        prev = i;
+                        continue;
+                    }
+                    else{
+                        min = Math.min(min, i - prev);
+                        prev = i;
+                    }
+                }
+            }
+            if(min == Integer.MAX_VALUE &amp;amp;&amp;amp; prev != -1) res[a++] = -1;
+            else res[a++] = min;
+        }
+        return res;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+">Leetcode Weekly Contest Round 246</a>
+      </div>
       
       <div class="item">
         <a class="result-title" style="opacity: 0;" href="https://rayzhang13.github.io/post/leetcode-weekly-contest-round-244/"" data-c="

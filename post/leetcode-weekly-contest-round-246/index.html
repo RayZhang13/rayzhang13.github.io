@@ -8,7 +8,7 @@
 <meta name="keywords" content="Ray&#39;s Blog">
 <meta name="description" content="Everything&#39;s gonna be just fine.">
 <meta name="theme-color" content="#000">
-<title>Ray&#39;s Blog</title>
+<title>Leetcode Weekly Contest Round 246 | Ray&#39;s Blog</title>
 <link rel="shortcut icon" href="/favicon.ico?v=1624167270516">
 <link rel="stylesheet" href="/media/css/pisces.css">
 <link rel="stylesheet" href="/media/fonts/font-awesome.css">
@@ -38,7 +38,8 @@
 
 
 
-  <meta name="description" content="Everything&#39;s gonna be just fine.">
+  <meta name="description" content="Leetcode Weekly Contest Round 246" />
+  <meta name="keywords" content="" />
 </head>
 
 <body>
@@ -87,7 +88,7 @@
             
               
             
-            <li class="nav-item nav-item-active">
+            <li class="nav-item ">
               
               
                 <a href="/archives/" target="_self">
@@ -171,10 +172,26 @@
   <div class="main-continer">
     
     <div
-      class="section-layout  pisces">
+      class="section-layout pisces ">
       <div class="section-layout-wrapper">
-        <div id="sidebarMeta" class="sidebar">
-    
+        
+
+<div class="sidebar">
+  
+    <div class="sidebar-box box-shadow-wrapper bg-color right-motion" id="sidebar">
+      
+        <div class="post-list-sidebar">
+          <div class="sidebar-title">
+            <span id="tocSideBar" class="sidebar-title-item sidebar-title-active language" data-lan="index">文章目录</span>
+            <span id="metaSideBar" class="sidebar-title-item language" data-lan="preview">站点概览</span>
+          </div>
+        </div>
+      
+      <div class="sidebar-body pisces" id="sidebar_body">
+        
+          
+            <div class="post-side-meta" id="post_side_meta">
+              
 <div class="sidebar-wrapper box-shadow-wrapper bg-color">
   <div class="sidebar-item">
     <img class="site-author-image right-motion" src="/images/avatar.png"/>
@@ -231,201 +248,683 @@
   </div>
 
 </div>
+            </div>
+            <div class="post-toc sidebar-body-active" id="post_toc" style="opacity: 1;">
+              <div class="toc-box right-motion">
+  <div class="toc-wrapper auto-number auto"
+    id="toc_wrapper">
+    <ul class="markdownIt-TOC">
+<li><a href="#t1-5788-%E5%AD%97%E7%AC%A6%E4%B8%B2%E4%B8%AD%E7%9A%84%E6%9C%80%E5%A4%A7%E5%A5%87%E6%95%B0">T1 5788. 字符串中的最大奇数</a>
+<ul>
+<li><a href="#%E9%A2%98%E7%9B%AE">题目</a></li>
+<li><a href="#%E9%A2%98%E8%A7%A3">题解</a></li>
+</ul>
+</li>
+<li><a href="#t2-5789-%E4%BD%A0%E5%AE%8C%E6%88%90%E7%9A%84%E5%AE%8C%E6%95%B4%E5%AF%B9%E5%B1%80%E6%95%B0">T2 5789. 你完成的完整对局数</a>
+<ul>
+<li><a href="#%E9%A2%98%E7%9B%AE-2">题目</a></li>
+<li><a href="#%E9%A2%98%E8%A7%A3-2">题解</a></li>
+</ul>
+</li>
+<li><a href="#t3-5791-%E7%BB%9F%E8%AE%A1%E5%AD%90%E5%B2%9B%E5%B1%BF">T3 5791. 统计子岛屿</a>
+<ul>
+<li><a href="#%E9%A2%98%E7%9B%AE-3">题目</a></li>
+<li><a href="#%E9%A2%98%E8%A7%A3-3">题解</a></li>
+</ul>
+</li>
+<li><a href="#t4-5790-%E6%9F%A5%E8%AF%A2%E5%B7%AE%E7%BB%9D%E5%AF%B9%E5%80%BC%E7%9A%84%E6%9C%80%E5%B0%8F%E5%80%BC">T4 5790. 查询差绝对值的最小值</a>
+<ul>
+<li><a href="#%E9%A2%98%E7%9B%AE-4">题目</a></li>
+<li><a href="#%E9%A2%98%E8%A7%A3-4">题解</a></li>
+</ul>
+</li>
+</ul>
+
+  </div>
 </div>
+
 <script>
-  let sidebarMeta = document.querySelector('#sidebarMeta');
-  let scheme = 'pisces';
-  let sidebarWrapper = document.querySelector('.sidebar-wrapper');
-  if (sidebarMeta && (scheme === 'pisces' || scheme === 'gemini')) {
-    document.addEventListener('scroll', function(e) {
-      if (document.scrollingElement.scrollTop > parseInt(sidebarMeta.style.marginTop) + 10) {
-        sidebarWrapper.classList.add('home-sidebar-fixed')
-      } else {
-        sidebarWrapper.classList.remove('home-sidebar-fixed')
+
+  let lastTop = 0, lList = [], hList = [], postBody, lastIndex = -1;
+  let active = 'active-show', activeClass = 'active-current';
+  let tocWrapper = document.querySelector('#toc_wrapper');
+  let tocContent = tocWrapper.children[0];
+  let autoNumber = tocWrapper && tocWrapper.classList.contains('auto-number');
+
+  function addTocNumber(elem, deep) {
+    if (!elem) {
+      return;
+    }
+    let prop = elem.__proto__;
+
+    if (prop === HTMLUListElement.prototype) {
+      for (let i = 0; i < elem.children.length; i++) {
+        addTocNumber(elem.children[i], deep + (i + 1) + '.');
       }
+    } else if (prop === HTMLLIElement.prototype) {
+      // 保存li元素
+      if (elem.children[0] && elem.children[0].__proto__ === HTMLAnchorElement.prototype) {
+        lList.push(elem);
+      }
+      for (let i = 0; i < elem.children.length; i++) {
+        let cur = elem.children[i];
+        if (cur.__proto__ === HTMLAnchorElement.prototype) {
+          if (autoNumber) {
+            cur.text = deep + ' ' + cur.text;
+          }
+        } else if (cur.__proto__ === HTMLUListElement.prototype) {
+          addTocNumber(cur, deep);
+        }
+      }
+    }
+  }
+
+  function removeParentActiveClass() {
+    let parents = tocContent.querySelectorAll('.' + active)
+    parents.forEach(function (elem) {
+      elem.classList.remove(active);
     });
   }
-  </script>
-        <div class="section-box box-shadow-wrapper">
-          <section class="section archives-section bg-color posts-expand">
-            
 
-<div class="bg-color">
-  <div class="archive-timeline-box">
-    <div class="archive-timeline-title">
-      
-        <h2 class="language" data-lan="archives" data-count="11">非常好！目前共计11篇日志，继续努力！</h2>
-      
-    </div>
-    
-      
-      
-        <div class="node-title">
-          <h2 class="tag-year">2021</h2>
-        </div>    
+  function addActiveClass(index) {
+    if (index >= 0 && index < hList.length) {
+      lList[index].classList.add(activeClass);
+    }
+  }
+
+  function removeActiveClass(index) {
+    if (index >= 0 && index < hList.length) {
+      lList[index].classList.remove(activeClass);
+    }
+  }
+
+  function addActiveLiElemment(elem, parent) {
+    if (!elem || elem === parent) {
+      return;
+    } else {
+      if (elem.__proto__ === HTMLLIElement.prototype) {
+        elem.classList.add(active);
+      }
+      addActiveLiElemment(elem.parentElement, parent);
+    }
+  }
+
+  function showToc() {
+    if (tocWrapper) {
+      postBody = document.querySelector('#post_body');
+      for (let i = 0; i < postBody.children.length; i++) {
+        if (postBody.children[i].__proto__ === HTMLHeadingElement.prototype) {
+          hList.push(postBody.children[i]);
+        }
+      }
+      if (tocWrapper.classList.contains('compress')) {
+        tocContent.classList.add('closed');
+      } else if (tocWrapper.classList.contains('no_compress')) {
+        tocContent.classList.add('expanded');
+      } else {
+        if (hList.length > 10) {
+          active = 'active-hidden'
+          tocContent.classList.add('closed');
+        } else {
+          tocContent.classList.add('expanded');
+        }
+      }
+    }
+  }
+
+  (function () {
+    // 处理不是从#一级标题开始目录
+    if (tocContent.children.length === 1 && tocContent.children[0].__proto__ === HTMLLIElement.prototype) {
+      let con = tocContent.children[0].children[0];
+      tocContent.innerHTML = con.innerHTML;
+    }
+    let markdownItTOC = document.querySelector('.markdownIt-TOC');
+    let innerHeight = window.innerHeight;
+    markdownItTOC.style = `max-height: ${innerHeight - 80 > 0 ? innerHeight - 80 : innerHeight}px`
+    addTocNumber(tocContent, '');
+  })();
+
+  document.addEventListener('scroll', function (e) {
+    if (lList.length <= 0) {
+      return;
+    }
+    let scrollTop = document.scrollingElement.scrollTop + 10;
+    let dir;
+
+    if (lastTop - scrollTop > 0) {
+      dir = 'up';
+    } else {
+      dir = 'down';
+    }
+
+    lastTop = scrollTop;
+    if (scrollTop <= 0) {
+      if (lastIndex >= 0 && lastIndex < hList.length) {
+        lList[lastIndex].classList.remove(activeClass);
+      }
+      return;
+    }
+
+    let current = 0, hasFind = false;
+    for (let i = 0; i < hList.length; i++) {
+      if (hList[i].offsetTop > scrollTop) {
+        current = i;
+        hasFind = true;
+        break;
+      }
+    }
+    if (!hasFind && scrollTop > lList[lList.length - 1].offsetTop) {
+      current = hList.length - 1;
+    } else {
+      current--;
+    }
+    if (dir === 'down') {
+      if (current > lastIndex) {
+        addActiveClass(current);
+        removeActiveClass(lastIndex)
+        lastIndex = current;
+        removeParentActiveClass();
+        lList[current] && addActiveLiElemment(lList[current].parentElement, tocContent);
+      }
+    } else {
+      if (current < lastIndex) {
+        addActiveClass(current);
+        removeActiveClass(lastIndex);
+        lastIndex = current;
+        removeParentActiveClass();
+        lList[current] && addActiveLiElemment(lList[current].parentElement, tocContent);
+      }
+    }
+  });
+
+
+  window.addEventListener('load', function () {
+    showToc();
+    document.querySelector('#sidebar').style = 'display: block;';
+    tocWrapper.classList.add('toc-active');
+    setTimeout(function () {
+      if ("createEvent" in document) {
+        let evt = document.createEvent("HTMLEvents");
+        evt.initEvent("scroll", false, true);
+        document.dispatchEvent(evt);
+      }
+      else {
+        document.fireEvent("scroll");
+      }
+    }, 500)
+  })
+
+</script>
+            </div>
+          
         
-      
-      <a href="https://rayzhang13.github.io/post/leetcode-weekly-contest-round-246/">
-        <div class="motion-warpper tag-archive-node">
-          <div class="tag-node">
-            <h1>
-              06-20
-              <small>Leetcode Weekly Contest Round 246</small>
-            </h1>
-          </div>  
       </div>
-      </a>
+    </div>
+  
+</div>
+<script>
+  const SIDEBAR_TITLE_ACTIVE = 'sidebar-title-active';
+  const SIDEBAR_BODY_ACTIVE = 'sidebar-body-active';
+  const SLIDE_UP_IN = 'slide-up-in';
+
+  let sidebar = document.querySelector('#sidebar'),
+  tocSideBar = document.querySelector('#tocSideBar'),
+  metaSideBar = document.querySelector('#metaSideBar'),
+  postToc = document.querySelector('#post_toc'),
+  postSiteMeta = document.querySelector('#post_side_meta'),
+  sidebarTitle = document.querySelector('.sidebar-title'),
+  sidebarBody = document.querySelector('#sidebar_body');
+
+  tocSideBar && tocSideBar.addEventListener('click', (e) => {
+    toggleSidebar(e);
+  });
+
+  metaSideBar && metaSideBar.addEventListener('click', (e) => {
+    toggleSidebar(e);
+  });
+
+  function toggleSidebar(e) {
+    let currentTitle = document.querySelector("."+SIDEBAR_TITLE_ACTIVE);
+    if (currentTitle == e.srcElement) {
+      return ;
+    }
+    let current, showElement, hideElement;
+    if (e.srcElement == metaSideBar) {
+      showElement = postSiteMeta;
+      hideElement = postToc;
+    } else if (e.srcElement == tocSideBar){
+      showElement = postToc;
+      hideElement = postSiteMeta;
+    }
+    currentTitle.classList.remove(SIDEBAR_TITLE_ACTIVE);
+    e.srcElement.classList.add(SIDEBAR_TITLE_ACTIVE);
+
+    window.Velocity(hideElement, 'stop');
+    window.Velocity(hideElement, 'transition.slideUpOut', {
+      display: 'none',
+      duration: 200,
+      complete: function () {
+        window.Velocity(showElement, 'transition.slideDownIn', {
+          duration: 200
+        });
+      }
+    })
+    hideElement.classList.remove(SIDEBAR_BODY_ACTIVE);
+    showElement.classList.add(SIDEBAR_BODY_ACTIVE);
+  }
+
+  postToc && postToc.addEventListener('transitionend', function() {
+    this.classList.remove(SLIDE_UP_IN);
+  });
+
+  if (sidebarBody) {
+    if (sidebarBody.classList.contains('pisces') || sidebarBody.classList.contains('gemini')) {
+      let hasFix = false;
+      let scrollEl = document.querySelector('.main-continer');
+      let limitTop = document.querySelector('#nav_ul').children.length * 42 + 162;
+      window.addEventListener('scroll', function(e) {
+        if (document.scrollingElement.scrollTop >= limitTop) {
+          if (!hasFix) {
+            sidebar.classList.add('sidebar-fixed');
+            hasFix = true;
+          }
+        } else {
+          if (hasFix) {
+            sidebar.classList.remove('sidebar-fixed');
+            hasFix = false;
+          }
+        }
+      });
+    }
+  }
+  
+</script>
+        <div class="section-box box-shadow-wrapper">
+          <div class="section bg-color post post-page">
+            <section class="post-header">
+  <h1 class="post-title">
+    <a class="post-title-link" href="https://rayzhang13.github.io/post/leetcode-weekly-contest-round-246/">
+      Leetcode Weekly Contest Round 246
+    </a>
+  </h1>
+  <div class="post-meta">
     
-      
-      
-      <a href="https://rayzhang13.github.io/post/leetcode-weekly-contest-round-244/">
-        <div class="motion-warpper tag-archive-node">
-          <div class="tag-node">
-            <h1>
-              06-06
-              <small>Leetcode Weekly Contest Round 244</small>
-            </h1>
-          </div>  
-      </div>
-      </a>
+    <span class="meta-item pc-show">
+      <i class="fa fa-calendar-o"></i>
+      <span class="language" data-lan="publish">发布于</span>
+      <span class="publish-time" data-t="2021-06-20 12:53:26">2021-06-20</span>
+      <span class="post-meta-divider pc-show">|</span>
+    </span>
     
-      
-      
-      <a href="https://rayzhang13.github.io/post/IO-modules/">
-        <div class="motion-warpper tag-archive-node">
-          <div class="tag-node">
-            <h1>
-              06-05
-              <small>关于阻塞非阻塞与同步异步的理解</small>
-            </h1>
-          </div>  
-      </div>
-      </a>
+    <span class="meta-item">
+      <i class="fa fa-clock-o"></i>
+      <span>12<span class="language" data-lan="minute">分钟</span></span>
+    </span>
+    <span class="meta-item">
+      <span class="post-meta-divider">|</span>
+      <i class="fa fa-file-word-o"></i>
+      <span>2607<span class="pc-show language" data-lan="words">字数</span></span>
+    </span>
     
-      
-      
-      <a href="https://rayzhang13.github.io/post/thread-pool/">
-        <div class="motion-warpper tag-archive-node">
-          <div class="tag-node">
-            <h1>
-              06-04
-              <small>Java线程池简单理解</small>
-            </h1>
-          </div>  
-      </div>
-      </a>
     
-      
-      
-      <a href="https://rayzhang13.github.io/post/spring-notes/">
-        <div class="motion-warpper tag-archive-node">
-          <div class="tag-node">
-            <h1>
-              06-04
-              <small>Spring 学习笔记（持续更新）</small>
-            </h1>
-          </div>  
-      </div>
-      </a>
     
-      
-      
-      <a href="https://rayzhang13.github.io/post/leetcode-weekly-contest-round-243/">
-        <div class="motion-warpper tag-archive-node">
-          <div class="tag-node">
-            <h1>
-              05-30
-              <small>Leetcode Weekly Contest Round 243</small>
-            </h1>
-          </div>  
-      </div>
-      </a>
-    
-      
-      
-      <a href="https://rayzhang13.github.io/post/leetcode-bio-weekly-contest-round-53/">
-        <div class="motion-warpper tag-archive-node">
-          <div class="tag-node">
-            <h1>
-              05-30
-              <small>Leetcode Bio-Weekly Contest Round 53</small>
-            </h1>
-          </div>  
-      </div>
-      </a>
-    
-      
-      
-      <a href="https://rayzhang13.github.io/post/eight-digit-maze/">
-        <div class="motion-warpper tag-archive-node">
-          <div class="tag-node">
-            <h1>
-              05-29
-              <small>A*算法解决八数码问题</small>
-            </h1>
-          </div>  
-      </div>
-      </a>
-    
-      
-      
-      <a href="https://rayzhang13.github.io/post/hanoi-problem/">
-        <div class="motion-warpper tag-archive-node">
-          <div class="tag-node">
-            <h1>
-              05-29
-              <small>Hanoi问题</small>
-            </h1>
-          </div>  
-      </div>
-      </a>
-    
-      
-      
-      <a href="https://rayzhang13.github.io/post/leetcode-project/">
-        <div class="motion-warpper tag-archive-node">
-          <div class="tag-node">
-            <h1>
-              05-29
-              <small>Leetcode刷题计划</small>
-            </h1>
-          </div>  
-      </div>
-      </a>
-    
-      
-      
-      <a href="https://rayzhang13.github.io/post/BinarySearchOccasions/">
-        <div class="motion-warpper tag-archive-node">
-          <div class="tag-node">
-            <h1>
-              05-28
-              <small>二分查找的边界问题</small>
-            </h1>
-          </div>  
-      </div>
-      </a>
+    <span id="/post/leetcode-weekly-contest-round-246/" data-flag-title="Leetcode Weekly Contest Round 246" class="meta-item pc-show leancloud_visitors">
+      <span class="post-meta-divider">|</span>
+      <i class="fa fa-eye"></i>
+      <span><span class="language" data-lan="view">浏览量</span>：<span class="leancloud-visitors-count"></span></span>
+    </span>
     
   </div>
-  
-<div class="page bg-color">
-  <ul class="pagination-ul">
-    
-    
-      
-        <li class="pagination-li pagination-active">
-            <a href="/archives/page/../">
-              1
-            </a>
-        </li>
-      
-    
-    
-  </ul>
-</div>
-</div>
+</section>
+            <div class="post-body next-md-body" id="post_body">
+              <p>久违的AK，题目不难，贴完代码就跑（狗头）<br>
+<img src="https://rayzhang13.github.io/post-images/1624164938921.png" alt="" loading="lazy"></p>
+<!-- more -->
+<h1 id="t1-5788-字符串中的最大奇数">T1 <a href="https://leetcode-cn.com/problems/largest-odd-number-in-string/">5788. 字符串中的最大奇数</a></h1>
+<h2 id="题目">题目</h2>
+<p>给你一个字符串 num ，表示一个大整数。请你在字符串 num 的所有 <strong>非空子字符串</strong> 中找出 <strong>值最大的奇数</strong> ，并以字符串形式返回。如果不存在奇数，则返回一个空字符串 &quot;&quot; 。<br>
+<strong>子字符串</strong> 是字符串中的一个连续的字符序列。</p>
+<blockquote>
+<p>示例 1：<br>
+输入：num = &quot;52&quot;<br>
+输出：&quot;5&quot;<br>
+解释：非空子字符串仅有 &quot;5&quot;、&quot;2&quot; 和 &quot;52&quot; 。&quot;5&quot; 是其中唯一的奇数。</p>
+</blockquote>
+<blockquote>
+<p>示例 2：<br>
+输入：num = &quot;4206&quot;<br>
+输出：&quot;&quot;<br>
+解释：在 &quot;4206&quot; 中不存在奇数。</p>
+</blockquote>
+<blockquote>
+<p>示例 3：<br>
+输入：num = &quot;35427&quot;<br>
+输出：&quot;35427&quot;<br>
+解释：&quot;35427&quot; 本身就是一个奇数。</p>
+</blockquote>
+<blockquote>
+<p>提示：<br>
+1 &lt;= num.length &lt;= 10^5<br>
+num 仅由数字组成且不含前导零</p>
+</blockquote>
+<h2 id="题解">题解</h2>
+<p>贪心，没啥悬念，找到最后一个奇数位，从头到这个位置能确保长度最大化，必为最大奇数</p>
+<pre><code class="language-java">class Solution {
+    public String largestOddNumber(String num) {
+        int len = num.length();
+        int flag = -1;
+        for(int i = 0; i &lt; len; i++){
+            if((int)(num.charAt(i) - '0') % 2 == 1) flag = i;
+        }
+        if(flag == -1) return &quot;&quot;;
+        else return num.substring(0, flag + 1);
+    }
+}
+</code></pre>
+<h1 id="t2-5789-你完成的完整对局数">T2 <a href="https://leetcode-cn.com/problems/the-number-of-full-rounds-you-have-played/">5789. 你完成的完整对局数</a></h1>
+<h2 id="题目-2">题目</h2>
+<p>一款新的在线电子游戏在近期发布，在该电子游戏中，以 <strong>刻钟</strong> 为周期规划若干时长为 <strong>15 分钟</strong> 的游戏对局。这意味着，在 <code>HH:00</code>、<code>HH:15</code>、<code>HH:30</code> 和 <code>HH:45</code> ，将会开始一个新的对局，其中 <code>HH</code> 用一个从 <code>00</code> 到 <code>23</code> 的整数表示。游戏中使用 <strong>24 小时制的时钟</strong> ，所以一天中最早的时间是 <code>00:00</code> ，最晚的时间是 <code>23:59</code> 。<br>
+给你两个字符串 <code>startTime</code> 和 <code>finishTime</code> ，均符合 <code>&quot;HH:MM&quot;</code> 格式，分别表示你 <strong>进入</strong> 和 <strong>退出</strong> 游戏的确切时间，请计算在整个游戏会话期间，你完成的 <strong>完整对局的对局数</strong> 。<br>
+例如，如果 <code>startTime = &quot;05:20&quot;</code> 且 <code>finishTime = &quot;05:59&quot;</code> ，这意味着你仅仅完成从 <code>05:30</code> 到 <code>05:45</code> 这一个完整对局。而你没有完成从 <code>05:15</code> 到 <code>05:30</code> 的完整对局，因为你是在对局开始后进入的游戏；同时，你也没有完成从 <code>05:45</code> 到 <code>06:00</code> 的完整对局，因为你是在对局结束前退出的游戏。<br>
+如果 <code>finishTime</code> 早于 <code>startTime</code> ，这表示你玩了个通宵（也就是从 <code>startTime</code> 到午夜，再从午夜到 <code>finishTime</code>）。</p>
+<p>假设你是从 <code>startTime</code> 进入游戏，并在 <code>finishTime</code> 退出游戏，请计算并返回你完成的 <strong>完整对局的对局数</strong> 。</p>
+<blockquote>
+<p>示例 1：<br>
+输入：startTime = &quot;12:01&quot;, finishTime = &quot;12:44&quot;<br>
+输出：1<br>
+解释：你完成了从 12:15 到 12:30 的一个完整对局。<br>
+你没有完成从 12:00 到 12:15 的完整对局，因为你是在对局开始后的 12:01 进入的游戏。<br>
+你没有完成从 12:30 到 12:45 的完整对局，因为你是在对局结束前的 12:44 退出的游戏。</p>
+</blockquote>
+<blockquote>
+<p>示例 2：<br>
+输入：startTime = &quot;20:00&quot;, finishTime = &quot;06:00&quot;<br>
+输出：40<br>
+解释：你完成了从 20:00 到 00:00 的 16 个完整的对局，以及从 00:00 到 06:00 的 24 个完整的对局。<br>
+16 + 24 = 40</p>
+</blockquote>
+<blockquote>
+<p>示例 3：<br>
+输入：startTime = &quot;00:00&quot;, finishTime = &quot;23:59&quot;<br>
+输出：95<br>
+解释：除最后一个小时你只完成了 3 个完整对局外，其余每个小时均完成了 4 场完整对局。</p>
+</blockquote>
+<blockquote>
+<p>提示：<br>
+startTime 和 finishTime 的格式为 HH:MM<br>
+00 &lt;= HH &lt;= 23<br>
+00 &lt;= MM &lt;= 59<br>
+startTime 和 finishTime 不相等</p>
+</blockquote>
+<h2 id="题解-2">题解</h2>
+<p>基本思路：考虑将开始时刻修正为首轮开始的有效时刻，即<code>00</code> <code>15</code> <code>30</code> <code>45</code>时刻，随后计算修正后的总时间，将总时间除以15即可得到有效场次</p>
+<p>我们先计算修正前的时间，若<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>r</mi><mi>e</mi><mi>s</mi><mo>&lt;</mo><mn>0</mn></mrow><annotation encoding="application/x-tex">res &lt; 0</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.5782em;vertical-align:-0.0391em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault">e</span><span class="mord mathdefault">s</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">&lt;</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">0</span></span></span></span>即 <code>startTime</code> 大于 <code>finishTime</code>，我们认为对局将跨越午夜，故加上<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>24</mn><mo>∗</mo><mn>60</mn><mi>m</mi><mi>i</mi><mi>n</mi></mrow><annotation encoding="application/x-tex">24 * 60 min</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">2</span><span class="mord">4</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">∗</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.65952em;vertical-align:0em;"></span><span class="mord">6</span><span class="mord">0</span><span class="mord mathdefault">m</span><span class="mord mathdefault">i</span><span class="mord mathdefault">n</span></span></span></span>即一天的时间。随后我们对开始时间进行修正，从总时间中扣除余量</p>
+<p>在此需要注意两个操作的顺序，切勿颠倒</p>
+<p>代码如下：</p>
+<pre><code class="language-java">class Solution {
+    public int numberOfRounds(String startTime, String finishTime) {
+        int s_hour = Integer.parseInt(startTime.substring(0, 2));
+        int s_minute = Integer.parseInt(startTime.substring(3, 5));
+        int f_hour = Integer.parseInt(finishTime.substring(0, 2));
+        int f_minute = Integer.parseInt(finishTime.substring(3, 5));
+        int res = f_minute - s_minute + 60 * (f_hour - s_hour);
+        if(res &lt; 0) res += 24 * 60;
+        if(s_minute == 0){
+            
+        }
+        else if(s_minute &lt;= 15){
+            res -= 15 - s_minute;
+        }
+        else if(s_minute &lt;= 30){
+            res -= 30 - s_minute;
+        }
+        else if(s_minute &lt;= 45){
+            res -= 45 - s_minute;
+        }
+        else if(s_minute &lt;= 60){
+            res -= 60 - s_minute;
+        }
+        return res &gt;= 0 ? res / 15: 0;
+    }
+}
+</code></pre>
+<h1 id="t3-5791-统计子岛屿">T3 <a href="https://leetcode-cn.com/problems/count-sub-islands/">5791. 统计子岛屿</a></h1>
+<h2 id="题目-3">题目</h2>
+<p>给你两个 <code>m x n</code> 的二进制矩阵 <code>grid1</code> 和 <code>grid2</code> ，它们只包含 <code>0</code> （表示水域）和 <code>1</code> （表示陆地）。一个 <strong>岛屿</strong> 是由 <strong>四个方向</strong> （水平或者竖直）上相邻的 <code>1</code> 组成的区域。任何矩阵以外的区域都视为水域。<br>
+如果 <code>grid2</code> 的一个岛屿，被 <code>grid1</code> 的一个岛屿 <strong>完全</strong> 包含，也就是说 <code>grid2</code> 中该岛屿的每一个格子都被 <code>grid1</code> 中同一个岛屿完全包含，那么我们称 <code>grid2</code> 中的这个岛屿为 <strong>子岛屿</strong> 。<br>
+请你返回 <code>grid2</code> 中 <strong>子岛屿</strong> 的 <strong>数目</strong> 。</p>
+<blockquote>
+<p>示例 1：<br>
+<img src="https://rayzhang13.github.io/post-images/1624166493940.png" alt="" loading="lazy"><br>
+输入：<code>grid1 = [[1,1,1,0,0],[0,1,1,1,1],[0,0,0,0,0],[1,0,0,0,0],[1,1,0,1,1]]</code>, <code>grid2 = [[1,1,1,0,0],[0,0,1,1,1],[0,1,0,0,0],[1,0,1,1,0],[0,1,0,1,0]]</code><br>
+输出：3<br>
+解释：如上图所示，左边为 <code>grid1</code> ，右边为 <code>grid2</code> 。<br>
+<code>grid2</code> 中标红的 <code>1</code> 区域是子岛屿，总共有 3 个子岛屿。</p>
+</blockquote>
+<blockquote>
+<p>示例 2：<br>
+<img src="https://rayzhang13.github.io/post-images/1624166520829.png" alt="" loading="lazy"><br>
+输入：<code>grid1 = [[1,0,1,0,1],[1,1,1,1,1],[0,0,0,0,0],[1,1,1,1,1],[1,0,1,0,1]]</code>, <code>grid2 = [[0,0,0,0,0],[1,1,1,1,1],[0,1,0,1,0],[0,1,0,1,0],[1,0,0,0,1]]</code><br>
+输出：2<br>
+解释：如上图所示，左边为 <code>grid1</code> ，右边为 <code>grid2</code> 。<br>
+<code>grid2</code> 中标红的 <code>1</code> 区域是子岛屿，总共有 2 个子岛屿。</p>
+</blockquote>
+<blockquote>
+<p>提示：<br>
+m == grid1.length == grid2.length<br>
+n == grid1[i].length == grid2[i].length<br>
+1 &lt;= m, n &lt;= 500<br>
+<code>grid1[i][j]</code> 和 <code>grid2[i][j]</code> 都要么是 0 要么是 1 。</p>
+</blockquote>
+<h2 id="题解-3">题解</h2>
+<p>非常常规的遍历，BFS和DFS在这道题目中都可以，全看阅读理解<br>
+grid2按块遍历，全部抹成0，过程中和grid1比较，如果grid1有0，这块就不算</p>
+<p>代码如下：</p>
+<pre><code class="language-java">class Solution {
+    public int countSubIslands(int[][] grid1, int[][] grid2) {
+        int rows = grid1.length;
+        int cols = grid1[0].length;
+        int cnt = 0;
+        int[] dir = new int[]{-1, 0, 1, 0, -1};
+        for(int i = 0; i &lt; rows; i++){
+            for(int j = 0; j &lt; cols; j++){
+                boolean flag = true;
+                if(grid2[i][j] == 1){
+                    Queue&lt;int[]&gt; queue = new ArrayDeque&lt;&gt;();
+                    queue.offer(new int[]{i, j});
+                    grid2[i][j] = 0;
+                    while(!queue.isEmpty()){
+                        int[] cur = queue.poll();
+                        int x = cur[0], y = cur[1];
+                        if(grid1[x][y] != 1){
+                            flag = false;
+                        }
+                        for(int t = 0; t &lt; 4; t++){
+                            int nx = x + dir[t], ny = y + dir[t + 1];
+                            if(nx &gt;= 0 &amp;&amp; nx &lt; rows &amp;&amp; ny &gt;= 0 &amp;&amp; ny &lt; cols &amp;&amp; grid2[nx][ny] == 1){
+                                grid2[nx][ny] = 0;
+                                queue.offer(new int[]{nx, ny});
+                            }
+                        }
+                    }
+                }
+                else continue;
+                if(flag) {
+                    cnt++;
+                }
+            }
+        }
+        return cnt;
+    }
+}
+</code></pre>
+<h1 id="t4-5790-查询差绝对值的最小值">T4 <a href="https://leetcode-cn.com/problems/minimum-absolute-difference-queries/">5790. 查询差绝对值的最小值</a></h1>
+<h2 id="题目-4">题目</h2>
+<p>一个数组 a 的 <strong>差绝对值的最小值</strong> 定义为：<code>0 &lt;= i &lt; j &lt; a.length</code> 且 <code>a[i] != a[j]</code> 的 <code>|a[i] - a[j]|</code> 的 <strong>最小值</strong>。如果 a 中所有元素都 <strong>相同</strong> ，那么差绝对值的最小值为 <code>-1</code> 。<br>
+比方说，数组 <code>[5,2,3,7,2]</code> 差绝对值的最小值是 <code>|2 - 3| = 1</code> 。注意答案不为 <code>0</code> ，因为 <code>a[i]</code> 和 <code>a[j]</code> 必须不相等。<br>
+给你一个整数数组 <code>nums</code> 和查询数组 <code>queries</code> ，其中 <code>queries[i] = [li, ri]</code> 。对于每个查询 <code>i</code> ，计算 <strong>子数组</strong> <code>nums[li...ri]</code> 中 <strong>差绝对值的最小值</strong> ，子数组 <code>nums[li...ri]</code> 包含 <code>nums</code> 数组（下标从 <strong>0</strong> 开始）中下标在 <code>li</code> 和 <code>ri</code> 之间的所有元素（包含 <code>li</code> 和 <code>ri</code> 在内）。<br>
+请你返回 <code>ans</code> 数组，其中 <code>ans[i]</code> 是第 <code>i</code> 个查询的答案。<br>
+<strong>子数组</strong> 是一个数组中连续的一段元素。<br>
+<code>|x|</code> 的值定义为：</p>
+<ul>
+<li>如果 <code>x &gt;= 0</code> ，那么值为 <code>x</code> 。</li>
+<li>如果 <code>x &lt; 0</code> ，那么值为 <code>-x</code> 。</li>
+</ul>
+<blockquote>
+<p>示例 1：<br>
+输入：<code>nums = [1,3,4,8]</code>, <code>queries = [[0,1],[1,2],[2,3],[0,3]]</code><br>
+输出：<code>[2,1,4,1]</code><br>
+解释：查询结果如下：<br>
+<code>queries[0] = [0,1]</code>：子数组是 <code>[1,3]</code> ，差绝对值的最小值为 <code>|1-3| = 2</code> 。<br>
+<code>queries[1] = [1,2]</code>：子数组是 <code>[3,4]</code> ，差绝对值的最小值为 <code>|3-4| = 1</code> 。<br>
+<code>queries[2] = [2,3]</code>：子数组是 <code>[4,8]</code> ，差绝对值的最小值为 <code>|4-8| = 4</code> 。<br>
+<code>queries[3] = [0,3]</code>：子数组是 <code>[1,3,4,8]</code> ，差的绝对值的最小值为 <code>|3-4| = 1</code> 。</p>
+</blockquote>
+<blockquote>
+<p>示例 2：<br>
+输入：<code>nums = [4,5,2,2,7,10]</code>, <code>queries = [[2,3],[0,2],[0,5],[3,5]]</code><br>
+输出：<code>[-1,1,1,3]</code><br>
+解释：查询结果如下：<br>
+<code>queries[0] = [2,3]</code>：子数组是 <code>[2,2]</code> ，差绝对值的最小值为 <code>-1</code> ，因为所有元素相等。<br>
+<code>queries[1] = [0,2]</code>：子数组是 <code>[4,5,2]</code> ，差绝对值的最小值为 <code>|4-5| = 1</code> 。<br>
+<code>queries[2] = [0,5]</code>：子数组是 <code>[4,5,2,2,7,10]</code> ，差绝对值的最小值为 <code>|4-5| = 1</code> 。<br>
+<code>queries[3] = [3,5]</code>：子数组是 <code>[2,7,10]</code> ，差绝对值的最小值为 <code>|7-10| = 3</code> 。<br>
+ <br>
+提示：<br>
+<code>2 &lt;= nums.length &lt;= 10^5</code><br>
+<code>1 &lt;= nums[i] &lt;= 100</code><br>
+<code>1 &lt;= queries.length &lt;= 2 * 10^4</code><br>
+<code>0 &lt;= li &lt; ri &lt; nums.length</code></p>
+</blockquote>
+<h2 id="题解-4">题解</h2>
+<p>这道题初看很吓人，关键点在于<code>1 &lt;= nums[i] &lt;= 100</code>，由此我们想到<strong>前缀和</strong>，创建一个数组<code>new int[len][101]</code>，在每个位置用一个<strong>100长度的数组</strong> 表示 100以内各个数字从头开始出现的个数，当我们要计算区间时，只需要抽出 对应的两条100长度的数组 相减 即可获得 <strong>此区间内的各数出现次数</strong><br>
+随后我们只需要在生成的100长度的数组中，计算非0元素间的最短距离</p>
+<p>代码如下：</p>
+<pre><code class="language-java">class Solution {
+    public int[] minDifference(int[] nums, int[][] queries) {
+        int len = nums.length;
+        int[][] arr = new int[len][101];
+        for(int i = 0; i &lt; len; i++){
+            for(int j = 0; j &lt; 101; j++){
+                arr[i][j] = (i &gt; 0) ? arr[i - 1][j] : 0;
+            }
+            arr[i][nums[i]] = (i &gt; 0 ? arr[i - 1][nums[i]] : 0) + 1;
+        }
+        int[] res = new int[queries.length];
+        int a = 0;
+        for(int[] query: queries){
+            int[] tmp = new int[101];
+            for(int i = 0; i &lt; 101; i++){
+                tmp[i] = arr[query[1]][i] - (query[0] == 0 ? 0 : (arr[query[0] - 1][i]));
+            }
+            int prev = -1;
+            int min = Integer.MAX_VALUE;
+            for(int i = 1; i &lt;= 100; i++){
+                if(tmp[i] != 0){
+                    if(prev == -1){
+                        prev = i;
+                        continue;
+                    }
+                    else{
+                        min = Math.min(min, i - prev);
+                        prev = i;
+                    }
+                }
+            }
+            if(min == Integer.MAX_VALUE &amp;&amp; prev != -1) res[a++] = -1;
+            else res[a++] = min;
+        }
+        return res;
+    }
+}
+</code></pre>
 
-          </section>
+            </div>
+            
+            
+              <div class="post-footer">
+  <ul class="post-copyright">
+    <li class="post-copyright-author">
+      <strong class="language" data-lan="author">本文作者：</strong>
+      Ray Zhang
+    </li>
+    <li class="post-copyright-link">
+      <strong class="language" data-lan="link">本文链接：</strong>
+      <a href="https://rayzhang13.github.io/post/leetcode-weekly-contest-round-246/" title="Leetcode Weekly Contest Round 246">https://rayzhang13.github.io/post/leetcode-weekly-contest-round-246/</a>
+    </li>
+    <li class="post-copyright-license">
+      <strong class="language" data-lan="copyright">版权声明： </strong>
+      本博客所有文章除特别声明外，均采用<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i> BY-NC-SA</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+  <div class="tags">
+    
+  </div>
+  <div class="nav">
+    <div class="nav-prev">
+      
+    </div>
+    <div class="nav-next">
+      
+        <a class="nav-pc-next" title="Leetcode Weekly Contest Round 244" href="https://rayzhang13.github.io/post/leetcode-weekly-contest-round-244/">Leetcode Weekly Contest Round 244</a>
+        <a class="nav-mobile-next" title="Leetcode Weekly Contest Round 244" href="https://rayzhang13.github.io/post/leetcode-weekly-contest-round-244/">下一篇</a>
+        <i class="fa fa-chevron-right"></i>
+      
+    </div>
+  </div>
+</div>
+            
+            
+  <script src="https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js"></script>
+<div id="vcomments" style="padding: 10px 0px 0px 0px"></div>
+
+<style>
+  .v .veditor {
+    min-height: 10rem;
+    background-image: url('');
+    background-size: contain;
+    background-repeat: no-repeat;
+    background-position: right;
+    background-color: rgba(255, 255, 255, 0);
+    resize: none;
+  }
+
+  .v .vwrap {
+    border: 1px solid #000 !important;
+  }
+
+  .v .vbtn {
+    padding: .4rem 1.2rem !important;
+    border-color: #fff !important;
+    background-color: #49b1f5 !important;
+    color: #fff !important;
+    font-size: .7rem !important;
+  }
+
+  .v .vcards .vcard .vh .vmeta .vat {
+    padding: 0 .8rem !important;
+    border: 1px solid #00c4b6 !important;
+    border-radius: 5px !important;
+    color: #00c4b6 !important;
+  }
+</style>
+<script>
+  new Valine({
+    el: '#vcomments',
+    appId: 'mq4UwLPFz232De6vGmxRQKof-gzGzoHsz',
+    appKey: 'FGmk8xcMVemmsbRKNcCkPaEc',
+    avatar: '',
+    placeholder: '',
+    pageSize: '',
+    lang: 'zh-cn',
+    enableQQ: 'true' === 'true',
+    visitor: 'true' === 'true',
+    highlight: 'true' === 'true',
+    avatarForce: 'true' === 'true',
+  });
+</script>
+
+          </div>
         </div>
       </div>
     </div>
@@ -681,6 +1180,223 @@
     parent.insertBefore(aelem, next);
   })
 </script>
+    <div class="reward-mask" style="display: none;">
+  <div class="reward-relative">
+    <span class="close" aria-hidden="true">x</span>
+    <div class="reward-body">
+      <h2>感谢您的支持，我会继续努力的!</h2>
+      <div class="reward-img-box">
+        <div style="position: relative; width: 140px; height: 140px;">
+          
+          
+          
+        </div>
+      </div>
+      <p class="reward-word">扫码打赏，你说多少就多少</p>
+      <p class="reward-tip">打开微信扫一扫，即可进行扫码打赏哦</p>
+    </div>
+    <div class="bottom">
+      
+      
+    </div>
+  </div>
+</div>
+<style>
+  .reward-mask {
+    position: fixed;
+    z-index: 99999;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #00000054;
+  }
+
+  .reward-relative {
+    position: relative;
+    width: 480px;
+    text-align: center;
+    margin: 0 auto;
+    border-radius: 5px;
+    background-color: #fff;
+    top: 50%;
+    margin-top: -205px;
+  }
+
+  .reward-relative .close {
+    position: absolute;
+    right: 10px;
+    font-weight: normal;
+    font-size: 16px;
+    color: #929292;
+  }
+
+  .reward-body {
+    padding: 40px 20px 20px;
+  }
+
+  .bottom {
+    display: flex;
+  }
+
+  .reward-btn {
+    text-align: center;
+  }
+
+  .reward-btn-text {
+    display: inline-block;
+    cursor: pointer;
+    width: 60px;
+    height: 60px;
+    line-height: 60px;
+    border-radius: 50%;
+    background-color: #ff9734;
+    color: #FFF;
+    margin-top: 20px;
+  }
+
+  .pay-text {
+    margin-top: 10px;
+    padding: 10px;
+    flex: 1;
+    transition: all .2s linear;
+  }
+
+  .pay-text:hover {
+    background-color: #a5a5a536;
+  }
+
+  .reward-body h2 {
+    padding-top: 10px;
+    text-align: center;
+    color: #a3a3a3;
+    font-size: 16px;
+    font-weight: normal;
+    margin: 0 0 20px;
+  }
+
+  .reward-body h2:after,
+  .reward-body h2:before {
+    font-family: Arial, Helvetica, sans-serif;
+    background: 0 0;
+    width: 0;
+    height: 0;
+    font-style: normal;
+    color: #eee;
+    font-size: 80px;
+    position: absolute;
+    top: 20px;
+  }
+
+  .reward-body h2:before {
+    content: '\201c';
+    left: 50px;
+  }
+
+  .reward-body h2:after {
+    content: '\201d';
+    right: 80px;
+  }
+
+  .reward-img-box {
+    display: inline-block;
+    padding: 10px;
+    border: 6px solid #ea5f00;
+    margin: 0 auto;
+    border-radius: 3px;
+    position: relative;
+  }
+
+  .reward-img {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+  }
+
+  @media (max-width: 767px) {
+    .reward-relative {
+      height: 100%;
+      top: 0px;
+      margin-top: 0;
+      width: auto;
+    }
+
+    .reward-relative .bottom {
+      flex-direction: column;
+    }
+
+    .reward-relative .pay-text {
+      width: 80%;
+      margin: 5px auto;
+      border: 1px solid silver;
+      padding: 6px;
+      border-radius: 4px;
+    }
+
+    .reward-body h2:after {
+      right: 40px;
+    }
+
+    .reward-body h2:after,
+    .reward-body h2:before {
+      font-size: 60px;
+    }
+
+    .reward-body h2:before {
+      left: 20px;
+    }
+  }
+</style>
+<script>
+  !function () {
+    var mask = document.querySelector('.reward-mask');
+    let close = document.querySelector('.reward-relative .close');
+    let rewardBtn = document.querySelector('.reward-btn');
+
+    let zfb = document.querySelector('#zfb'),
+      wx = document.querySelector('#wx'),
+      zfbBtn = document.querySelector('#zfbBtn'),
+      wxBtn = document.querySelector('#wxBtn');
+
+    if (zfbBtn && wxBtn) {
+      zfbBtn.addEventListener('click', () => {
+        window.Velocity(zfb, 'transition.slideLeftIn', {
+          duration: 400
+        });
+        window.Velocity(wx, 'transition.slideRightOut', {
+          display: 'none',
+          duration: 400
+        });
+      });
+
+      wxBtn.addEventListener('click', () => {
+        window.Velocity(wx, 'transition.slideRightIn', {
+          duration: 400
+        });
+        window.Velocity(zfb, 'transition.slideLeftOut', {
+          display: 'none',
+          duration: 400
+        });
+      });
+    }
+
+    rewardBtn.addEventListener('click', (e) => {
+      window.Velocity(mask, 'transition.slideDownIn', {
+        duration: 400
+      })
+    });
+
+    close.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.Velocity(mask, 'transition.slideUpOut', {
+        duration: 400
+      })
+    })
+  }()
+</script>
+
   </div>
 </body>
 
@@ -3590,7 +4306,6 @@ public static int minSpeedOnTime(int[] dist, double hour) {
 
 </script>
 <script src="/media/js/motion.js"></script>
-
 
 
 
