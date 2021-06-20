@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://rayzhang13.github.io</id>
     <title>Ray&apos;s Blog</title>
-    <updated>2021-06-20T05:36:49.002Z</updated>
+    <updated>2021-06-20T12:01:52.113Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://rayzhang13.github.io"/>
     <link rel="self" href="https://rayzhang13.github.io/atom.xml"/>
@@ -1461,6 +1461,81 @@ private final Set&lt;String&gt; alreadyCreated = Collections.newSetFromMap(new C
 <p>是否可以：不管有没有循环依赖，都提前创建好代理对象，并将代理对象放入缓存，出现循环依赖时，其他对象直接就可以取到代理对象并注入。<br>
 每次实例化完 Bean 之后就直接去创建代理对象，并添加到二级缓存中。测试结果是完全正常的，Spring 的初始化时间应该也是不会有太大的影响，因为如果 Bean 本身不需要代理的话，是直接返回原始 Bean 的，并不需要走复杂的创建代理 Bean 的流程。<br>
 如果要使用二级缓存解决循环依赖，意味着Bean在构造完后就创建代理对象，这样违背了Spring设计原则。Spring结合AOP跟Bean的生命周期，是在Bean创建完全之后通过AnnotationAwareAspectJAutoProxyCreator这个后置处理器来完成的，在这个后置处理的postProcessAfterInitialization方法中对初始化后的Bean完成AOP代理。如果出现了循环依赖，那没有办法，只有给Bean先创建代理，但是没有出现循环依赖的情况下，设计之初就是让Bean在生命周期的最后一步完成代理而不是在实例化后就立马完成代理。</p>
+<h1 id="spring-aop">Spring AOP</h1>
+<h2 id="基本概念">基本概念</h2>
+<p>在 spring 中 Aspect 通过<code>@Aspect</code>、<code>@Pointcut</code>和一系列 advice（<code>@Before</code>、<code>@after</code>、<code>@afterReturning</code>、<code>@Around</code>）组成。</p>
+<ul>
+<li><code>@Aspect</code> 切面，声明当前 class 为一个切面</li>
+<li><code>@Pointcut</code> 切入点，通过 execution 表达式描述切入规则，</li>
+<li>advice 通知，定义了切面是什么以及何时使用。</li>
+<li>advice 中还包含了 连接点（joinpoint）</li>
+<li>weave 织入，将切面应用到目标对象并导致代理对象创建的过程</li>
+<li>introduction 引入，在不修改代码的前提下，引入可以在运行期为类动态地添加一些方法或字段</li>
+</ul>
+<h2 id="advice类型">advice类型</h2>
+<h3 id="before">@Before</h3>
+<p>前置通知（Before advice）：在某连接点（JoinPoint）——被切入代码（类或者方法）之前执行的通知，但这个通知不能阻止连接点前的执行。因为<code>@Before</code> 注解的方法入参不能传 ProceedingJoinPoint，而只能传入 JoinPoint。而从 aop 走到核心代码就是通过调用 ProceedingJionPoint 的 proceed()方法。而 JoinPoint 没有这个方法。<br>
+这里牵扯区别这两个类：Proceedingjoinpoint 继承了 JoinPoint 。是在 JoinPoint 的基础上暴露出 proceed 这个方法。proceed 很重要，这个是 aop 代理链执行的方法。暴露出这个方法，就能支持 aop:around 这种切面（而其他的几种切面只需要用到 JoinPoint，这跟切面类型有关）， 能决定是否走代理链还是走自己拦截的其他逻辑。</p>
+<h3 id="after">@After</h3>
+<p>后通知（After advice）：当某连接点退出的时候执行的通知（不论是正常返回还是异常退出）。</p>
+<h3 id="afterreturning">@AfterReturning</h3>
+<p>返回后通知（After return advice）：在某连接点正常完成后执行的通知，不包括抛出异常的情况。</p>
+<h3 id="around">@Around</h3>
+<p>环绕通知（Around advice）：包围一个连接点的通知，类似 Web 中 Servlet 规范中的 Filter 的 doFilter 方法。可以在方法的调用前后完成自定义的行为，也可以选择不执行。这时 aop 的最重要的，最常用的注解。用这个注解的方法入参传的是 ProceedingJionPoint pjp，可以决定当前线程能否进入核心方法中——通过调用 <code>pjp.proceed();</code></p>
+<h3 id="afterthrowing">@AfterThrowing</h3>
+<p>抛出异常后通知（After throwing advice）：在方法抛出异常退出时执行的通知。</p>
+<h2 id="advice-注解的执行先后顺序">advice 注解的执行先后顺序</h2>
+<p>单个执行：<br>
+<img src="https://rayzhang13.github.io/post-images/1624189595455.png" alt="" loading="lazy"><br>
+多个切面执行：<br>
+<img src="https://rayzhang13.github.io/post-images/1624189647566.png" alt="" loading="lazy"></p>
+<p>其实我们可以将aop视作同心圆<br>
+<img src="https://rayzhang13.github.io/post-images/1624189778815.png" alt="" loading="lazy"><br>
+spring aop就是一个同心圆，要执行的方法为圆心，最外层的order最小。从最外层按照AOP1、AOP2的顺序依次执行doAround方法，doBefore方法。然后执行method方法，最后按照AOP2、AOP1的顺序依次执行doAfter、doAfterReturn方法。也就是说对多个AOP来说，先before的，一定后after。<br>
+如果我们要在同一个方法事务提交后执行自己的AOP，那么把事务的AOP order设置为2，自己的AOP order设置为1，然后在doAfterReturn里边处理自己的业务逻辑。<br>
+order越小越是最先执行，但更重要的是最先执行的最后结束。</p>
+<h2 id="代码实例">代码实例</h2>
+<p>如下为Ascpect类</p>
+<pre><code class="language-java">@Aspect
+@Component
+@Log4j2
+public class LogAspect {
+    @Pointcut(&quot;execution(* com.ray.blog.web.*.*(..))&quot;)
+    //表示匹配 所有返回类型（*含义） 下的com.ray.web下面的所有类（.*含义）
+    //匹配所有方法（.*）任何参数（(..)含义）
+    public void log(){}
+
+    @Before(&quot;log()&quot;)
+    public void doBefore(JoinPoint joinPoint){
+        log.info(&quot;-----------doBefore-------------&quot;);
+    }
+    @After(&quot;log()&quot;)
+    public void doAfter(){
+        log.info(&quot;-------------doAfter-----------------&quot;);
+    }
+    @AfterReturning(returning = &quot;result&quot;, pointcut = &quot;log()&quot;)
+    public void doAfterReturn(Object result){
+        log.info(&quot;Result: {}&quot;, result);
+    }
+}
+</code></pre>
+<p>如下为对应的Servlet Controller类：</p>
+<pre><code class="language-java">@Controller
+public class IndexController {
+    @GetMapping(&quot;/&quot;)
+    public String index(){
+        System.out.println(&quot;-----------index-----------&quot;);
+        return &quot;index&quot;;
+    }
+}
+</code></pre>
+<p>访问<code>127.0.0.1:8080</code>得到如下日志：</p>
+<pre><code class="language-bash">20:00:22.415 [http-nio-8080-exec-1] INFO  com.ray.blog.aspect.LogAspect - -----------doBefore-------------
+-----------index-----------
+20:00:22.421 [http-nio-8080-exec-1] INFO  com.ray.blog.aspect.LogAspect - Result: index
+20:00:22.421 [http-nio-8080-exec-1] INFO  com.ray.blog.aspect.LogAspect - -------------doAfter-----------------
+</code></pre>
+<p>验证了aop切面的运行顺序</p>
 ]]></content>
     </entry>
     <entry>
