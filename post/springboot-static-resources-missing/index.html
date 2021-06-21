@@ -9,7 +9,7 @@
 <meta name="description" content="Everything&#39;s gonna be just fine.">
 <meta name="theme-color" content="#000">
 <title>Springboot下静态资源访问问题 | Ray&#39;s Blog</title>
-<link rel="shortcut icon" href="/favicon.ico?v=1624201543209">
+<link rel="shortcut icon" href="/favicon.ico?v=1624257637524">
 <link rel="stylesheet" href="/media/css/pisces.css">
 <link rel="stylesheet" href="/media/fonts/font-awesome.css">
 <link
@@ -39,7 +39,7 @@
 
 
   <meta name="description" content="Springboot下静态资源访问问题" />
-  <meta name="keywords" content="Spring" />
+  <meta name="keywords" content="Thymeleaf,Spring" />
 </head>
 
 <body>
@@ -211,19 +211,19 @@
     <div class="sidebar-item-box">
       <a href="/archives/">
         
-        <span class="site-item-stat-count">14</span>
+        <span class="site-item-stat-count">15</span>
         <span class="site-item-stat-name language" data-lan="article">文章</span>
       </a>
     </div>
     <div class="sidebar-item-box">
       <a href="">
-        <span class="site-item-stat-count">4</span>
+        <span class="site-item-stat-count">5</span>
         <span class="site-item-stat-name language" data-lan="category">分类</span>
       </a>
     </div>
     <div class="sidebar-item-box">
       <a href="/tags/">
-        <span class="site-item-stat-count">4</span>
+        <span class="site-item-stat-count">5</span>
         <span class="site-item-stat-name language" data-lan="tag">标签</span>
       </a>
     </div>
@@ -541,6 +541,12 @@
       <span class="pc-show language" data-lan="category-in">分类于</span>
       
       
+      <a href="https://rayzhang13.github.io/tag/OBpIzY0P4/">
+        <span>Thymeleaf</span>
+      </a>、
+      
+      
+      
       <a href="https://rayzhang13.github.io/tag/k6dv4QTFt/">
         <span>Spring</span>
       </a>
@@ -556,7 +562,7 @@
     <span class="meta-item">
       <span class="post-meta-divider">|</span>
       <i class="fa fa-file-word-o"></i>
-      <span>556<span class="pc-show language" data-lan="words">字数</span></span>
+      <span>555<span class="pc-show language" data-lan="words">字数</span></span>
     </span>
     
     
@@ -604,16 +610,16 @@ css文件爆出404错误，说明对应的<code>me.css</code>文件无法被访�
 </ul>
 <p>如果这四个目录中有相同的静态资源文件，那么优先访问哪个目录下面的资源啊？<br>
 静态资源的默认访问优先级：<code>/META-INF/resources/</code>&gt;<code>/resources/</code>&gt;<code>/static/</code>&gt;<code>/public/</code></p>
-<p>在上述问题中，css文件被放置到了<code>/static/css/</code>目录下，导致无法被访问</p>
+<p>在上述问题中，css文件被放置到了<code>../static/css/</code>目录下，导致无法被访问</p>
 <h1 id="解决方案1配置文件指定静态资源映射">解决方案1：配置文件指定静态资源映射</h1>
-<p>在springboot配置文件<code>application.xml</code>中指定静态资源映射</p>
+<p>在springboot配置文件<code>application.properties</code>中指定静态资源映射</p>
 <pre><code class="language-xml">spring.mvc.static-path-pattern=/static/**
 spring.resources.static-locations= classpath:static/
 </code></pre>
 <h1 id="解决方案2使用thymeleaf引用静态资源">解决方案2：使用Thymeleaf引用静态资源</h1>
 <p>将<code>index.html</code>中加入Thymeleaf模块：</p>
 <pre><code class="language-html">&lt;!DOCTYPE html&gt;
-&lt;html lang=&quot;en&quot; xmlns=&quot;http://www.w3.org/1999/html&quot;&gt;
+&lt;html lang=&quot;en&quot; xmlns:th=&quot;http://www.thymeleaf.org&quot;&gt;
 &lt;head&gt;
     &lt;meta charset=&quot;UTF-8&quot;&gt;
     &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
@@ -647,11 +653,17 @@ spring.resources.static-locations= classpath:static/
   </ul>
   <div class="tags">
     
+      <a href="https://rayzhang13.github.io/tag/OBpIzY0P4/"># Thymeleaf</a>
+    
       <a href="https://rayzhang13.github.io/tag/k6dv4QTFt/"># Spring</a>
     
   </div>
   <div class="nav">
     <div class="nav-prev">
+      
+        <i class="fa fa-chevron-left"></i>
+        <a class="nav-pc-next" title="使用Thymeleaf模版布局和资源引入" href="https://rayzhang13.github.io/post/thymeleaf-usages/">使用Thymeleaf模版布局和资源引入</a class="nav-pc-next">
+        <a class="nav-mobile-prev" title="使用Thymeleaf模版布局和资源引入" href="https://rayzhang13.github.io/post/thymeleaf-usages/">上一篇</a>
       
     </div>
     <div class="nav-next">
@@ -1206,6 +1218,203 @@ spring.resources.static-locations= classpath:static/
     <div class="result" id="result">
       
       <div class="item">
+        <a class="result-title" style="opacity: 0;" href="https://rayzhang13.github.io/post/thymeleaf-usages/"" data-c="
+          &lt;p&gt;Thymeleaf是一种用于Web和独立环境的现代服务器端的Java模板引擎。&lt;br&gt;
+Thymeleaf的主要目标是将优雅的自然模板带到开发工作流程中，并将HTML在浏览器中正确显示，并且可以作为静态原型，让开发团队能更容易地协作。Thymeleaf能够处理HTML，XML，JavaScript，CSS甚至纯文本。&lt;br&gt;
+Thymeleaf使用Spring框架的模块，与许多常见的工具集成在一起，并且可以插入自己的功能，是现代HTML5 JVM Web开发的理想选择，尽管Thymeleaf还有更多其它的功能。Thymeleaf建立在自然模板的概念之上，以不影响模板作为设计原型的方式将其逻辑注入到模板文件中。 这改善了设计沟通，弥合了前端设计和开发人员之间的理解偏差。&lt;/p&gt;
+&lt;!-- more --&gt;
+&lt;h1 id=&#34;问题引入&#34;&gt;问题引入&lt;/h1&gt;
+&lt;p&gt;当直接访问&lt;code&gt;HTML&lt;/code&gt;文件时，可以访问到的部分静态资源可能由于路径配置的原因，在Springboot中报错，我们希望能在不影响当前网页功能、不破坏结构的情况下修改路径达到效果&lt;br&gt;
+又或者在前端各页面中存在大量雷同的代码块，例如博客项目中存在Navigation Bar和footer等布局大量相同的情况，如果想对这些布局中等元素进行统一修改将会非常麻烦&lt;/p&gt;
+&lt;p&gt;而Thymeleaf很好的解决了这样的痛点&lt;/p&gt;
+&lt;h1 id=&#34;项目示例&#34;&gt;项目示例&lt;/h1&gt;
+&lt;p&gt;以下将做几个博客中简单的示例：&lt;br&gt;
+我们定义一个Thymeleaf模版&lt;code&gt;_fragment.html&lt;/code&gt;&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-html&#34;&gt;&amp;lt;!DOCTYPE html&amp;gt;
+&amp;lt;html lang=&amp;quot;en&amp;quot; xmlns:th=&amp;quot;http://www.thymeleaf.org&amp;quot;&amp;gt;
+&amp;lt;head th:fragment=&amp;quot;head(title)&amp;quot;&amp;gt;
+  &amp;lt;meta charset=&amp;quot;UTF-8&amp;quot;&amp;gt;
+  &amp;lt;meta name=&amp;quot;viewport&amp;quot; content=&amp;quot;width=device-width, initial-scale=1.0&amp;quot;&amp;gt;
+  &amp;lt;title th:replace=&amp;quot;${title}&amp;quot;&amp;gt;博客详情&amp;lt;/title&amp;gt;
+  &amp;lt;link rel=&amp;quot;stylesheet&amp;quot; href=&amp;quot;https://cdn.jsdelivr.net/npm/semantic-ui@2.2.4/dist/semantic.min.css&amp;quot;&amp;gt;
+  &amp;lt;link rel=&amp;quot;stylesheet&amp;quot; href=&amp;quot;../static/css/typo.css&amp;quot; th:href=&amp;quot;@{/css/typo.css}&amp;quot;&amp;gt;
+  &amp;lt;link rel=&amp;quot;stylesheet&amp;quot; href=&amp;quot;../static/css/me.css&amp;quot; th:href=&amp;quot;@{/css/me.css}&amp;quot;&amp;gt;
+  &amp;lt;link rel=&amp;quot;stylesheet&amp;quot; href=&amp;quot;../static/css/animate.css&amp;quot; th:href=&amp;quot;@{/css/animate.css}&amp;quot;&amp;gt;
+  &amp;lt;link rel=&amp;quot;stylesheet&amp;quot; href=&amp;quot;../static/lib/prism/prism.css&amp;quot; th:href=&amp;quot;@{/lib/prism/prism.css}&amp;quot;&amp;gt;
+  &amp;lt;link rel=&amp;quot;stylesheet&amp;quot; href=&amp;quot;../static/lib/tocbot/tocbot.css&amp;quot; th:href=&amp;quot;@{/lib/tocbot/tocbot.css}&amp;quot;&amp;gt;
+  &amp;lt;link rel=&amp;quot;stylesheet&amp;quot; href=&amp;quot;../static/lib/editormd/css/editormd.css&amp;quot; th:href=&amp;quot;@{/lib/editormd/css/editormd.css}&amp;quot;&amp;gt;
+&amp;lt;/head&amp;gt;
+&amp;lt;body&amp;gt;
+&amp;lt;nav th:fragment=&amp;quot;menu(n)&amp;quot; class=&amp;quot;ui inverted attached segment m-padded-tb-mini m-shadow-small&amp;quot;&amp;gt;
+  &amp;lt;div class=&amp;quot;ui container&amp;quot;&amp;gt;
+    &amp;lt;div class=&amp;quot;ui inverted secondary stackable menu&amp;quot;&amp;gt;
+      &amp;lt;h2 class=&amp;quot;ui teal header item&amp;quot;&amp;gt;Blog&amp;lt;/h2&amp;gt;
+      &amp;lt;a href=&amp;quot;#&amp;quot; class=&amp;quot;m-item item m-mobile-hide&amp;quot; th:classappend=&amp;quot;${n==1}?&#39;active&#39;&amp;quot;&amp;gt;&amp;lt;i class=&amp;quot;home icon&amp;quot;&amp;gt;&amp;lt;/i&amp;gt;首页&amp;lt;/a&amp;gt;
+      &amp;lt;a href=&amp;quot;#&amp;quot; class=&amp;quot;m-item item m-mobile-hide&amp;quot; th:classappend=&amp;quot;${n==2}?&#39;active&#39;&amp;quot;&amp;gt;&amp;lt;i class=&amp;quot;idea icon&amp;quot;&amp;gt;&amp;lt;/i&amp;gt;分类&amp;lt;/a&amp;gt;
+      &amp;lt;a href=&amp;quot;#&amp;quot; class=&amp;quot;m-item item m-mobile-hide&amp;quot; th:classappend=&amp;quot;${n==3}?&#39;active&#39;&amp;quot;&amp;gt;&amp;lt;i class=&amp;quot;tags icon&amp;quot;&amp;gt;&amp;lt;/i&amp;gt;标签&amp;lt;/a&amp;gt;
+      &amp;lt;a href=&amp;quot;#&amp;quot; class=&amp;quot;m-item item m-mobile-hide&amp;quot; th:classappend=&amp;quot;${n==4}?&#39;active&#39;&amp;quot;&amp;gt;&amp;lt;i class=&amp;quot;clone icon&amp;quot;&amp;gt;&amp;lt;/i&amp;gt;归档&amp;lt;/a&amp;gt;
+      &amp;lt;a href=&amp;quot;#&amp;quot; class=&amp;quot;m-item item m-mobile-hide&amp;quot; th:classappend=&amp;quot;${n==5}?&#39;active&#39;&amp;quot;&amp;gt;&amp;lt;i class=&amp;quot;info icon&amp;quot;&amp;gt;&amp;lt;/i&amp;gt;关于我&amp;lt;/a&amp;gt;
+      &amp;lt;div class=&amp;quot;right item m-mobile-hide&amp;quot;&amp;gt;
+        &amp;lt;div class=&amp;quot;ui icon inverted transparent input&amp;quot;&amp;gt;
+          &amp;lt;input type=&amp;quot;text&amp;quot; placeholder=&amp;quot;Search....&amp;quot;&amp;gt;
+          &amp;lt;i class=&amp;quot;search link icon&amp;quot;&amp;gt;&amp;lt;/i&amp;gt;
+        &amp;lt;/div&amp;gt;
+      &amp;lt;/div&amp;gt;
+    &amp;lt;/div&amp;gt;
+  &amp;lt;/div&amp;gt;
+  &amp;lt;a href=&amp;quot;#&amp;quot; class=&amp;quot;ui menu toggle black icon button m-right-top m-mobile-show&amp;quot;&amp;gt;
+    &amp;lt;i class=&amp;quot;sidebar icon&amp;quot;&amp;gt;&amp;lt;/i&amp;gt;
+  &amp;lt;/a&amp;gt;
+&amp;lt;/nav&amp;gt;
+
+&amp;lt;footer th:fragment=&amp;quot;footer&amp;quot; class=&amp;quot;ui inverted vertical segment m-padded-tb-massive&amp;quot;&amp;gt;
+......
+&amp;lt;/footer&amp;gt;
+
+&amp;lt;th:block th:fragment=&amp;quot;script&amp;quot;&amp;gt;
+  &amp;lt;script src=&amp;quot;https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+  &amp;lt;script src=&amp;quot;https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+  &amp;lt;script src=&amp;quot;https://cdn.jsdelivr.net/npm/jquery.scrollto@2.1.3/jquery.scrollTo.min.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+  &amp;lt;script src=&amp;quot;../static/lib/prism/prism.js&amp;quot; th:src=&amp;quot;@{/lib/prism/prism.js}&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+  &amp;lt;script src=&amp;quot;../static/lib/tocbot/tocbot.min.js&amp;quot; th:src=&amp;quot;@{/lib/tocbot/tocbot.min.js}&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+  &amp;lt;script src=&amp;quot;../static/lib/qrcode/qrcode.min.js&amp;quot; th:src=&amp;quot;@{/lib/qrcode/qrcode.min.js}&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+  &amp;lt;script src=&amp;quot;../static/lib/waypoint/jquery.waypoints.min.js&amp;quot; th:src=&amp;quot;@{/lib/waypoint/jquery.waypoints.min.js}&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+  &amp;lt;script src=&amp;quot;../../static/lib/editormd/editormd.js&amp;quot; th:src=&amp;quot;@{/lib/editormd/editormd.js}&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+&amp;lt;/th:block&amp;gt;
+&amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;其中&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;head块中，引入参数title，用于替换标签页标题“博客详情”字样&lt;/li&gt;
+&lt;li&gt;menu块中，引入参数n，不同的n对应不同的顶栏按钮被追加&lt;code&gt;active&lt;/code&gt;属性&lt;/li&gt;
+&lt;li&gt;footer和script块也为类似模版代码&lt;/li&gt;
+&lt;li&gt;注意到src路径在Springboot中由于静态资源的路径问题，不生效，我们改由Thymeleaf使用&lt;code&gt;th:href&lt;/code&gt;和&lt;code&gt;th:src&lt;/code&gt;标签引入static下的新路径&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;具体调用方法如下：&lt;br&gt;
+在博客首页&lt;code&gt;index.html&lt;/code&gt;中：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-html&#34;&gt;&amp;lt;!DOCTYPE html&amp;gt;
+&amp;lt;html lang=&amp;quot;en&amp;quot; xmlns:th=&amp;quot;http://www.thymeleaf.org&amp;quot;&amp;gt;
+&amp;lt;head th:replace=&amp;quot;_fragments :: head(~{::title})&amp;quot;&amp;gt;
+    &amp;lt;meta charset=&amp;quot;UTF-8&amp;quot;&amp;gt;
+    &amp;lt;meta name=&amp;quot;viewport&amp;quot; content=&amp;quot;width=device-width, initial-scale=1.0&amp;quot;&amp;gt;
+    &amp;lt;title&amp;gt;首页&amp;lt;/title&amp;gt;
+    &amp;lt;link rel=&amp;quot;stylesheet&amp;quot; href=&amp;quot;https://cdn.jsdelivr.net/npm/semantic-ui@2.2.4/dist/semantic.min.css&amp;quot;&amp;gt;
+    &amp;lt;link rel=&amp;quot;stylesheet&amp;quot; href=&amp;quot;../static/css/me.css&amp;quot;&amp;gt;
+&amp;lt;/head&amp;gt;
+&amp;lt;body&amp;gt;
+
+    &amp;lt;!--导航--&amp;gt;
+    &amp;lt;nav th:replace=&amp;quot;_fragments :: menu(1)&amp;quot; class=&amp;quot;ui inverted attached segment m-padded-tb-mini m-shadow-small&amp;quot;&amp;gt;
+        &amp;lt;div class=&amp;quot;ui container&amp;quot;&amp;gt;
+            &amp;lt;div class=&amp;quot;ui inverted secondary stackable menu&amp;quot;&amp;gt;
+                &amp;lt;h2 class=&amp;quot;ui teal header item&amp;quot;&amp;gt;Blog&amp;lt;/h2&amp;gt;
+                &amp;lt;a href=&amp;quot;#&amp;quot; class=&amp;quot;m-item item m-mobile-hide&amp;quot;&amp;gt;&amp;lt;i class=&amp;quot;home icon&amp;quot;&amp;gt;&amp;lt;/i&amp;gt;首页&amp;lt;/a&amp;gt;
+                &amp;lt;a href=&amp;quot;#&amp;quot; class=&amp;quot;m-item item m-mobile-hide&amp;quot;&amp;gt;&amp;lt;i class=&amp;quot;idea icon&amp;quot;&amp;gt;&amp;lt;/i&amp;gt;分类&amp;lt;/a&amp;gt;
+                &amp;lt;a href=&amp;quot;#&amp;quot; class=&amp;quot;m-item item m-mobile-hide&amp;quot;&amp;gt;&amp;lt;i class=&amp;quot;tags icon&amp;quot;&amp;gt;&amp;lt;/i&amp;gt;标签&amp;lt;/a&amp;gt;
+                &amp;lt;a href=&amp;quot;#&amp;quot; class=&amp;quot;m-item item m-mobile-hide&amp;quot;&amp;gt;&amp;lt;i class=&amp;quot;clone icon&amp;quot;&amp;gt;&amp;lt;/i&amp;gt;归档&amp;lt;/a&amp;gt;
+                &amp;lt;a href=&amp;quot;#&amp;quot; class=&amp;quot;m-item item m-mobile-hide&amp;quot;&amp;gt;&amp;lt;i class=&amp;quot;info icon&amp;quot;&amp;gt;&amp;lt;/i&amp;gt;关于我&amp;lt;/a&amp;gt;
+                &amp;lt;div class=&amp;quot;right item m-mobile-hide&amp;quot;&amp;gt;
+                    &amp;lt;div class=&amp;quot;ui icon inverted transparent input&amp;quot;&amp;gt;
+                        &amp;lt;input type=&amp;quot;text&amp;quot; placeholder=&amp;quot;Search....&amp;quot;&amp;gt;
+                        &amp;lt;i class=&amp;quot;search link icon&amp;quot;&amp;gt;&amp;lt;/i&amp;gt;
+                    &amp;lt;/div&amp;gt;
+                &amp;lt;/div&amp;gt;
+            &amp;lt;/div&amp;gt;
+        &amp;lt;/div&amp;gt;
+        &amp;lt;a href=&amp;quot;#&amp;quot; class=&amp;quot;ui menu toggle black icon button m-right-top m-mobile-show&amp;quot;&amp;gt;
+            &amp;lt;i class=&amp;quot;sidebar icon&amp;quot;&amp;gt;&amp;lt;/i&amp;gt;
+        &amp;lt;/a&amp;gt;
+    &amp;lt;/nav&amp;gt;
+   &amp;lt;!--底部footer--&amp;gt;
+    &amp;lt;footer th:replace=&amp;quot;_fragments :: footer&amp;quot; class=&amp;quot;ui inverted vertical segment m-padded-tb-massive&amp;quot;&amp;gt;
+        ............
+    &amp;lt;/footer&amp;gt;
+    &amp;lt;!--/*/&amp;lt;th:block th:replace=&amp;quot;_fragments :: script&amp;quot;&amp;gt;/*/--&amp;gt;
+        &amp;lt;script src=&amp;quot;https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+        &amp;lt;script src=&amp;quot;https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+    &amp;lt;!--/*/&amp;lt;/th:block&amp;gt;/*/--&amp;gt;
+
+    &amp;lt;script&amp;gt;
+        $(&#39;.menu.toggle&#39;).click(function (){
+            $(&#39;.m-item&#39;).toggleClass(&#39;m-mobile-hide&#39;);
+        });
+    &amp;lt;/script&amp;gt;
+&amp;lt;/body&amp;gt;
+&amp;lt;/html&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;ul&gt;
+&lt;li&gt;通过&lt;code&gt;th:replace=&amp;quot;_fragments :: head(~{::title})&amp;quot;&lt;/code&gt;的方式，我们从原先&lt;code&gt;inedx&lt;/code&gt;的代码块中获取到了&lt;code&gt;title&lt;/code&gt;的值并将它覆盖到了&lt;code&gt;_fragments&lt;/code&gt;对应模版上，随后使用模版替换了当前代码块&lt;/li&gt;
+&lt;li&gt;通过&lt;code&gt;th:replace=&amp;quot;_fragments :: menu(1)&amp;quot;&lt;/code&gt; 加入了参数&lt;code&gt;n = 1&lt;/code&gt;，触发了&lt;code&gt;_fragments&lt;/code&gt;中对首页按钮追加的&lt;code&gt;active&lt;/code&gt;属性，随后使用模版替换了代码块（甚至导航整块删除后Springboot访问仍然不受影响，因为已经被Thymeleaf替换了，但是本地静态网页渲染时结构会遭到破坏）&lt;/li&gt;
+&lt;li&gt;通过加入&lt;code&gt;&amp;lt;!--/*/&amp;lt;th:block th:replace=&amp;quot;_fragments :: script&amp;quot;&amp;gt;/*/--&amp;gt;&lt;/code&gt; 和&lt;code&gt;&amp;lt;!--/*/&amp;lt;/th:block&amp;gt;/*/--&amp;gt;&lt;/code&gt;注释的方式，我们可以让浏览器直接加载HTML时忽略外部的包裹，而实际Springboot启动时，Thymeleaf代码块会视其为有效&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;&lt;font color=&#34;#FF0000&#34;&gt;&lt;b&gt;PS：Thymeleaf的妙处就在这里，在本地打开对应的HTML时，Thymeleaf代码不生效，使用对应的本地路径，可以确保浏览器正常渲染，而使用Springboot时，Thymeleaf会注入模版和参数，按照我们之前配置的形式去运行，我们只需要对对应代码块加入一个标签就能实现托管&lt;/b&gt;&lt;/font&gt;&lt;/p&gt;
+&lt;p&gt;类似的我们还可以使用&lt;code&gt;th:inline&lt;/code&gt;对Javascript和jQuery代码进行修改&lt;/p&gt;
+&lt;p&gt;例如，在博客输入页面中，我们引入了markdown-editor部件，并引入了css和js文件（已经通过Thymeleaf完成了路径替换）&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-html&#34;&gt;&amp;lt;!DOCTYPE html&amp;gt;
+&amp;lt;html lang=&amp;quot;en&amp;quot; xmlns:th=&amp;quot;http://www.thymeleaf.org&amp;quot;&amp;gt;
+&amp;lt;head th:replace=&amp;quot;_fragments :: head(~{::title})&amp;quot;&amp;gt;
+    &amp;lt;meta charset=&amp;quot;UTF-8&amp;quot;&amp;gt;
+    &amp;lt;meta name=&amp;quot;viewport&amp;quot; content=&amp;quot;width=device-width, initial-scale=1.0&amp;quot;&amp;gt;
+    &amp;lt;title&amp;gt;博客发布&amp;lt;/title&amp;gt;
+    &amp;lt;link rel=&amp;quot;stylesheet&amp;quot; href=&amp;quot;https://cdn.jsdelivr.net/npm/semantic-ui@2.2.4/dist/semantic.min.css&amp;quot;&amp;gt;
+    &amp;lt;link rel=&amp;quot;stylesheet&amp;quot; href=&amp;quot;../../static/lib/editormd/css/editormd.css&amp;quot;&amp;gt;
+    &amp;lt;link rel=&amp;quot;stylesheet&amp;quot; href=&amp;quot;../../static/css/me.css&amp;quot;&amp;gt;
+&amp;lt;/head&amp;gt;
+&amp;lt;body&amp;gt;
+    ..................
+    &amp;lt;!--/*/&amp;lt;th:block th:replace=&amp;quot;_fragments :: script&amp;quot;&amp;gt;/*/--&amp;gt;
+    &amp;lt;script src=&amp;quot;https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+    &amp;lt;script src=&amp;quot;https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+    &amp;lt;script src=&amp;quot;../../static/lib/editormd/editormd.js&amp;quot;&amp;gt;&amp;lt;/script&amp;gt;
+    &amp;lt;!--/*/&amp;lt;/th:block&amp;gt;/*/--&amp;gt;
+    .................
+&amp;lt;/body&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;关键在于为了markdown对正常使用，官方使用了一段jQuery代码：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-html&#34;&gt;&amp;lt;script&amp;gt;
+        var contentEditor;
+        $(function() {
+            contentEditor = editormd(&amp;quot;md-content&amp;quot;, {
+                width   : &amp;quot;100%&amp;quot;,
+                height  : 640,
+                syncScrolling : &amp;quot;single&amp;quot;,
+                path    : &amp;quot;../../static/lib/editormd/lib/&amp;quot;,
+                tex: true,
+                flowChart : true,
+                sequenceDiagram : true
+            });
+        });
+&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;本地环境下浏览器渲染运行无问题&lt;/p&gt;
+&lt;p&gt;而部署到Springboot上时，插件开始转圈，并且无法加载：&lt;br&gt;
+&lt;img src=&#34;https://rayzhang13.github.io/post-images/1624257326637.png&#34; alt=&#34;&#34; loading=&#34;lazy&#34;&gt;&lt;br&gt;
+显然由于路径配置问题，&lt;code&gt;&amp;quot;../../static/lib/editormd/lib/&amp;quot;&lt;/code&gt;路径下的js和css文件不能生效，爆出404错误&lt;/p&gt;
+&lt;p&gt;这里我们采用&lt;code&gt;th:inline&lt;/code&gt;对jQuery进行修改：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-html&#34;&gt;&amp;lt;script th:inline=&amp;quot;javascript&amp;quot;&amp;gt;
+        var contentEditor;
+        $(function() {
+            contentEditor = editormd(&amp;quot;md-content&amp;quot;, {
+                width   : &amp;quot;100%&amp;quot;,
+                height  : 640,
+                syncScrolling : &amp;quot;single&amp;quot;,
+                path    : /*[[@{/lib/editormd/lib/}]]*/ &amp;quot;../../static/lib/editormd/lib/&amp;quot;,
+                tex: true,
+                flowChart : true,
+                sequenceDiagram : true
+            });
+        });
+&amp;lt;/script&amp;gt;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;由于引入了注释，本地访问时浏览器仍然会去请求&lt;code&gt;&amp;quot;../../static/lib/editormd/lib/&amp;quot;&lt;/code&gt;目录，而使用Springboot进行部署时，Thymeleaf会使用&lt;code&gt;@{/lib/editormd/lib/}&lt;/code&gt;路径对原先路径进行替换&lt;/p&gt;
+&lt;p&gt;如图样式加载正常：&lt;br&gt;
+&lt;img src=&#34;https://rayzhang13.github.io/post-images/1624257617100.png&#34; alt=&#34;&#34; loading=&#34;lazy&#34;&gt;&lt;br&gt;
+达到了预期效果&lt;/p&gt;
+">使用Thymeleaf模版布局和资源引入</a>
+      </div>
+      
+      <div class="item">
         <a class="result-title" style="opacity: 0;" href="https://rayzhang13.github.io/post/springboot-static-resources-missing/"" data-c="
           &lt;p&gt;在我们开发Web应用的时候，会用到大量的js、css、image、html等静态资源资源。&lt;br&gt;
 如果无法访问，会导致样式错乱和贴图缺失等问题，严重影响观感&lt;/p&gt;
@@ -1241,16 +1450,16 @@ css文件爆出404错误，说明对应的&lt;code&gt;me.css&lt;/code&gt;文件�
 &lt;/ul&gt;
 &lt;p&gt;如果这四个目录中有相同的静态资源文件，那么优先访问哪个目录下面的资源啊？&lt;br&gt;
 静态资源的默认访问优先级：&lt;code&gt;/META-INF/resources/&lt;/code&gt;&amp;gt;&lt;code&gt;/resources/&lt;/code&gt;&amp;gt;&lt;code&gt;/static/&lt;/code&gt;&amp;gt;&lt;code&gt;/public/&lt;/code&gt;&lt;/p&gt;
-&lt;p&gt;在上述问题中，css文件被放置到了&lt;code&gt;/static/css/&lt;/code&gt;目录下，导致无法被访问&lt;/p&gt;
+&lt;p&gt;在上述问题中，css文件被放置到了&lt;code&gt;../static/css/&lt;/code&gt;目录下，导致无法被访问&lt;/p&gt;
 &lt;h1 id=&#34;解决方案1配置文件指定静态资源映射&#34;&gt;解决方案1：配置文件指定静态资源映射&lt;/h1&gt;
-&lt;p&gt;在springboot配置文件&lt;code&gt;application.xml&lt;/code&gt;中指定静态资源映射&lt;/p&gt;
+&lt;p&gt;在springboot配置文件&lt;code&gt;application.properties&lt;/code&gt;中指定静态资源映射&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&#34;language-xml&#34;&gt;spring.mvc.static-path-pattern=/static/**
 spring.resources.static-locations= classpath:static/
 &lt;/code&gt;&lt;/pre&gt;
 &lt;h1 id=&#34;解决方案2使用thymeleaf引用静态资源&#34;&gt;解决方案2：使用Thymeleaf引用静态资源&lt;/h1&gt;
 &lt;p&gt;将&lt;code&gt;index.html&lt;/code&gt;中加入Thymeleaf模块：&lt;/p&gt;
 &lt;pre&gt;&lt;code class=&#34;language-html&#34;&gt;&amp;lt;!DOCTYPE html&amp;gt;
-&amp;lt;html lang=&amp;quot;en&amp;quot; xmlns=&amp;quot;http://www.w3.org/1999/html&amp;quot;&amp;gt;
+&amp;lt;html lang=&amp;quot;en&amp;quot; xmlns:th=&amp;quot;http://www.thymeleaf.org&amp;quot;&amp;gt;
 &amp;lt;head&amp;gt;
     &amp;lt;meta charset=&amp;quot;UTF-8&amp;quot;&amp;gt;
     &amp;lt;meta name=&amp;quot;viewport&amp;quot; content=&amp;quot;width=device-width, initial-scale=1.0&amp;quot;&amp;gt;

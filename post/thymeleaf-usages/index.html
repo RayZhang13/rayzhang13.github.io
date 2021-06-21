@@ -8,7 +8,7 @@
 <meta name="keywords" content="Ray&#39;s Blog">
 <meta name="description" content="Everything&#39;s gonna be just fine.">
 <meta name="theme-color" content="#000">
-<title>Ray&#39;s Blog</title>
+<title>使用Thymeleaf模版布局和资源引入 | Ray&#39;s Blog</title>
 <link rel="shortcut icon" href="/favicon.ico?v=1624257637524">
 <link rel="stylesheet" href="/media/css/pisces.css">
 <link rel="stylesheet" href="/media/fonts/font-awesome.css">
@@ -38,6 +38,8 @@
 
 
 
+  <meta name="description" content="使用Thymeleaf模版布局和资源引入" />
+  <meta name="keywords" content="Thymeleaf,Spring" />
 </head>
 
 <body>
@@ -172,8 +174,24 @@
     <div
       class="section-layout pisces ">
       <div class="section-layout-wrapper">
-        <div id="sidebarMeta" class="sidebar">
-    
+        
+
+<div class="sidebar">
+  
+    <div class="sidebar-box box-shadow-wrapper bg-color right-motion" id="sidebar">
+      
+        <div class="post-list-sidebar">
+          <div class="sidebar-title">
+            <span id="tocSideBar" class="sidebar-title-item sidebar-title-active language" data-lan="index">文章目录</span>
+            <span id="metaSideBar" class="sidebar-title-item language" data-lan="preview">站点概览</span>
+          </div>
+        </div>
+      
+      <div class="sidebar-body pisces" id="sidebar_body">
+        
+          
+            <div class="post-side-meta" id="post_side_meta">
+              
 <div class="sidebar-wrapper box-shadow-wrapper bg-color">
   <div class="sidebar-item">
     <img class="site-author-image right-motion" src="/images/avatar.png"/>
@@ -230,51 +248,564 @@
   </div>
 
 </div>
+            </div>
+            <div class="post-toc sidebar-body-active" id="post_toc" style="opacity: 1;">
+              <div class="toc-box right-motion">
+  <div class="toc-wrapper auto-number auto"
+    id="toc_wrapper">
+    <ul class="markdownIt-TOC">
+<li><a href="#%E9%97%AE%E9%A2%98%E5%BC%95%E5%85%A5">问题引入</a></li>
+<li><a href="#%E9%A1%B9%E7%9B%AE%E7%A4%BA%E4%BE%8B">项目示例</a></li>
+</ul>
+
+  </div>
 </div>
+
 <script>
-  let sidebarMeta = document.querySelector('#sidebarMeta');
-  let scheme = 'pisces';
-  let sidebarWrapper = document.querySelector('.sidebar-wrapper');
-  if (sidebarMeta && (scheme === 'pisces' || scheme === 'gemini')) {
-    document.addEventListener('scroll', function(e) {
-      if (document.scrollingElement.scrollTop > parseInt(sidebarMeta.style.marginTop) + 10) {
-        sidebarWrapper.classList.add('home-sidebar-fixed')
-      } else {
-        sidebarWrapper.classList.remove('home-sidebar-fixed')
+
+  let lastTop = 0, lList = [], hList = [], postBody, lastIndex = -1;
+  let active = 'active-show', activeClass = 'active-current';
+  let tocWrapper = document.querySelector('#toc_wrapper');
+  let tocContent = tocWrapper.children[0];
+  let autoNumber = tocWrapper && tocWrapper.classList.contains('auto-number');
+
+  function addTocNumber(elem, deep) {
+    if (!elem) {
+      return;
+    }
+    let prop = elem.__proto__;
+
+    if (prop === HTMLUListElement.prototype) {
+      for (let i = 0; i < elem.children.length; i++) {
+        addTocNumber(elem.children[i], deep + (i + 1) + '.');
       }
+    } else if (prop === HTMLLIElement.prototype) {
+      // 保存li元素
+      if (elem.children[0] && elem.children[0].__proto__ === HTMLAnchorElement.prototype) {
+        lList.push(elem);
+      }
+      for (let i = 0; i < elem.children.length; i++) {
+        let cur = elem.children[i];
+        if (cur.__proto__ === HTMLAnchorElement.prototype) {
+          if (autoNumber) {
+            cur.text = deep + ' ' + cur.text;
+          }
+        } else if (cur.__proto__ === HTMLUListElement.prototype) {
+          addTocNumber(cur, deep);
+        }
+      }
+    }
+  }
+
+  function removeParentActiveClass() {
+    let parents = tocContent.querySelectorAll('.' + active)
+    parents.forEach(function (elem) {
+      elem.classList.remove(active);
     });
   }
-  </script>
-        <div class="section-box pisces box-shadow-wrapper">
-          <section class="friends-section bg-color slide-down-in">
-            <div class="firends-box">
-              <h1 class="firends-title" itemprop="name headline">友情链接</h1>
-              
-              
-              
+
+  function addActiveClass(index) {
+    if (index >= 0 && index < hList.length) {
+      lList[index].classList.add(activeClass);
+    }
+  }
+
+  function removeActiveClass(index) {
+    if (index >= 0 && index < hList.length) {
+      lList[index].classList.remove(activeClass);
+    }
+  }
+
+  function addActiveLiElemment(elem, parent) {
+    if (!elem || elem === parent) {
+      return;
+    } else {
+      if (elem.__proto__ === HTMLLIElement.prototype) {
+        elem.classList.add(active);
+      }
+      addActiveLiElemment(elem.parentElement, parent);
+    }
+  }
+
+  function showToc() {
+    if (tocWrapper) {
+      postBody = document.querySelector('#post_body');
+      for (let i = 0; i < postBody.children.length; i++) {
+        if (postBody.children[i].__proto__ === HTMLHeadingElement.prototype) {
+          hList.push(postBody.children[i]);
+        }
+      }
+      if (tocWrapper.classList.contains('compress')) {
+        tocContent.classList.add('closed');
+      } else if (tocWrapper.classList.contains('no_compress')) {
+        tocContent.classList.add('expanded');
+      } else {
+        if (hList.length > 10) {
+          active = 'active-hidden'
+          tocContent.classList.add('closed');
+        } else {
+          tocContent.classList.add('expanded');
+        }
+      }
+    }
+  }
+
+  (function () {
+    // 处理不是从#一级标题开始目录
+    if (tocContent.children.length === 1 && tocContent.children[0].__proto__ === HTMLLIElement.prototype) {
+      let con = tocContent.children[0].children[0];
+      tocContent.innerHTML = con.innerHTML;
+    }
+    let markdownItTOC = document.querySelector('.markdownIt-TOC');
+    let innerHeight = window.innerHeight;
+    markdownItTOC.style = `max-height: ${innerHeight - 80 > 0 ? innerHeight - 80 : innerHeight}px`
+    addTocNumber(tocContent, '');
+  })();
+
+  document.addEventListener('scroll', function (e) {
+    if (lList.length <= 0) {
+      return;
+    }
+    let scrollTop = document.scrollingElement.scrollTop + 10;
+    let dir;
+
+    if (lastTop - scrollTop > 0) {
+      dir = 'up';
+    } else {
+      dir = 'down';
+    }
+
+    lastTop = scrollTop;
+    if (scrollTop <= 0) {
+      if (lastIndex >= 0 && lastIndex < hList.length) {
+        lList[lastIndex].classList.remove(activeClass);
+      }
+      return;
+    }
+
+    let current = 0, hasFind = false;
+    for (let i = 0; i < hList.length; i++) {
+      if (hList[i].offsetTop > scrollTop) {
+        current = i;
+        hasFind = true;
+        break;
+      }
+    }
+    if (!hasFind && scrollTop > lList[lList.length - 1].offsetTop) {
+      current = hList.length - 1;
+    } else {
+      current--;
+    }
+    if (dir === 'down') {
+      if (current > lastIndex) {
+        addActiveClass(current);
+        removeActiveClass(lastIndex)
+        lastIndex = current;
+        removeParentActiveClass();
+        lList[current] && addActiveLiElemment(lList[current].parentElement, tocContent);
+      }
+    } else {
+      if (current < lastIndex) {
+        addActiveClass(current);
+        removeActiveClass(lastIndex);
+        lastIndex = current;
+        removeParentActiveClass();
+        lList[current] && addActiveLiElemment(lList[current].parentElement, tocContent);
+      }
+    }
+  });
+
+
+  window.addEventListener('load', function () {
+    showToc();
+    document.querySelector('#sidebar').style = 'display: block;';
+    tocWrapper.classList.add('toc-active');
+    setTimeout(function () {
+      if ("createEvent" in document) {
+        let evt = document.createEvent("HTMLEvents");
+        evt.initEvent("scroll", false, true);
+        document.dispatchEvent(evt);
+      }
+      else {
+        document.fireEvent("scroll");
+      }
+    }, 500)
+  })
+
+</script>
             </div>
-            <hr>
-            <div style="text-align:center">
-              <span class="with-love">
-                <i class="fa fa-heart"></i>
-              </span>
-              <span class="language" data-lan="leave-message">留言添加友链</span>
-              <span class="with-love">
-                <i class="fa fa-heart"></i>
-              </span>
+          
+        
+      </div>
+    </div>
+  
+</div>
+<script>
+  const SIDEBAR_TITLE_ACTIVE = 'sidebar-title-active';
+  const SIDEBAR_BODY_ACTIVE = 'sidebar-body-active';
+  const SLIDE_UP_IN = 'slide-up-in';
+
+  let sidebar = document.querySelector('#sidebar'),
+  tocSideBar = document.querySelector('#tocSideBar'),
+  metaSideBar = document.querySelector('#metaSideBar'),
+  postToc = document.querySelector('#post_toc'),
+  postSiteMeta = document.querySelector('#post_side_meta'),
+  sidebarTitle = document.querySelector('.sidebar-title'),
+  sidebarBody = document.querySelector('#sidebar_body');
+
+  tocSideBar && tocSideBar.addEventListener('click', (e) => {
+    toggleSidebar(e);
+  });
+
+  metaSideBar && metaSideBar.addEventListener('click', (e) => {
+    toggleSidebar(e);
+  });
+
+  function toggleSidebar(e) {
+    let currentTitle = document.querySelector("."+SIDEBAR_TITLE_ACTIVE);
+    if (currentTitle == e.srcElement) {
+      return ;
+    }
+    let current, showElement, hideElement;
+    if (e.srcElement == metaSideBar) {
+      showElement = postSiteMeta;
+      hideElement = postToc;
+    } else if (e.srcElement == tocSideBar){
+      showElement = postToc;
+      hideElement = postSiteMeta;
+    }
+    currentTitle.classList.remove(SIDEBAR_TITLE_ACTIVE);
+    e.srcElement.classList.add(SIDEBAR_TITLE_ACTIVE);
+
+    window.Velocity(hideElement, 'stop');
+    window.Velocity(hideElement, 'transition.slideUpOut', {
+      display: 'none',
+      duration: 200,
+      complete: function () {
+        window.Velocity(showElement, 'transition.slideDownIn', {
+          duration: 200
+        });
+      }
+    })
+    hideElement.classList.remove(SIDEBAR_BODY_ACTIVE);
+    showElement.classList.add(SIDEBAR_BODY_ACTIVE);
+  }
+
+  postToc && postToc.addEventListener('transitionend', function() {
+    this.classList.remove(SLIDE_UP_IN);
+  });
+
+  if (sidebarBody) {
+    if (sidebarBody.classList.contains('pisces') || sidebarBody.classList.contains('gemini')) {
+      let hasFix = false;
+      let scrollEl = document.querySelector('.main-continer');
+      let limitTop = document.querySelector('#nav_ul').children.length * 42 + 162;
+      window.addEventListener('scroll', function(e) {
+        if (document.scrollingElement.scrollTop >= limitTop) {
+          if (!hasFix) {
+            sidebar.classList.add('sidebar-fixed');
+            hasFix = true;
+          }
+        } else {
+          if (hasFix) {
+            sidebar.classList.remove('sidebar-fixed');
+            hasFix = false;
+          }
+        }
+      });
+    }
+  }
+  
+</script>
+        <div class="section-box box-shadow-wrapper">
+          <div class="section bg-color post post-page">
+            <section class="post-header">
+  <h1 class="post-title">
+    <a class="post-title-link" href="https://rayzhang13.github.io/post/thymeleaf-usages/">
+      使用Thymeleaf模版布局和资源引入
+    </a>
+  </h1>
+  <div class="post-meta">
+    
+    <span class="meta-item pc-show">
+      <i class="fa fa-calendar-o"></i>
+      <span class="language" data-lan="publish">发布于</span>
+      <span class="publish-time" data-t="2021-06-21 13:48:40">2021-06-21</span>
+      <span class="post-meta-divider pc-show">|</span>
+    </span>
+    
+    <span class="meta-item">
+      <i class="fa fa-folder-o"></i>
+      <span class="pc-show language" data-lan="category-in">分类于</span>
+      
+      
+      <a href="https://rayzhang13.github.io/tag/OBpIzY0P4/">
+        <span>Thymeleaf</span>
+      </a>、
+      
+      
+      
+      <a href="https://rayzhang13.github.io/tag/k6dv4QTFt/">
+        <span>Spring</span>
+      </a>
+      
+      
+    </span>
+    <span class="post-meta-divider">|</span>
+    
+    <span class="meta-item">
+      <i class="fa fa-clock-o"></i>
+      <span>14<span class="language" data-lan="minute">分钟</span></span>
+    </span>
+    <span class="meta-item">
+      <span class="post-meta-divider">|</span>
+      <i class="fa fa-file-word-o"></i>
+      <span>2671<span class="pc-show language" data-lan="words">字数</span></span>
+    </span>
+    
+    
+    
+    <span id="/post/thymeleaf-usages/" data-flag-title="使用Thymeleaf模版布局和资源引入" class="meta-item pc-show leancloud_visitors">
+      <span class="post-meta-divider">|</span>
+      <i class="fa fa-eye"></i>
+      <span><span class="language" data-lan="view">浏览量</span>：<span class="leancloud-visitors-count"></span></span>
+    </span>
+    
+  </div>
+</section>
+            <div class="post-body next-md-body" id="post_body">
+              <p>Thymeleaf是一种用于Web和独立环境的现代服务器端的Java模板引擎。<br>
+Thymeleaf的主要目标是将优雅的自然模板带到开发工作流程中，并将HTML在浏览器中正确显示，并且可以作为静态原型，让开发团队能更容易地协作。Thymeleaf能够处理HTML，XML，JavaScript，CSS甚至纯文本。<br>
+Thymeleaf使用Spring框架的模块，与许多常见的工具集成在一起，并且可以插入自己的功能，是现代HTML5 JVM Web开发的理想选择，尽管Thymeleaf还有更多其它的功能。Thymeleaf建立在自然模板的概念之上，以不影响模板作为设计原型的方式将其逻辑注入到模板文件中。 这改善了设计沟通，弥合了前端设计和开发人员之间的理解偏差。</p>
+<!-- more -->
+<h1 id="问题引入">问题引入</h1>
+<p>当直接访问<code>HTML</code>文件时，可以访问到的部分静态资源可能由于路径配置的原因，在Springboot中报错，我们希望能在不影响当前网页功能、不破坏结构的情况下修改路径达到效果<br>
+又或者在前端各页面中存在大量雷同的代码块，例如博客项目中存在Navigation Bar和footer等布局大量相同的情况，如果想对这些布局中等元素进行统一修改将会非常麻烦</p>
+<p>而Thymeleaf很好的解决了这样的痛点</p>
+<h1 id="项目示例">项目示例</h1>
+<p>以下将做几个博客中简单的示例：<br>
+我们定义一个Thymeleaf模版<code>_fragment.html</code></p>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot; xmlns:th=&quot;http://www.thymeleaf.org&quot;&gt;
+&lt;head th:fragment=&quot;head(title)&quot;&gt;
+  &lt;meta charset=&quot;UTF-8&quot;&gt;
+  &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+  &lt;title th:replace=&quot;${title}&quot;&gt;博客详情&lt;/title&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/semantic-ui@2.2.4/dist/semantic.min.css&quot;&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;../static/css/typo.css&quot; th:href=&quot;@{/css/typo.css}&quot;&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;../static/css/me.css&quot; th:href=&quot;@{/css/me.css}&quot;&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;../static/css/animate.css&quot; th:href=&quot;@{/css/animate.css}&quot;&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;../static/lib/prism/prism.css&quot; th:href=&quot;@{/lib/prism/prism.css}&quot;&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;../static/lib/tocbot/tocbot.css&quot; th:href=&quot;@{/lib/tocbot/tocbot.css}&quot;&gt;
+  &lt;link rel=&quot;stylesheet&quot; href=&quot;../static/lib/editormd/css/editormd.css&quot; th:href=&quot;@{/lib/editormd/css/editormd.css}&quot;&gt;
+&lt;/head&gt;
+&lt;body&gt;
+&lt;nav th:fragment=&quot;menu(n)&quot; class=&quot;ui inverted attached segment m-padded-tb-mini m-shadow-small&quot;&gt;
+  &lt;div class=&quot;ui container&quot;&gt;
+    &lt;div class=&quot;ui inverted secondary stackable menu&quot;&gt;
+      &lt;h2 class=&quot;ui teal header item&quot;&gt;Blog&lt;/h2&gt;
+      &lt;a href=&quot;#&quot; class=&quot;m-item item m-mobile-hide&quot; th:classappend=&quot;${n==1}?'active'&quot;&gt;&lt;i class=&quot;home icon&quot;&gt;&lt;/i&gt;首页&lt;/a&gt;
+      &lt;a href=&quot;#&quot; class=&quot;m-item item m-mobile-hide&quot; th:classappend=&quot;${n==2}?'active'&quot;&gt;&lt;i class=&quot;idea icon&quot;&gt;&lt;/i&gt;分类&lt;/a&gt;
+      &lt;a href=&quot;#&quot; class=&quot;m-item item m-mobile-hide&quot; th:classappend=&quot;${n==3}?'active'&quot;&gt;&lt;i class=&quot;tags icon&quot;&gt;&lt;/i&gt;标签&lt;/a&gt;
+      &lt;a href=&quot;#&quot; class=&quot;m-item item m-mobile-hide&quot; th:classappend=&quot;${n==4}?'active'&quot;&gt;&lt;i class=&quot;clone icon&quot;&gt;&lt;/i&gt;归档&lt;/a&gt;
+      &lt;a href=&quot;#&quot; class=&quot;m-item item m-mobile-hide&quot; th:classappend=&quot;${n==5}?'active'&quot;&gt;&lt;i class=&quot;info icon&quot;&gt;&lt;/i&gt;关于我&lt;/a&gt;
+      &lt;div class=&quot;right item m-mobile-hide&quot;&gt;
+        &lt;div class=&quot;ui icon inverted transparent input&quot;&gt;
+          &lt;input type=&quot;text&quot; placeholder=&quot;Search....&quot;&gt;
+          &lt;i class=&quot;search link icon&quot;&gt;&lt;/i&gt;
+        &lt;/div&gt;
+      &lt;/div&gt;
+    &lt;/div&gt;
+  &lt;/div&gt;
+  &lt;a href=&quot;#&quot; class=&quot;ui menu toggle black icon button m-right-top m-mobile-show&quot;&gt;
+    &lt;i class=&quot;sidebar icon&quot;&gt;&lt;/i&gt;
+  &lt;/a&gt;
+&lt;/nav&gt;
+
+&lt;footer th:fragment=&quot;footer&quot; class=&quot;ui inverted vertical segment m-padded-tb-massive&quot;&gt;
+......
+&lt;/footer&gt;
+
+&lt;th:block th:fragment=&quot;script&quot;&gt;
+  &lt;script src=&quot;https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js&quot;&gt;&lt;/script&gt;
+  &lt;script src=&quot;https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js&quot;&gt;&lt;/script&gt;
+  &lt;script src=&quot;https://cdn.jsdelivr.net/npm/jquery.scrollto@2.1.3/jquery.scrollTo.min.js&quot;&gt;&lt;/script&gt;
+  &lt;script src=&quot;../static/lib/prism/prism.js&quot; th:src=&quot;@{/lib/prism/prism.js}&quot;&gt;&lt;/script&gt;
+  &lt;script src=&quot;../static/lib/tocbot/tocbot.min.js&quot; th:src=&quot;@{/lib/tocbot/tocbot.min.js}&quot;&gt;&lt;/script&gt;
+  &lt;script src=&quot;../static/lib/qrcode/qrcode.min.js&quot; th:src=&quot;@{/lib/qrcode/qrcode.min.js}&quot;&gt;&lt;/script&gt;
+  &lt;script src=&quot;../static/lib/waypoint/jquery.waypoints.min.js&quot; th:src=&quot;@{/lib/waypoint/jquery.waypoints.min.js}&quot;&gt;&lt;/script&gt;
+  &lt;script src=&quot;../../static/lib/editormd/editormd.js&quot; th:src=&quot;@{/lib/editormd/editormd.js}&quot;&gt;&lt;/script&gt;
+&lt;/th:block&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<p>其中</p>
+<ul>
+<li>head块中，引入参数title，用于替换标签页标题“博客详情”字样</li>
+<li>menu块中，引入参数n，不同的n对应不同的顶栏按钮被追加<code>active</code>属性</li>
+<li>footer和script块也为类似模版代码</li>
+<li>注意到src路径在Springboot中由于静态资源的路径问题，不生效，我们改由Thymeleaf使用<code>th:href</code>和<code>th:src</code>标签引入static下的新路径</li>
+</ul>
+<p>具体调用方法如下：<br>
+在博客首页<code>index.html</code>中：</p>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot; xmlns:th=&quot;http://www.thymeleaf.org&quot;&gt;
+&lt;head th:replace=&quot;_fragments :: head(~{::title})&quot;&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+    &lt;title&gt;首页&lt;/title&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/semantic-ui@2.2.4/dist/semantic.min.css&quot;&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;../static/css/me.css&quot;&gt;
+&lt;/head&gt;
+&lt;body&gt;
+
+    &lt;!--导航--&gt;
+    &lt;nav th:replace=&quot;_fragments :: menu(1)&quot; class=&quot;ui inverted attached segment m-padded-tb-mini m-shadow-small&quot;&gt;
+        &lt;div class=&quot;ui container&quot;&gt;
+            &lt;div class=&quot;ui inverted secondary stackable menu&quot;&gt;
+                &lt;h2 class=&quot;ui teal header item&quot;&gt;Blog&lt;/h2&gt;
+                &lt;a href=&quot;#&quot; class=&quot;m-item item m-mobile-hide&quot;&gt;&lt;i class=&quot;home icon&quot;&gt;&lt;/i&gt;首页&lt;/a&gt;
+                &lt;a href=&quot;#&quot; class=&quot;m-item item m-mobile-hide&quot;&gt;&lt;i class=&quot;idea icon&quot;&gt;&lt;/i&gt;分类&lt;/a&gt;
+                &lt;a href=&quot;#&quot; class=&quot;m-item item m-mobile-hide&quot;&gt;&lt;i class=&quot;tags icon&quot;&gt;&lt;/i&gt;标签&lt;/a&gt;
+                &lt;a href=&quot;#&quot; class=&quot;m-item item m-mobile-hide&quot;&gt;&lt;i class=&quot;clone icon&quot;&gt;&lt;/i&gt;归档&lt;/a&gt;
+                &lt;a href=&quot;#&quot; class=&quot;m-item item m-mobile-hide&quot;&gt;&lt;i class=&quot;info icon&quot;&gt;&lt;/i&gt;关于我&lt;/a&gt;
+                &lt;div class=&quot;right item m-mobile-hide&quot;&gt;
+                    &lt;div class=&quot;ui icon inverted transparent input&quot;&gt;
+                        &lt;input type=&quot;text&quot; placeholder=&quot;Search....&quot;&gt;
+                        &lt;i class=&quot;search link icon&quot;&gt;&lt;/i&gt;
+                    &lt;/div&gt;
+                &lt;/div&gt;
+            &lt;/div&gt;
+        &lt;/div&gt;
+        &lt;a href=&quot;#&quot; class=&quot;ui menu toggle black icon button m-right-top m-mobile-show&quot;&gt;
+            &lt;i class=&quot;sidebar icon&quot;&gt;&lt;/i&gt;
+        &lt;/a&gt;
+    &lt;/nav&gt;
+   &lt;!--底部footer--&gt;
+    &lt;footer th:replace=&quot;_fragments :: footer&quot; class=&quot;ui inverted vertical segment m-padded-tb-massive&quot;&gt;
+        ............
+    &lt;/footer&gt;
+    &lt;!--/*/&lt;th:block th:replace=&quot;_fragments :: script&quot;&gt;/*/--&gt;
+        &lt;script src=&quot;https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js&quot;&gt;&lt;/script&gt;
+        &lt;script src=&quot;https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js&quot;&gt;&lt;/script&gt;
+    &lt;!--/*/&lt;/th:block&gt;/*/--&gt;
+
+    &lt;script&gt;
+        $('.menu.toggle').click(function (){
+            $('.m-item').toggleClass('m-mobile-hide');
+        });
+    &lt;/script&gt;
+&lt;/body&gt;
+&lt;/html&gt;
+</code></pre>
+<ul>
+<li>通过<code>th:replace=&quot;_fragments :: head(~{::title})&quot;</code>的方式，我们从原先<code>inedx</code>的代码块中获取到了<code>title</code>的值并将它覆盖到了<code>_fragments</code>对应模版上，随后使用模版替换了当前代码块</li>
+<li>通过<code>th:replace=&quot;_fragments :: menu(1)&quot;</code> 加入了参数<code>n = 1</code>，触发了<code>_fragments</code>中对首页按钮追加的<code>active</code>属性，随后使用模版替换了代码块（甚至导航整块删除后Springboot访问仍然不受影响，因为已经被Thymeleaf替换了，但是本地静态网页渲染时结构会遭到破坏）</li>
+<li>通过加入<code>&lt;!--/*/&lt;th:block th:replace=&quot;_fragments :: script&quot;&gt;/*/--&gt;</code> 和<code>&lt;!--/*/&lt;/th:block&gt;/*/--&gt;</code>注释的方式，我们可以让浏览器直接加载HTML时忽略外部的包裹，而实际Springboot启动时，Thymeleaf代码块会视其为有效</li>
+</ul>
+<p><font color="#FF0000"><b>PS：Thymeleaf的妙处就在这里，在本地打开对应的HTML时，Thymeleaf代码不生效，使用对应的本地路径，可以确保浏览器正常渲染，而使用Springboot时，Thymeleaf会注入模版和参数，按照我们之前配置的形式去运行，我们只需要对对应代码块加入一个标签就能实现托管</b></font></p>
+<p>类似的我们还可以使用<code>th:inline</code>对Javascript和jQuery代码进行修改</p>
+<p>例如，在博客输入页面中，我们引入了markdown-editor部件，并引入了css和js文件（已经通过Thymeleaf完成了路径替换）</p>
+<pre><code class="language-html">&lt;!DOCTYPE html&gt;
+&lt;html lang=&quot;en&quot; xmlns:th=&quot;http://www.thymeleaf.org&quot;&gt;
+&lt;head th:replace=&quot;_fragments :: head(~{::title})&quot;&gt;
+    &lt;meta charset=&quot;UTF-8&quot;&gt;
+    &lt;meta name=&quot;viewport&quot; content=&quot;width=device-width, initial-scale=1.0&quot;&gt;
+    &lt;title&gt;博客发布&lt;/title&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;https://cdn.jsdelivr.net/npm/semantic-ui@2.2.4/dist/semantic.min.css&quot;&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;../../static/lib/editormd/css/editormd.css&quot;&gt;
+    &lt;link rel=&quot;stylesheet&quot; href=&quot;../../static/css/me.css&quot;&gt;
+&lt;/head&gt;
+&lt;body&gt;
+    ..................
+    &lt;!--/*/&lt;th:block th:replace=&quot;_fragments :: script&quot;&gt;/*/--&gt;
+    &lt;script src=&quot;https://apps.bdimg.com/libs/jquery/2.1.4/jquery.min.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;https://cdn.jsdelivr.net/npm/semantic-ui@2.4.2/dist/semantic.min.js&quot;&gt;&lt;/script&gt;
+    &lt;script src=&quot;../../static/lib/editormd/editormd.js&quot;&gt;&lt;/script&gt;
+    &lt;!--/*/&lt;/th:block&gt;/*/--&gt;
+    .................
+&lt;/body&gt;
+</code></pre>
+<p>关键在于为了markdown对正常使用，官方使用了一段jQuery代码：</p>
+<pre><code class="language-html">&lt;script&gt;
+        var contentEditor;
+        $(function() {
+            contentEditor = editormd(&quot;md-content&quot;, {
+                width   : &quot;100%&quot;,
+                height  : 640,
+                syncScrolling : &quot;single&quot;,
+                path    : &quot;../../static/lib/editormd/lib/&quot;,
+                tex: true,
+                flowChart : true,
+                sequenceDiagram : true
+            });
+        });
+&lt;/script&gt;
+</code></pre>
+<p>本地环境下浏览器渲染运行无问题</p>
+<p>而部署到Springboot上时，插件开始转圈，并且无法加载：<br>
+<img src="https://rayzhang13.github.io/post-images/1624257326637.png" alt="" loading="lazy"><br>
+显然由于路径配置问题，<code>&quot;../../static/lib/editormd/lib/&quot;</code>路径下的js和css文件不能生效，爆出404错误</p>
+<p>这里我们采用<code>th:inline</code>对jQuery进行修改：</p>
+<pre><code class="language-html">&lt;script th:inline=&quot;javascript&quot;&gt;
+        var contentEditor;
+        $(function() {
+            contentEditor = editormd(&quot;md-content&quot;, {
+                width   : &quot;100%&quot;,
+                height  : 640,
+                syncScrolling : &quot;single&quot;,
+                path    : /*[[@{/lib/editormd/lib/}]]*/ &quot;../../static/lib/editormd/lib/&quot;,
+                tex: true,
+                flowChart : true,
+                sequenceDiagram : true
+            });
+        });
+&lt;/script&gt;
+</code></pre>
+<p>由于引入了注释，本地访问时浏览器仍然会去请求<code>&quot;../../static/lib/editormd/lib/&quot;</code>目录，而使用Springboot进行部署时，Thymeleaf会使用<code>@{/lib/editormd/lib/}</code>路径对原先路径进行替换</p>
+<p>如图样式加载正常：<br>
+<img src="https://rayzhang13.github.io/post-images/1624257617100.png" alt="" loading="lazy"><br>
+达到了预期效果</p>
+
             </div>
-            <hr>
-            <div class="friends-note">
-              <p><strong class="language" data-lan="format">友链格式：</strong></p>
-              <ul>
-                <li><span class="language" data-lan="site-name">网站名称：</span>Ray&#39;s Blog</li>
-                <li><span class="language" data-lan="site-link">网站地址：</span><a href="https://rayzhang13.github.io" data-pjax-state="">https://rayzhang13.github.io</a></li>
-                <li><span class="language" data-lan="site-desc">网站描述：</span>Everything&#39;s gonna be just fine.</li>
-                <li><span class="language" data-lan="site-img">网站头像：</span>
-                  <a href="https://rayzhang13.github.io/images/avatar.png">https://rayzhang13.github.io/images/avatar.png</a>
-                </li>
-              </ul>
-            </div>
+            
+            
+              <div class="post-footer">
+  <ul class="post-copyright">
+    <li class="post-copyright-author">
+      <strong class="language" data-lan="author">本文作者：</strong>
+      Ray Zhang
+    </li>
+    <li class="post-copyright-link">
+      <strong class="language" data-lan="link">本文链接：</strong>
+      <a href="https://rayzhang13.github.io/post/thymeleaf-usages/" title="使用Thymeleaf模版布局和资源引入">https://rayzhang13.github.io/post/thymeleaf-usages/</a>
+    </li>
+    <li class="post-copyright-license">
+      <strong class="language" data-lan="copyright">版权声明： </strong>
+      本博客所有文章除特别声明外，均采用<a href="https://creativecommons.org/licenses/by-nc-sa/4.0/" rel="noopener" target="_blank"><i class="fa fa-fw fa-creative-commons"></i> BY-NC-SA</a> 许可协议。转载请注明出处！
+    </li>
+  </ul>
+  <div class="tags">
+    
+      <a href="https://rayzhang13.github.io/tag/OBpIzY0P4/"># Thymeleaf</a>
+    
+      <a href="https://rayzhang13.github.io/tag/k6dv4QTFt/"># Spring</a>
+    
+  </div>
+  <div class="nav">
+    <div class="nav-prev">
+      
+    </div>
+    <div class="nav-next">
+      
+        <a class="nav-pc-next" title="Springboot下静态资源访问问题" href="https://rayzhang13.github.io/post/springboot-static-resources-missing/">Springboot下静态资源访问问题</a>
+        <a class="nav-mobile-next" title="Springboot下静态资源访问问题" href="https://rayzhang13.github.io/post/springboot-static-resources-missing/">下一篇</a>
+        <i class="fa fa-chevron-right"></i>
+      
+    </div>
+  </div>
+</div>
+            
             
   <script src="https://cdn.jsdelivr.net/npm/valine@1.4.14/dist/Valine.min.js"></script>
 <div id="vcomments" style="padding: 10px 0px 0px 0px"></div>
@@ -325,7 +856,7 @@
   });
 </script>
 
-          </section>
+          </div>
         </div>
       </div>
     </div>
@@ -581,6 +1112,223 @@
     parent.insertBefore(aelem, next);
   })
 </script>
+    <div class="reward-mask" style="display: none;">
+  <div class="reward-relative">
+    <span class="close" aria-hidden="true">x</span>
+    <div class="reward-body">
+      <h2>感谢您的支持，我会继续努力的!</h2>
+      <div class="reward-img-box">
+        <div style="position: relative; width: 140px; height: 140px;">
+          
+          
+          
+        </div>
+      </div>
+      <p class="reward-word">扫码打赏，你说多少就多少</p>
+      <p class="reward-tip">打开微信扫一扫，即可进行扫码打赏哦</p>
+    </div>
+    <div class="bottom">
+      
+      
+    </div>
+  </div>
+</div>
+<style>
+  .reward-mask {
+    position: fixed;
+    z-index: 99999;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background-color: #00000054;
+  }
+
+  .reward-relative {
+    position: relative;
+    width: 480px;
+    text-align: center;
+    margin: 0 auto;
+    border-radius: 5px;
+    background-color: #fff;
+    top: 50%;
+    margin-top: -205px;
+  }
+
+  .reward-relative .close {
+    position: absolute;
+    right: 10px;
+    font-weight: normal;
+    font-size: 16px;
+    color: #929292;
+  }
+
+  .reward-body {
+    padding: 40px 20px 20px;
+  }
+
+  .bottom {
+    display: flex;
+  }
+
+  .reward-btn {
+    text-align: center;
+  }
+
+  .reward-btn-text {
+    display: inline-block;
+    cursor: pointer;
+    width: 60px;
+    height: 60px;
+    line-height: 60px;
+    border-radius: 50%;
+    background-color: #ff9734;
+    color: #FFF;
+    margin-top: 20px;
+  }
+
+  .pay-text {
+    margin-top: 10px;
+    padding: 10px;
+    flex: 1;
+    transition: all .2s linear;
+  }
+
+  .pay-text:hover {
+    background-color: #a5a5a536;
+  }
+
+  .reward-body h2 {
+    padding-top: 10px;
+    text-align: center;
+    color: #a3a3a3;
+    font-size: 16px;
+    font-weight: normal;
+    margin: 0 0 20px;
+  }
+
+  .reward-body h2:after,
+  .reward-body h2:before {
+    font-family: Arial, Helvetica, sans-serif;
+    background: 0 0;
+    width: 0;
+    height: 0;
+    font-style: normal;
+    color: #eee;
+    font-size: 80px;
+    position: absolute;
+    top: 20px;
+  }
+
+  .reward-body h2:before {
+    content: '\201c';
+    left: 50px;
+  }
+
+  .reward-body h2:after {
+    content: '\201d';
+    right: 80px;
+  }
+
+  .reward-img-box {
+    display: inline-block;
+    padding: 10px;
+    border: 6px solid #ea5f00;
+    margin: 0 auto;
+    border-radius: 3px;
+    position: relative;
+  }
+
+  .reward-img {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+  }
+
+  @media (max-width: 767px) {
+    .reward-relative {
+      height: 100%;
+      top: 0px;
+      margin-top: 0;
+      width: auto;
+    }
+
+    .reward-relative .bottom {
+      flex-direction: column;
+    }
+
+    .reward-relative .pay-text {
+      width: 80%;
+      margin: 5px auto;
+      border: 1px solid silver;
+      padding: 6px;
+      border-radius: 4px;
+    }
+
+    .reward-body h2:after {
+      right: 40px;
+    }
+
+    .reward-body h2:after,
+    .reward-body h2:before {
+      font-size: 60px;
+    }
+
+    .reward-body h2:before {
+      left: 20px;
+    }
+  }
+</style>
+<script>
+  !function () {
+    var mask = document.querySelector('.reward-mask');
+    let close = document.querySelector('.reward-relative .close');
+    let rewardBtn = document.querySelector('.reward-btn');
+
+    let zfb = document.querySelector('#zfb'),
+      wx = document.querySelector('#wx'),
+      zfbBtn = document.querySelector('#zfbBtn'),
+      wxBtn = document.querySelector('#wxBtn');
+
+    if (zfbBtn && wxBtn) {
+      zfbBtn.addEventListener('click', () => {
+        window.Velocity(zfb, 'transition.slideLeftIn', {
+          duration: 400
+        });
+        window.Velocity(wx, 'transition.slideRightOut', {
+          display: 'none',
+          duration: 400
+        });
+      });
+
+      wxBtn.addEventListener('click', () => {
+        window.Velocity(wx, 'transition.slideRightIn', {
+          duration: 400
+        });
+        window.Velocity(zfb, 'transition.slideLeftOut', {
+          display: 'none',
+          duration: 400
+        });
+      });
+    }
+
+    rewardBtn.addEventListener('click', (e) => {
+      window.Velocity(mask, 'transition.slideDownIn', {
+        duration: 400
+      })
+    });
+
+    close.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.Velocity(mask, 'transition.slideUpOut', {
+        duration: 400
+      })
+    })
+  }()
+</script>
+
   </div>
 </body>
 
@@ -4089,7 +4837,6 @@ public static int minSpeedOnTime(int[] dist, double hour) {
 
 </script>
 <script src="/media/js/motion.js"></script>
-
 
 
 
