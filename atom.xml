@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://rayzhang13.github.io</id>
     <title>Ray&apos;s Blog</title>
-    <updated>2021-06-21T07:02:48.193Z</updated>
+    <updated>2021-06-22T12:44:37.691Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://rayzhang13.github.io"/>
     <link rel="self" href="https://rayzhang13.github.io/atom.xml"/>
@@ -1124,6 +1124,59 @@ private final Set&lt;String&gt; alreadyCreated = Collections.newSetFromMap(new C
 <p>是否可以：不管有没有循环依赖，都提前创建好代理对象，并将代理对象放入缓存，出现循环依赖时，其他对象直接就可以取到代理对象并注入。<br>
 每次实例化完 Bean 之后就直接去创建代理对象，并添加到二级缓存中。测试结果是完全正常的，Spring 的初始化时间应该也是不会有太大的影响，因为如果 Bean 本身不需要代理的话，是直接返回原始 Bean 的，并不需要走复杂的创建代理 Bean 的流程。<br>
 如果要使用二级缓存解决循环依赖，意味着Bean在构造完后就创建代理对象，这样违背了Spring设计原则。Spring结合AOP跟Bean的生命周期，是在Bean创建完全之后通过AnnotationAwareAspectJAutoProxyCreator这个后置处理器来完成的，在这个后置处理的postProcessAfterInitialization方法中对初始化后的Bean完成AOP代理。如果出现了循环依赖，那没有办法，只有给Bean先创建代理，但是没有出现循环依赖的情况下，设计之初就是让Bean在生命周期的最后一步完成代理而不是在实例化后就立马完成代理。</p>
+<h2 id="常用注解">常用注解</h2>
+<h3 id="configuration注解">@Configuration注解</h3>
+<p>该类等价 与XML中配置beans，相当于Ioc容器，它的某个方法头上如果注册了@Bean，就会作为这个Spring容器中的Bean，与xml中配置的bean意思一样。</p>
+<p>@Configuration注解的类必需使用扫描.<br>
+定义一个MainConfig，用@Configuration注解，那MainConfig相当于xml里的beans,里面用@Bean注解的和xml里定义的bean等价，用扫描该类，最终我们可以在程序里用@AutoWired或@Resource注解取得用@Bean注解的bean，和用xml先配置bean然后在程序里自动注入一样。目的是减少xml里配置。</p>
+<h3 id="vaue注解">@Vaue注解</h3>
+<p>为了简化从properties里取配置，可以使用@Value, 可以在properties文件中的配置值。</p>
+<p>在dispatcher-servlet.xml里引入properties文件。<br>
+<code>&lt;context:property-placeholder location=&quot;classpath:test.properties&quot; /&gt;</code><br>
+在程序里使用@Value:</p>
+<pre><code class="language-java">@Value(&quot;${wx_appid}&quot;)
+public String appid;
+</code></pre>
+<p>即使给变量赋了初值也会以配置文件的值为准。</p>
+<h3 id="controllerservicerepositorycomponent">@Controller,@Service,@Repository,@Component</h3>
+<p>目前4种注解意思是一样，并没有什么区别，区别只是名字不同。</p>
+<h3 id="postconstruct-和-predestory">@PostConstruct 和 @PreDestory</h3>
+<p>实现初始化和销毁bean之前进行的操作，只能有一个方法可以用此注释进行注释，方法不能有参数，返回值必需是void,方法需要是非静态的。</p>
+<pre><code class="language-java">public class TestService {
+@PostConstruct  
+public void  init(){  
+    System.out.println(&quot;初始化&quot;);  
+}
+
+@PreDestroy  
+public void  dostory(){  
+    System.out.println(&quot;销毁&quot;);  
+}  
+}
+</code></pre>
+<h3 id="primary">@Primary</h3>
+<p>自动装配时当出现多个Bean候选者时，被注解为@Primary的Bean将作为首选者，否则将抛出异常。</p>
+<h3 id="lazytrue">@Lazy(true)</h3>
+<p>用于指定该Bean是否取消预初始化，用于注解类，延迟初始化。</p>
+<h3 id="autowired">@Autowired</h3>
+<p>Autowired默认先按byType，如果发现找到多个bean，则，又按照byName方式比对，如果还有多个，则报出异常。<br>
+1.可以手动指定按byName方式注入，使用@Qualifier。<br>
+//通过此注解完成从spring配置文件中 查找满足Fruit的bean,然后按//@Qualifier指定pean</p>
+<pre><code class="language-java">@Autowired
+@Qualifier(&quot;pean&quot;)
+public Fruit fruit;
+</code></pre>
+<p>2.如果要允许null 值，可以设置它的required属性为false，如：</p>
+<pre><code class="language-java">@Autowired(required=false)
+public Fruit fruit;
+</code></pre>
+<h3 id="resource">@Resource</h3>
+<p>默认按 byName自动注入,如果找不到再按byType找bean,如果还是找不到则抛异常，无论按byName还是byType如果找到多个，则抛异常。<br>
+可以手动指定bean,它有2个属性分别是name和type，使用name属性，则使用byName的自动注入，而使用type属性时则使用byType自动注入。<br>
+@Resource(name=”bean名字”)<br>
+或<br>
+@Resource(type=”bean的class”)<br>
+这个注解是属于J2EE的，减少了与spring的耦合。</p>
 <h1 id="spring-aop">Spring AOP</h1>
 <h2 id="基本概念">基本概念</h2>
 <p>在 spring 中 Aspect 通过<code>@Aspect</code>、<code>@Pointcut</code>和一系列 advice（<code>@Before</code>、<code>@after</code>、<code>@afterReturning</code>、<code>@Around</code>）组成。</p>
@@ -1207,11 +1260,13 @@ public class IndexController {
         <link href="https://rayzhang13.github.io/post/leetcode-weekly-contest-round-246/">
         </link>
         <updated>2021-06-20T04:53:26.000Z</updated>
-        <summary type="html"><![CDATA[<p><img src="https://rayzhang13.github.io/post-images/1624164938921.png" alt="" loading="lazy"><br>
-久违的AK，题目不难，贴完代码就跑（狗头）</p>
+        <summary type="html"><![CDATA[<p><img src="https://rayzhang13.github.io/post-images/1624365854328.png" alt="" loading="lazy"><br>
+久违的AK，题目不难，贴完代码就跑（狗头）<br>
+什么叫狗屎运啊（战术后仰）</p>
 ]]></summary>
-        <content type="html"><![CDATA[<p><img src="https://rayzhang13.github.io/post-images/1624164938921.png" alt="" loading="lazy"><br>
-久违的AK，题目不难，贴完代码就跑（狗头）</p>
+        <content type="html"><![CDATA[<p><img src="https://rayzhang13.github.io/post-images/1624365854328.png" alt="" loading="lazy"><br>
+久违的AK，题目不难，贴完代码就跑（狗头）<br>
+什么叫狗屎运啊（战术后仰）</p>
 <!-- more -->
 <h1 id="t1-5788-字符串中的最大奇数">T1 <a href="https://leetcode-cn.com/problems/largest-odd-number-in-string/">5788. 字符串中的最大奇数</a></h1>
 <h2 id="题目">题目</h2>

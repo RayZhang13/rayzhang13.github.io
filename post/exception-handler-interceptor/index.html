@@ -9,7 +9,7 @@
 <meta name="description" content="Everything&#39;s gonna be just fine.">
 <meta name="theme-color" content="#000">
 <title>使用@ControllerAdvice与@ExceptionHandler拦截异常 | Ray&#39;s Blog</title>
-<link rel="shortcut icon" href="/favicon.ico?v=1624258960893">
+<link rel="shortcut icon" href="/favicon.ico?v=1624365874321">
 <link rel="stylesheet" href="/media/css/pisces.css">
 <link rel="stylesheet" href="/media/fonts/font-awesome.css">
 <link
@@ -2403,6 +2403,59 @@ private final Set&amp;lt;String&amp;gt; alreadyCreated = Collections.newSetFromM
 &lt;p&gt;是否可以：不管有没有循环依赖，都提前创建好代理对象，并将代理对象放入缓存，出现循环依赖时，其他对象直接就可以取到代理对象并注入。&lt;br&gt;
 每次实例化完 Bean 之后就直接去创建代理对象，并添加到二级缓存中。测试结果是完全正常的，Spring 的初始化时间应该也是不会有太大的影响，因为如果 Bean 本身不需要代理的话，是直接返回原始 Bean 的，并不需要走复杂的创建代理 Bean 的流程。&lt;br&gt;
 如果要使用二级缓存解决循环依赖，意味着Bean在构造完后就创建代理对象，这样违背了Spring设计原则。Spring结合AOP跟Bean的生命周期，是在Bean创建完全之后通过AnnotationAwareAspectJAutoProxyCreator这个后置处理器来完成的，在这个后置处理的postProcessAfterInitialization方法中对初始化后的Bean完成AOP代理。如果出现了循环依赖，那没有办法，只有给Bean先创建代理，但是没有出现循环依赖的情况下，设计之初就是让Bean在生命周期的最后一步完成代理而不是在实例化后就立马完成代理。&lt;/p&gt;
+&lt;h2 id=&#34;常用注解&#34;&gt;常用注解&lt;/h2&gt;
+&lt;h3 id=&#34;configuration注解&#34;&gt;@Configuration注解&lt;/h3&gt;
+&lt;p&gt;该类等价 与XML中配置beans，相当于Ioc容器，它的某个方法头上如果注册了@Bean，就会作为这个Spring容器中的Bean，与xml中配置的bean意思一样。&lt;/p&gt;
+&lt;p&gt;@Configuration注解的类必需使用扫描.&lt;br&gt;
+定义一个MainConfig，用@Configuration注解，那MainConfig相当于xml里的beans,里面用@Bean注解的和xml里定义的bean等价，用扫描该类，最终我们可以在程序里用@AutoWired或@Resource注解取得用@Bean注解的bean，和用xml先配置bean然后在程序里自动注入一样。目的是减少xml里配置。&lt;/p&gt;
+&lt;h3 id=&#34;vaue注解&#34;&gt;@Vaue注解&lt;/h3&gt;
+&lt;p&gt;为了简化从properties里取配置，可以使用@Value, 可以在properties文件中的配置值。&lt;/p&gt;
+&lt;p&gt;在dispatcher-servlet.xml里引入properties文件。&lt;br&gt;
+&lt;code&gt;&amp;lt;context:property-placeholder location=&amp;quot;classpath:test.properties&amp;quot; /&amp;gt;&lt;/code&gt;&lt;br&gt;
+在程序里使用@Value:&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;@Value(&amp;quot;${wx_appid}&amp;quot;)
+public String appid;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;即使给变量赋了初值也会以配置文件的值为准。&lt;/p&gt;
+&lt;h3 id=&#34;controllerservicerepositorycomponent&#34;&gt;@Controller,@Service,@Repository,@Component&lt;/h3&gt;
+&lt;p&gt;目前4种注解意思是一样，并没有什么区别，区别只是名字不同。&lt;/p&gt;
+&lt;h3 id=&#34;postconstruct-和-predestory&#34;&gt;@PostConstruct 和 @PreDestory&lt;/h3&gt;
+&lt;p&gt;实现初始化和销毁bean之前进行的操作，只能有一个方法可以用此注释进行注释，方法不能有参数，返回值必需是void,方法需要是非静态的。&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;public class TestService {
+@PostConstruct  
+public void  init(){  
+    System.out.println(&amp;quot;初始化&amp;quot;);  
+}
+
+@PreDestroy  
+public void  dostory(){  
+    System.out.println(&amp;quot;销毁&amp;quot;);  
+}  
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;primary&#34;&gt;@Primary&lt;/h3&gt;
+&lt;p&gt;自动装配时当出现多个Bean候选者时，被注解为@Primary的Bean将作为首选者，否则将抛出异常。&lt;/p&gt;
+&lt;h3 id=&#34;lazytrue&#34;&gt;@Lazy(true)&lt;/h3&gt;
+&lt;p&gt;用于指定该Bean是否取消预初始化，用于注解类，延迟初始化。&lt;/p&gt;
+&lt;h3 id=&#34;autowired&#34;&gt;@Autowired&lt;/h3&gt;
+&lt;p&gt;Autowired默认先按byType，如果发现找到多个bean，则，又按照byName方式比对，如果还有多个，则报出异常。&lt;br&gt;
+1.可以手动指定按byName方式注入，使用@Qualifier。&lt;br&gt;
+//通过此注解完成从spring配置文件中 查找满足Fruit的bean,然后按//@Qualifier指定pean&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;@Autowired
+@Qualifier(&amp;quot;pean&amp;quot;)
+public Fruit fruit;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;2.如果要允许null 值，可以设置它的required属性为false，如：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;@Autowired(required=false)
+public Fruit fruit;
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h3 id=&#34;resource&#34;&gt;@Resource&lt;/h3&gt;
+&lt;p&gt;默认按 byName自动注入,如果找不到再按byType找bean,如果还是找不到则抛异常，无论按byName还是byType如果找到多个，则抛异常。&lt;br&gt;
+可以手动指定bean,它有2个属性分别是name和type，使用name属性，则使用byName的自动注入，而使用type属性时则使用byType自动注入。&lt;br&gt;
+@Resource(name=”bean名字”)&lt;br&gt;
+或&lt;br&gt;
+@Resource(type=”bean的class”)&lt;br&gt;
+这个注解是属于J2EE的，减少了与spring的耦合。&lt;/p&gt;
 &lt;h1 id=&#34;spring-aop&#34;&gt;Spring AOP&lt;/h1&gt;
 &lt;h2 id=&#34;基本概念&#34;&gt;基本概念&lt;/h2&gt;
 &lt;p&gt;在 spring 中 Aspect 通过&lt;code&gt;@Aspect&lt;/code&gt;、&lt;code&gt;@Pointcut&lt;/code&gt;和一系列 advice（&lt;code&gt;@Before&lt;/code&gt;、&lt;code&gt;@after&lt;/code&gt;、&lt;code&gt;@afterReturning&lt;/code&gt;、&lt;code&gt;@Around&lt;/code&gt;）组成。&lt;/p&gt;
@@ -2483,8 +2536,9 @@ public class IndexController {
       
       <div class="item">
         <a class="result-title" style="opacity: 0;" href="https://rayzhang13.github.io/post/leetcode-weekly-contest-round-246/"" data-c="
-          &lt;p&gt;&lt;img src=&#34;https://rayzhang13.github.io/post-images/1624164938921.png&#34; alt=&#34;&#34; loading=&#34;lazy&#34;&gt;&lt;br&gt;
-久违的AK，题目不难，贴完代码就跑（狗头）&lt;/p&gt;
+          &lt;p&gt;&lt;img src=&#34;https://rayzhang13.github.io/post-images/1624365854328.png&#34; alt=&#34;&#34; loading=&#34;lazy&#34;&gt;&lt;br&gt;
+久违的AK，题目不难，贴完代码就跑（狗头）&lt;br&gt;
+什么叫狗屎运啊（战术后仰）&lt;/p&gt;
 &lt;!-- more --&gt;
 &lt;h1 id=&#34;t1-5788-字符串中的最大奇数&#34;&gt;T1 &lt;a href=&#34;https://leetcode-cn.com/problems/largest-odd-number-in-string/&#34;&gt;5788. 字符串中的最大奇数&lt;/a&gt;&lt;/h1&gt;
 &lt;h2 id=&#34;题目&#34;&gt;题目&lt;/h2&gt;
