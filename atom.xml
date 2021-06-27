@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://rayzhang13.github.io</id>
     <title>Ray&apos;s Blog</title>
-    <updated>2021-06-27T12:00:54.190Z</updated>
+    <updated>2021-06-27T15:20:11.486Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://rayzhang13.github.io"/>
     <link rel="self" href="https://rayzhang13.github.io/atom.xml"/>
@@ -28,16 +28,20 @@
 例如，<code>(5, 6)</code> 和 <code>(2, 7)</code> 之间的乘积差是 <code>(5 * 6) - (2 * 7) = 16</code> 。<br>
 给你一个整数数组 <code>nums</code> ，选出四个 <strong>不同的</strong> 下标 <code>w</code>、<code>x</code>、<code>y</code> 和 <code>z</code> ，使数对 <code>(nums[w], nums[x])</code> 和 <code>(nums[y], nums[z])</code> 之间的 <strong>乘积差</strong> 取到 <strong>最大值</strong> 。<br>
 返回以这种方式取得的乘积差中的 <strong>最大值</strong> 。</p>
+<blockquote>
 <p>示例 1：<br>
 输入：<code>nums = [5,6,2,7,4]</code><br>
 输出：34<br>
 解释：可以选出下标为 1 和 3 的元素构成第一个数对 (6, 7) 以及下标 2 和 4 构成第二个数对 (2, 4)<br>
 乘积差是 <code>(6 * 7) - (2 * 4) = 34</code></p>
+</blockquote>
+<blockquote>
 <p>示例 2：<br>
 输入：<code>nums = [4,2,5,9,7,4,8]</code><br>
 输出：64<br>
 解释：可以选出下标为 3 和 6 的元素构成第一个数对 (9, 8) 以及下标 1 和 5 构成第二个数对 (2, 4)<br>
 乘积差是 <code>(9 * 8) - (2 * 4) = 64</code></p>
+</blockquote>
 <p>提示：<br>
 <code>4 &lt;= nums.length &lt;= 10^4</code><br>
 <code>1 &lt;= nums[i] &lt;= 10^4</code></p>
