@@ -2,7 +2,7 @@
 <feed xmlns="http://www.w3.org/2005/Atom">
     <id>https://rayzhang13.github.io</id>
     <title>Ray&apos;s Blog</title>
-    <updated>2021-06-27T06:57:25.397Z</updated>
+    <updated>2021-06-27T11:59:50.898Z</updated>
     <generator>https://github.com/jpmonette/feed</generator>
     <link rel="alternate" href="https://rayzhang13.github.io"/>
     <link rel="self" href="https://rayzhang13.github.io/atom.xml"/>
@@ -10,6 +10,340 @@
     <logo>https://rayzhang13.github.io/images/avatar.png</logo>
     <icon>https://rayzhang13.github.io/favicon.ico</icon>
     <rights>All rights reserved 2021, Ray&apos;s Blog</rights>
+    <entry>
+        <title type="html"><![CDATA[Leetcode Weekly Contest Round 247]]></title>
+        <id>https://rayzhang13.github.io/post/leetcode-weekly-contest-round-247/</id>
+        <link href="https://rayzhang13.github.io/post/leetcode-weekly-contest-round-247/">
+        </link>
+        <updated>2021-06-27T07:00:50.000Z</updated>
+        <summary type="html"><![CDATA[<p>t4组合数知识盲区，找个时间补一下，还行<br>
+<img src="https://rayzhang13.github.io/post-images/1624777319676.png" alt="" loading="lazy"></p>
+]]></summary>
+        <content type="html"><![CDATA[<p>t4组合数知识盲区，找个时间补一下，还行<br>
+<img src="https://rayzhang13.github.io/post-images/1624777319676.png" alt="" loading="lazy"></p>
+<!-- more -->
+<h1 id="t1-5797-两个数对之间的最大乘积差">T1 <a href="https://leetcode-cn.com/problems/maximum-product-difference-between-two-pairs/">5797. 两个数对之间的最大乘积差</a></h1>
+<h2 id="题目">题目</h2>
+<p>两个数对 <code>(a, b)</code> 和 <code>(c, d)</code> 之间的 <strong>乘积差</strong> 定义为 <code>(a * b) - (c * d)</code> 。<br>
+例如，<code>(5, 6)</code> 和 <code>(2, 7)</code> 之间的乘积差是 <code>(5 * 6) - (2 * 7) = 16</code> 。<br>
+给你一个整数数组 <code>nums</code> ，选出四个 <strong>不同的</strong> 下标 <code>w</code>、<code>x</code>、<code>y</code> 和 <code>z</code> ，使数对 <code>(nums[w], nums[x])</code> 和 <code>(nums[y], nums[z])</code> 之间的 <strong>乘积差</strong> 取到 <strong>最大值</strong> 。<br>
+返回以这种方式取得的乘积差中的 <strong>最大值</strong> 。</p>
+<p>示例 1：<br>
+输入：<code>nums = [5,6,2,7,4]</code><br>
+输出：34<br>
+解释：可以选出下标为 1 和 3 的元素构成第一个数对 (6, 7) 以及下标 2 和 4 构成第二个数对 (2, 4)<br>
+乘积差是 <code>(6 * 7) - (2 * 4) = 34</code></p>
+<p>示例 2：<br>
+输入：<code>nums = [4,2,5,9,7,4,8]</code><br>
+输出：64<br>
+解释：可以选出下标为 3 和 6 的元素构成第一个数对 (9, 8) 以及下标 1 和 5 构成第二个数对 (2, 4)<br>
+乘积差是 <code>(9 * 8) - (2 * 4) = 64</code></p>
+<p>提示：<br>
+<code>4 &lt;= nums.length &lt;= 10^4</code><br>
+<code>1 &lt;= nums[i] &lt;= 10^4</code></p>
+<h2 id="题解">题解</h2>
+<p>典型贪心，最大的一组减去最小的一组即可</p>
+<pre><code class="language-java">class Solution {
+    public int maxProductDifference(int[] nums) {
+        Arrays.sort(nums);
+        int len = nums.length;
+        return nums[len - 1] * nums[len - 2] - nums[0] * nums[1];
+    }
+}
+</code></pre>
+<h1 id="t2-5798-循环轮转矩阵">T2 <a href="https://leetcode-cn.com/problems/cyclically-rotating-a-grid/">5798. 循环轮转矩阵</a></h1>
+<h2 id="题目-2">题目</h2>
+<p>给你一个大小为 <code>m x n</code> 的整数矩阵 <code>grid</code>​​​ ，其中 <code>m</code> 和 <code>n</code> 都是 <strong>偶数</strong> ；另给你一个整数 <code>k</code> 。</p>
+<p>矩阵由若干层组成，如下图所示，每种颜色代表一层：<br>
+<img src="https://rayzhang13.github.io/post-images/1624777769061.png" alt="" loading="lazy"></p>
+<p>矩阵的循环轮转是通过分别循环轮转矩阵中的每一层完成的。在对某一层进行一次循环旋转操作时，层中的每一个元素将会取代其 <strong>逆时针</strong> 方向的相邻元素。轮转示例如下：<br>
+<img src="https://rayzhang13.github.io/post-images/1624777853269.jpg" alt="" loading="lazy"></p>
+<p>返回执行 <code>k</code> 次循环轮转操作后的矩阵。</p>
+<blockquote>
+<p>示例 1：<br>
+<img src="https://rayzhang13.github.io/post-images/1624778060661.png" alt="" loading="lazy"><br>
+输入：<code>grid = [[40,10],[30,20]]</code>, k = 1<br>
+输出：<code>[[10,20],[40,30]]</code><br>
+解释：上图展示了矩阵在执行循环轮转操作时每一步的状态。</p>
+</blockquote>
+<blockquote>
+<p>示例 2：<br>
+<img src="https://rayzhang13.github.io/post-images/1624778118561.png" alt="" loading="lazy"><br>
+<img src="https://rayzhang13.github.io/post-images/1624778144309.png" alt="" loading="lazy"><br>
+<img src="https://rayzhang13.github.io/post-images/1624778162797.png" alt="" loading="lazy"><br>
+输入：<code>grid = [[1,2,3,4],[5,6,7,8],[9,10,11,12],[13,14,15,16]]</code>, k = 2<br>
+输出：<code>[[3,4,8,12],[2,11,10,16],[1,7,6,15],[5,9,13,14]]</code><br>
+解释：上图展示了矩阵在执行循环轮转操作时每一步的状态。</p>
+</blockquote>
+<p>提示：<br>
+<code>m == grid.length</code><br>
+<code>n == grid[i].length</code><br>
+<code>2 &lt;= m, n &lt;= 50</code><br>
+m 和 n 都是 <strong>偶数</strong><br>
+<code>1 &lt;= grid[i][j] &lt;= 5000</code><br>
+<code>1 &lt;= k &lt;= 10^9</code></p>
+<h2 id="题解-2">题解</h2>
+<p>骚年，你做过<a href="https://leetcode-cn.com/problems/spiral-matrix/">螺旋打印矩阵</a>的题目没？<br>
+类似的思路，我们先把一圈的数紫按顺序写入一个<code>ArrayList</code>，再依次延后<code>k</code>个位置，对原数组进行覆盖</p>
+<p><code>k</code>如果太大了，可以预先对本圈大小进行取模<br>
+ez~</p>
+<pre><code class="language-java">class Solution {
+    public int[][] rotateGrid(int[][] grid, int k) {
+        int rows = grid.length;
+        int cols = grid[0].length;
+        int top = 0, bottom = rows - 1, left = 0, right = cols - 1;
+        while(top &lt; bottom &amp;&amp; left &lt; right){
+            List&lt;Integer&gt; list = new ArrayList&lt;&gt;();
+            for(int i = left; i &lt; right; i++){
+                list.add(grid[top][i]);
+            }
+            for(int i = top; i &lt; bottom; i++){
+                list.add(grid[i][right]);
+            }
+            for(int i = right; i &gt; left; i--){
+                list.add(grid[bottom][i]);
+            }
+            for(int i = bottom; i &gt; top; i--){
+                list.add(grid[i][left]);
+            }
+            int size = list.size();
+            int tmp = k % size;
+            int cnt = tmp;
+            for(int i = left; i &lt; right; i++){
+                grid[top][i] = list.get(cnt);
+                cnt = (cnt + 1) % size;
+            }
+            for(int i = top; i &lt; bottom; i++){
+                grid[i][right] = list.get(cnt);
+                cnt = (cnt + 1) % size;
+            }
+            for(int i = right; i &gt; left; i--){
+                grid[bottom][i] = list.get(cnt);
+                cnt = (cnt + 1) % size;
+            }
+            for(int i = bottom; i &gt; top; i--){
+                grid[i][left] = list.get(cnt);
+                cnt = (cnt + 1) % size;
+            }
+            top++;
+            bottom--;
+            left++;
+            right--;
+        }
+        return grid;
+    }
+}
+</code></pre>
+<h1 id="t3-5799-最美子字符串的数目">T3 <a href="https://leetcode-cn.com/problems/number-of-wonderful-substrings/">5799. 最美子字符串的数目</a></h1>
+<h2 id="题目-3">题目</h2>
+<p>如果某个字符串中 <strong>至多一个</strong> 字母出现 <strong>奇数</strong> 次，则称其为 <strong>最美</strong> 字符串。</p>
+<ul>
+<li>例如，<code>&quot;ccjjc&quot;</code> 和 <code>&quot;abab&quot;</code> 都是最美字符串，但 <code>&quot;ab&quot;</code> 不是。<br>
+给你一个字符串 <code>word</code> ，该字符串由前十个小写英文字母组成（<code>'a'</code> 到 <code>'j'</code>）。请你返回 <code>word</code> 中 <strong>最美非空子字符串</strong> 的数目。如果同样的子字符串在 <code>word</code> 中出现多次，那么应当对 <strong>每次出现</strong> 分别计数。<br>
+<strong>子字符串</strong> 是字符串中的一个连续字符序列。</li>
+</ul>
+<blockquote>
+<p>示例 1：<br>
+输入：word = &quot;aba&quot;<br>
+输出：4<br>
+解释：4 个最美子字符串如下所示：<br>
+&quot;aba&quot; -&gt; &quot;a&quot;<br>
+&quot;aba&quot; -&gt; &quot;b&quot;<br>
+&quot;aba&quot; -&gt; &quot;a&quot;<br>
+&quot;aba&quot; -&gt; &quot;aba&quot;</p>
+</blockquote>
+<p>示例 2：</p>
+<blockquote>
+<p>输入：word = &quot;aabb&quot;<br>
+输出：9<br>
+解释：9 个最美子字符串如下所示：<br>
+&quot;aabb&quot; -&gt; &quot;a&quot;<br>
+&quot;aabb&quot; -&gt; &quot;aa&quot;<br>
+&quot;aabb&quot; -&gt; &quot;aab&quot;<br>
+&quot;aabb&quot; -&gt; &quot;aabb&quot;<br>
+&quot;aabb&quot; -&gt; &quot;a&quot;<br>
+&quot;aabb&quot; -&gt; &quot;abb&quot;<br>
+&quot;aabb&quot; -&gt; &quot;b&quot;<br>
+&quot;aabb&quot; -&gt; &quot;bb&quot;<br>
+&quot;aabb&quot; -&gt; &quot;b&quot;</p>
+</blockquote>
+<blockquote>
+<p>示例 3：<br>
+输入：word = &quot;he&quot;<br>
+输出：2<br>
+解释：2 个最美子字符串如下所示：<br>
+&quot;he&quot; -&gt; &quot;h&quot;<br>
+&quot;he&quot; -&gt; &quot;e&quot;</p>
+</blockquote>
+<p>提示：<br>
+<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1</mn><mo>&lt;</mo><mo>=</mo><mi>w</mi><mi>o</mi><mi>r</mi><mi>d</mi><mi mathvariant="normal">.</mi><mi>l</mi><mi>e</mi><mi>n</mi><mi>g</mi><mi>t</mi><mi>h</mi><mo>&lt;</mo><mo>=</mo><mn>1</mn><msup><mn>0</mn><mn>5</mn></msup></mrow><annotation encoding="application/x-tex">1 &lt;= word.length &lt;= 10^5</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68354em;vertical-align:-0.0391em;"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">&lt;</span></span><span class="base"><span class="strut" style="height:0.36687em;vertical-align:0em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault" style="margin-right:0.02691em;">w</span><span class="mord mathdefault">o</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault">d</span><span class="mord">.</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">e</span><span class="mord mathdefault">n</span><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="mord mathdefault">t</span><span class="mord mathdefault">h</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">&lt;</span></span><span class="base"><span class="strut" style="height:0.36687em;vertical-align:0em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="mord">1</span><span class="mord"><span class="mord">0</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">5</span></span></span></span></span></span></span></span></span></span></span><br>
+word 由从 'a' 到 'j' 的小写英文字母组成</p>
+<h2 id="题解-3">题解</h2>
+<p>初看题目我们会想到是不是前缀和+二分进行暴力遍历，构造一个<code>int[len][10]</code>数组，枚举各个位置的各字母总数<br>
+但是当我们看到<code>word.length</code>达到<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1</mn><msup><mn>0</mn><mn>5</mn></msup></mrow><annotation encoding="application/x-tex">10^5</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="mord">1</span><span class="mord"><span class="mord">0</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">5</span></span></span></span></span></span></span></span></span></span></span>我们就知道这样做会导致TLE，因为复杂度为<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>O</mi><mo>(</mo><msup><mi>n</mi><mn>2</mn></msup><mo>)</mo></mrow><annotation encoding="application/x-tex">O(n^2)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.064108em;vertical-align:-0.25em;"></span><span class="mord mathdefault" style="margin-right:0.02778em;">O</span><span class="mopen">(</span><span class="mord"><span class="mord mathdefault">n</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">2</span></span></span></span></span></span></span></span><span class="mclose">)</span></span></span></span></p>
+<p>继续看，我们发现其实各位置各个字母的个数并不完全是有效信息，我们只需要获取某个区间内字母的数量是 奇数还是偶数 即可。所以我们构造前缀和时也考虑到这点，每个位置只保存对应字母的奇偶信息<br>
+例如，本题中，我采用一个10位的二进制数表示a-j的各位的奇偶。0表示偶数，1表示奇数<br>
+我们都知道：</p>
+<ul>
+<li>偶数 - 偶数 = 偶数</li>
+<li>奇数 - 奇数 = 偶数</li>
+<li>偶数 - 奇数 = 奇数</li>
+<li>奇数 - 偶数 = 奇数<br>
+对于一个状态<code>s</code>，我们去搜索满足这个状态的 前继的 状态变量<code>t</code>，有两种情况：</li>
+<li><code>s == t</code>，这样子的话，s和t的各字母总数均同奇偶，减出来得到的中间区间必然各字母全偶数，满足条件</li>
+<li><code>s</code> 与 <code>t</code> 的二进制中有一位不同，这样子我们在求解区间时，其余位数相减均为偶，而奇偶不同的该位进行相减得奇数，区间只有一个字母为奇数个<br>
+那么如何查询<code>t</code>的个数呢，我们可以构造一个<code>HashMap&lt;Integer, Integer&gt;</code>，之前每个位置每次计算出的前缀和状态和数量信息都计入<code>Map</code>中即可<br>
+代码如下：</li>
+</ul>
+<pre><code class="language-java">class Solution {
+    public long wonderfulSubstrings(String word) {
+        int len = word.length();
+        Map&lt;Integer, Integer&gt; map = new HashMap&lt;&gt;();
+        map.put(0, 1);
+        int[] arr = new int[len];
+        long res = 0l;
+        for(int i = 0; i &lt; len; i++){
+            arr[i] = i &gt; 0 ? arr[i - 1]: 0;
+            arr[i] ^= (1 &lt;&lt; (int)(word.charAt(i) - 'a'));
+            if(map.containsKey(arr[i])) res += (long) map.get(arr[i]);
+            for(int k = 0; k &lt; 10; k++){
+                if((arr[i] &gt;&gt; k) % 2 == 0){
+                    int tmp = arr[i] + (1 &lt;&lt; k);
+                    if(map.containsKey(tmp)) res += (long)map.get(tmp);
+                }
+                else{
+                    int tmp = arr[i] - (1 &lt;&lt; k);
+                    if(map.containsKey(tmp)) res += (long)map.get(tmp);
+                }
+            }
+            
+            map.put(arr[i], map.getOrDefault(arr[i], 0) + 1);
+        }
+        return res;
+    }
+}
+</code></pre>
+<p>其实状态总共也只有<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mn>2</mn><mn>10</mn></msup></mrow><annotation encoding="application/x-tex">2^{10}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord">2</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">1</span><span class="mord mtight">0</span></span></span></span></span></span></span></span></span></span></span></span>，共1024种情况，不用<code>HashMap</code>也可以用数组代替</p>
+<h1 id="t4-1916-统计为蚁群构筑房间的不同顺序">T4 <a href="https://leetcode-cn.com/problems/count-ways-to-build-rooms-in-an-ant-colony/">1916. 统计为蚁群构筑房间的不同顺序</a></h1>
+<h2 id="题目-4">题目</h2>
+<p>你是一只蚂蚁，负责为蚁群构筑 <code>n</code> 间编号从 <code>0</code> 到 <code>n-1</code> 的新房间。给你一个 <strong>下标从 0 开始</strong> 且长度为 <code>n</code> 的整数数组 <code>prevRoom</code> 作为扩建计划。其中，<code>prevRoom[i]</code> 表示在构筑房间 <code>i</code> 之前，你必须先构筑房间 <code>prevRoom[i]</code> ，并且这两个房间必须 <strong>直接</strong> 相连。房间 <code>0</code> 已经构筑完成，所以 <code>prevRoom[0] = -1</code> 。扩建计划中还有一条硬性要求，在完成所有房间的构筑之后，从房间 <code>0</code> 可以访问到每个房间。<br>
+你一次只能构筑 <strong>一个</strong> 房间。你可以在 <strong>已经构筑好的</strong> 房间之间自由穿行，只要这些房间是 <strong>相连的</strong> 。如果房间 <code>prevRoom[i]</code> 已经构筑完成，那么你就可以构筑房间 <code>i</code>。<br>
+返回你构筑所有房间的 <strong>不同顺序的数目</strong> 。由于答案可能很大，请返回对 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1</mn><msup><mn>0</mn><mn>9</mn></msup><mo>+</mo><mn>7</mn></mrow><annotation encoding="application/x-tex">10^9 + 7</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.897438em;vertical-align:-0.08333em;"></span><span class="mord">1</span><span class="mord"><span class="mord">0</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">9</span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2222222222222222em;"></span><span class="mbin">+</span><span class="mspace" style="margin-right:0.2222222222222222em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">7</span></span></span></span> <strong>取余</strong> 的结果。</p>
+<blockquote>
+<p>示例 1：<br>
+<img src="https://rayzhang13.github.io/post-images/1624792797598.jpg" alt="" loading="lazy"><br>
+输入：<code>prevRoom = [-1,0,1]</code><br>
+输出：1<br>
+解释：仅有一种方案可以完成所有房间的构筑：0 → 1 → 2</p>
+</blockquote>
+<blockquote>
+<p>示例 2：<br>
+<img src="https://rayzhang13.github.io/post-images/1624792804444.jpg" alt="" loading="lazy"><br>
+输入：<code>prevRoom = [-1,0,0,1,2]</code><br>
+输出：6<br>
+解释：<br>
+有 6 种不同顺序：<br>
+0 → 1 → 3 → 2 → 4<br>
+0 → 2 → 4 → 1 → 3<br>
+0 → 1 → 2 → 3 → 4<br>
+0 → 1 → 2 → 4 → 3<br>
+0 → 2 → 1 → 3 → 4<br>
+0 → 2 → 1 → 4 → 3</p>
+</blockquote>
+<p>提示：<br>
+<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>n</mi><mo>=</mo><mo>=</mo><mi>p</mi><mi>r</mi><mi>e</mi><mi>v</mi><mi>R</mi><mi>o</mi><mi>o</mi><mi>m</mi><mi mathvariant="normal">.</mi><mi>l</mi><mi>e</mi><mi>n</mi><mi>g</mi><mi>t</mi><mi>h</mi></mrow><annotation encoding="application/x-tex">n == prevRoom.length</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">n</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span></span><span class="base"><span class="strut" style="height:0.36687em;vertical-align:0em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8888799999999999em;vertical-align:-0.19444em;"></span><span class="mord mathdefault">p</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault">e</span><span class="mord mathdefault" style="margin-right:0.03588em;">v</span><span class="mord mathdefault" style="margin-right:0.00773em;">R</span><span class="mord mathdefault">o</span><span class="mord mathdefault">o</span><span class="mord mathdefault">m</span><span class="mord">.</span><span class="mord mathdefault" style="margin-right:0.01968em;">l</span><span class="mord mathdefault">e</span><span class="mord mathdefault">n</span><span class="mord mathdefault" style="margin-right:0.03588em;">g</span><span class="mord mathdefault">t</span><span class="mord mathdefault">h</span></span></span></span><br>
+<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>2</mn><mo>&lt;</mo><mo>=</mo><mi>n</mi><mo>&lt;</mo><mo>=</mo><mn>1</mn><msup><mn>0</mn><mn>5</mn></msup></mrow><annotation encoding="application/x-tex">2 &lt;= n &lt;= 10^5</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68354em;vertical-align:-0.0391em;"></span><span class="mord">2</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">&lt;</span></span><span class="base"><span class="strut" style="height:0.36687em;vertical-align:0em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.5782em;vertical-align:-0.0391em;"></span><span class="mord mathdefault">n</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">&lt;</span></span><span class="base"><span class="strut" style="height:0.36687em;vertical-align:0em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="mord">1</span><span class="mord"><span class="mord">0</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight">5</span></span></span></span></span></span></span></span></span></span></span><br>
+<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>p</mi><mi>r</mi><mi>e</mi><mi>v</mi><mi>R</mi><mi>o</mi><mi>o</mi><mi>m</mi><mo>[</mo><mn>0</mn><mo>]</mo><mo>=</mo><mo>=</mo><mo>−</mo><mn>1</mn></mrow><annotation encoding="application/x-tex">prevRoom[0] == -1</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">p</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault">e</span><span class="mord mathdefault" style="margin-right:0.03588em;">v</span><span class="mord mathdefault" style="margin-right:0.00773em;">R</span><span class="mord mathdefault">o</span><span class="mord mathdefault">o</span><span class="mord mathdefault">m</span><span class="mopen">[</span><span class="mord">0</span><span class="mclose">]</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span></span><span class="base"><span class="strut" style="height:0.36687em;vertical-align:0em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.72777em;vertical-align:-0.08333em;"></span><span class="mord">−</span><span class="mord">1</span></span></span></span><br>
+对于所有的 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>1</mn><mo>&lt;</mo><mo>=</mo><mi>i</mi><mo>&lt;</mo><mi>n</mi></mrow><annotation encoding="application/x-tex">1 &lt;= i &lt; n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68354em;vertical-align:-0.0391em;"></span><span class="mord">1</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">&lt;</span></span><span class="base"><span class="strut" style="height:0.36687em;vertical-align:0em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.69862em;vertical-align:-0.0391em;"></span><span class="mord mathdefault">i</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">&lt;</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">n</span></span></span></span> ，都有 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mn>0</mn><mo>&lt;</mo><mo>=</mo><mi>p</mi><mi>r</mi><mi>e</mi><mi>v</mi><mi>R</mi><mi>o</mi><mi>o</mi><mi>m</mi><mo>[</mo><mi>i</mi><mo>]</mo><mo>&lt;</mo><mi>n</mi></mrow><annotation encoding="application/x-tex">0 &lt;= prevRoom[i] &lt; n</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.68354em;vertical-align:-0.0391em;"></span><span class="mord">0</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">&lt;</span></span><span class="base"><span class="strut" style="height:0.36687em;vertical-align:0em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord mathdefault">p</span><span class="mord mathdefault" style="margin-right:0.02778em;">r</span><span class="mord mathdefault">e</span><span class="mord mathdefault" style="margin-right:0.03588em;">v</span><span class="mord mathdefault" style="margin-right:0.00773em;">R</span><span class="mord mathdefault">o</span><span class="mord mathdefault">o</span><span class="mord mathdefault">m</span><span class="mopen">[</span><span class="mord mathdefault">i</span><span class="mclose">]</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">&lt;</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">n</span></span></span></span><br>
+题目保证所有房间都构筑完成后，从房间 0 可以访问到每个房间</p>
+<h2 id="题解-4">题解</h2>
+<p>高中排列组合数学没学好。。。递归子问题找到了却连方程都列不对</p>
+<p>设 <code>f[i]</code> 表示以节点 <code>i</code> 为根的子树的拓扑排序方案数，那么<br>
+任意一种拓扑排序中的第一个节点一定是节点 ii；</p>
+<p>假设节点 <code>i</code> 有子节点ch0, ch1, ... chk,这 k+1 棵子树，它们均有若干种拓扑排序的方案。如果我们希望把这些子树的拓扑排序方案「简单地」合并到一起，可以使用乘法原理，即方案数为：<br>
+<code>f[ch0] * f[ch1] * .... * f[chk]</code></p>
+<p>但是简单相乘只能表示树的最终结构和自身顺序，事实上组成这<code>k+1</code>棵树的方法还要细分，例如，我先拓展ch0上的节点，再拓展chk的节点，再拓展别的节点....（顺序不定还能产生多种方法）。</p>
+<p>简单的排列数学：<br>
+排列数计算。假设有 a0个物品 0，a1个物品 1，...，an−1个物品 n-1，我们需要将它们排成一排，那么方案数为  <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mfrac><mrow><mo>(</mo><msub><mi>a</mi><mn>0</mn></msub><mo>+</mo><msub><mi>a</mi><mn>1</mn></msub><mo>+</mo><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><mo>+</mo><msub><mi>a</mi><mrow><mi>n</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>)</mo><mo>!</mo></mrow><mrow><msub><mi>a</mi><mn>0</mn></msub><mo>!</mo><mo>∗</mo><msub><mi>a</mi><mn>1</mn></msub><mo>!</mo><mo>∗</mo><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><mo>∗</mo><msub><mi>a</mi><mrow><mi>n</mi><mo>−</mo><mn>1</mn></mrow></msub><mo>!</mo></mrow></mfrac></mrow><annotation encoding="application/x-tex">\frac{(a_0 + a_1 + .. + a_{n-1})!}{a_0! * a_1! * ... * a_{n-1}!}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.496765em;vertical-align:-0.486765em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.01em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight"><span class="mord mathdefault mtight">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31731428571428577em;"><span style="top:-2.357em;margin-left:0em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span><span class="mclose mtight">!</span><span class="mbin mtight">∗</span><span class="mord mtight"><span class="mord mathdefault mtight">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31731428571428577em;"><span style="top:-2.357em;margin-left:0em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span><span class="mclose mtight">!</span><span class="mbin mtight">∗</span><span class="mord mtight">.</span><span class="mord mtight">.</span><span class="mord mtight">.</span><span class="mbin mtight">∗</span><span class="mord mtight"><span class="mord mathdefault mtight">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3173142857142857em;"><span style="top:-2.357em;margin-left:0em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">n</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.20252142857142857em;"><span></span></span></span></span></span></span><span class="mclose mtight">!</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.485em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mopen mtight">(</span><span class="mord mtight"><span class="mord mathdefault mtight">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31731428571428577em;"><span style="top:-2.357em;margin-left:0em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span><span class="mbin mtight">+</span><span class="mord mtight"><span class="mord mathdefault mtight">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31731428571428577em;"><span style="top:-2.357em;margin-left:0em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span><span class="mbin mtight">+</span><span class="mord mtight">.</span><span class="mord mtight">.</span><span class="mbin mtight">+</span><span class="mord mtight"><span class="mord mathdefault mtight">a</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3173142857142857em;"><span style="top:-2.357em;margin-left:0em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">n</span><span class="mbin mtight">−</span><span class="mord mtight">1</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.20252142857142857em;"><span></span></span></span></span></span></span><span class="mclose mtight">)</span><span class="mclose mtight">!</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.486765em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></p>
+<p>对于已经被确定结构和自身顺序的ch0, ch1,..., chk子树，类似的，我们确定每棵树的节点个数<code>cnt[ch1]</code> <code>cnt[ch2]</code> .... <code>cnt[chk]</code>，（注意这是在每棵树的结构和自身顺序已经被确定的前提下），我们得到排列的种数为<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mfrac><mrow><mo>(</mo><mi>c</mi><mi>n</mi><mi>t</mi><mo>[</mo><mi>i</mi><mo>]</mo><mo>−</mo><mn>1</mn><mo>)</mo><mo>!</mo></mrow><mrow><mi>c</mi><mi>n</mi><mi>t</mi><mo>[</mo><mi>c</mi><msub><mi>h</mi><mn>0</mn></msub><mo>]</mo><mo>!</mo><mo>∗</mo><mi>c</mi><mi>n</mi><mi>t</mi><mo>[</mo><mi>c</mi><msub><mi>h</mi><mn>1</mn></msub><mo>]</mo><mo>!</mo><mo>∗</mo><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><mi mathvariant="normal">.</mi><mo>∗</mo><mi>c</mi><mi>n</mi><mi>t</mi><mo>[</mo><mi>c</mi><msub><mi>h</mi><mi>k</mi></msub><mo>]</mo><mo>!</mo></mrow></mfrac></mrow><annotation encoding="application/x-tex">\frac{(cnt[i] - 1)!}{cnt[ch_0]! * cnt[ch_1]! * ... * cnt[ch_k]!}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.53em;vertical-align:-0.52em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:1.01em;"><span style="top:-2.655em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">c</span><span class="mord mathdefault mtight">n</span><span class="mord mathdefault mtight">t</span><span class="mopen mtight">[</span><span class="mord mathdefault mtight">c</span><span class="mord mtight"><span class="mord mathdefault mtight">h</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31731428571428577em;"><span style="top:-2.357em;margin-left:0em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight">0</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span><span class="mclose mtight">]</span><span class="mclose mtight">!</span><span class="mbin mtight">∗</span><span class="mord mathdefault mtight">c</span><span class="mord mathdefault mtight">n</span><span class="mord mathdefault mtight">t</span><span class="mopen mtight">[</span><span class="mord mathdefault mtight">c</span><span class="mord mtight"><span class="mord mathdefault mtight">h</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.31731428571428577em;"><span style="top:-2.357em;margin-left:0em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mtight">1</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.143em;"><span></span></span></span></span></span></span><span class="mclose mtight">]</span><span class="mclose mtight">!</span><span class="mbin mtight">∗</span><span class="mord mtight">.</span><span class="mord mtight">.</span><span class="mord mtight">.</span><span class="mbin mtight">∗</span><span class="mord mathdefault mtight">c</span><span class="mord mathdefault mtight">n</span><span class="mord mathdefault mtight">t</span><span class="mopen mtight">[</span><span class="mord mathdefault mtight">c</span><span class="mord mtight"><span class="mord mathdefault mtight">h</span><span class="msupsub"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.3448em;"><span style="top:-2.3487714285714287em;margin-left:0em;margin-right:0.07142857142857144em;"><span class="pstrut" style="height:2.5em;"></span><span class="sizing reset-size3 size1 mtight"><span class="mord mathdefault mtight" style="margin-right:0.03148em;">k</span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.15122857142857138em;"><span></span></span></span></span></span></span><span class="mclose mtight">]</span><span class="mclose mtight">!</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.485em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mopen mtight">(</span><span class="mord mathdefault mtight">c</span><span class="mord mathdefault mtight">n</span><span class="mord mathdefault mtight">t</span><span class="mopen mtight">[</span><span class="mord mathdefault mtight">i</span><span class="mclose mtight">]</span><span class="mbin mtight">−</span><span class="mord mtight">1</span><span class="mclose mtight">)</span><span class="mclose mtight">!</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.52em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span></p>
+<p>所以我们要把两个公式乘起来就是<code>i</code>节点的总解数了</p>
+<p>而当我们处理大数相乘时，如本题，会由于数据过大无法计算<br>
+因而使用了<strong>乘法逆元</strong>和<strong>费马小定理</strong></p>
+<p><strong>乘法逆元</strong>： 如果需要计算 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><mfrac><mi>b</mi><mi>a</mi></mfrac></mrow><annotation encoding="application/x-tex">\frac{b}{a}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:1.2251079999999999em;vertical-align:-0.345em;"></span><span class="mord"><span class="mopen nulldelimiter"></span><span class="mfrac"><span class="vlist-t vlist-t2"><span class="vlist-r"><span class="vlist" style="height:0.8801079999999999em;"><span style="top:-2.6550000000000002em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">a</span></span></span></span><span style="top:-3.23em;"><span class="pstrut" style="height:3em;"></span><span class="frac-line" style="border-bottom-width:0.04em;"></span></span><span style="top:-3.394em;"><span class="pstrut" style="height:3em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">b</span></span></span></span></span><span class="vlist-s">​</span></span><span class="vlist-r"><span class="vlist" style="height:0.345em;"><span></span></span></span></span></span><span class="mclose nulldelimiter"></span></span></span></span></span>对 <code>m</code> 取模的值，<code>b</code> 和 <code>a</code> 均为表达式（例如上面排列数的分子与分母）并且它们实际的值非常大，无法直接进行计算，那么我们可以求出 <code>a</code> 在模 <code>m</code> 意义下的乘法逆元 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>a</mi><mrow><mo>−</mo><mn>1</mn></mrow></msup></mrow><annotation encoding="application/x-tex">a^{-1}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord mathdefault">a</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">−</span><span class="mord mtight">1</span></span></span></span></span></span></span></span></span></span></span></span></p>
+<p><strong>费马小定理</strong>：<br>
+当 <code>m</code> 为质数时，<br>
+<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>a</mi><mrow><mi>m</mi><mi mathvariant="normal">−</mi><mn>1</mn></mrow></msup><mo>≡</mo><mn>1</mn><mo>(</mo><mi>m</mi><mi>o</mi><mi>d</mi><mi>m</mi><mo>)</mo><mo>⟹</mo><msup><mi>a</mi><mrow><mi>m</mi><mi mathvariant="normal">−</mi><mn>2</mn></mrow></msup><mo>≡</mo><msup><mi>a</mi><mrow><mo>−</mo><mn>1</mn></mrow></msup><mo>(</mo><mi>m</mi><mi>o</mi><mi>d</mi><mi>m</mi><mo>)</mo></mrow><annotation encoding="application/x-tex">a^{m−1} ≡1 (mod m) \Longrightarrow a^{m−2} ≡ a^{-1} (mod m)</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord mathdefault">a</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">m</span><span class="mord mtight">−</span><span class="mord mtight">1</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">≡</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1em;vertical-align:-0.25em;"></span><span class="mord">1</span><span class="mopen">(</span><span class="mord mathdefault">m</span><span class="mord mathdefault">o</span><span class="mord mathdefault">d</span><span class="mord mathdefault">m</span><span class="mclose">)</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">⟹</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord mathdefault">a</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">m</span><span class="mord mtight">−</span><span class="mord mtight">2</span></span></span></span></span></span></span></span></span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">≡</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:1.064108em;vertical-align:-0.25em;"></span><span class="mord"><span class="mord mathdefault">a</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">−</span><span class="mord mtight">1</span></span></span></span></span></span></span></span></span><span class="mopen">(</span><span class="mord mathdefault">m</span><span class="mord mathdefault">o</span><span class="mord mathdefault">d</span><span class="mord mathdefault">m</span><span class="mclose">)</span></span></span></span><br>
+即<span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>a</mi><mrow><mo>−</mo><mn>1</mn></mrow></msup></mrow><annotation encoding="application/x-tex">a^{-1}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord mathdefault">a</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mtight">−</span><span class="mord mtight">1</span></span></span></span></span></span></span></span></span></span></span></span>就等于 <span class="katex"><span class="katex-mathml"><math><semantics><mrow><msup><mi>a</mi><mrow><mi>m</mi><mo>−</mo><mn>2</mn></mrow></msup></mrow><annotation encoding="application/x-tex">a^{m-2}</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.8141079999999999em;vertical-align:0em;"></span><span class="mord"><span class="mord mathdefault">a</span><span class="msupsub"><span class="vlist-t"><span class="vlist-r"><span class="vlist" style="height:0.8141079999999999em;"><span style="top:-3.063em;margin-right:0.05em;"><span class="pstrut" style="height:2.7em;"></span><span class="sizing reset-size6 size3 mtight"><span class="mord mtight"><span class="mord mathdefault mtight">m</span><span class="mbin mtight">−</span><span class="mord mtight">2</span></span></span></span></span></span></span></span></span></span></span></span> 对 m 取模的结果<br>
+题中<span class="katex"><span class="katex-mathml"><math><semantics><mrow><mi>m</mi><mo>=</mo><mn>1000000007</mn></mrow><annotation encoding="application/x-tex">m = 1000000007</annotation></semantics></math></span><span class="katex-html" aria-hidden="true"><span class="base"><span class="strut" style="height:0.43056em;vertical-align:0em;"></span><span class="mord mathdefault">m</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span><span class="mrel">=</span><span class="mspace" style="margin-right:0.2777777777777778em;"></span></span><span class="base"><span class="strut" style="height:0.64444em;vertical-align:0em;"></span><span class="mord">1</span><span class="mord">0</span><span class="mord">0</span><span class="mord">0</span><span class="mord">0</span><span class="mord">0</span><span class="mord">0</span><span class="mord">0</span><span class="mord">0</span><span class="mord">7</span></span></span></span>满足条件</p>
+<p>代码如下：</p>
+<pre><code class="language-java">class Solution {
+
+    private static final int BASE = 1000000007;
+
+    private Map&lt;Integer, Set&lt;Integer&gt;&gt; neighbors = new HashMap&lt;&gt;();
+
+    public int waysToBuildRooms(int[] prevRoom) {
+        int n = prevRoom.length;
+        int[] deg = new int[n];
+        for(int i = 0; i &lt; n; i++) {
+            if(prevRoom[i] &lt; 0) continue;
+            Set&lt;Integer&gt; set = neighbors.computeIfAbsent(prevRoom[i], k -&gt; new HashSet&lt;&gt;());
+            set.add(i);
+            deg[prevRoom[i]]++;
+        }
+        Queue&lt;Integer&gt; queue = new LinkedList&lt;&gt;();
+        int[] dp = new int[n];
+        int[] sizes = new int[n];
+        Arrays.fill(sizes, 1);
+        for(int i = 0; i &lt; n; i++) {
+            if(deg[i] == 0) {
+                queue.offer(i);
+            }
+        }
+        int[] fac = new int[n + 1];
+        Arrays.fill(fac, 1);
+        int[] ifac = new int[n + 1];
+        Arrays.fill(ifac, 1);
+        for(int i =2; i &lt;= n; i++) {
+            fac[i] = (int)((long) i * fac[i - 1] % BASE);
+        }
+        for(int i = 2; i &lt;= n; i++) {
+            ifac[i] = power(fac[i], BASE - 2);
+        }
+        while(!queue.isEmpty()) {
+            int u = queue.poll();
+            int p = prevRoom[u];
+            if(p &gt;= 0) {
+                sizes[p] += sizes[u];
+                if(--deg[p] == 0) {
+                    queue.offer(p);
+                }
+            }
+            int cnt = fac[sizes[u] - 1];
+            Set&lt;Integer&gt; childSet = neighbors.get(u);
+            if(childSet != null) {
+                for(int v : childSet) {
+                    cnt = (int)((long)cnt * ifac[sizes[v]] % BASE);
+                    cnt = (int)((long)cnt * dp[v] % BASE);
+                }
+            }
+            dp[u] = cnt;
+        }
+        return dp[0];
+    }
+
+    private int power(int x, int n) {
+        long res = 1;
+        for(int i = n; i &gt; 0; i /= 2) {
+            if(i % 2 == 1) res = res * x % BASE;
+            x = (int)(1L *x * x % BASE);
+        }
+        return (int)res;
+    }
+}
+</code></pre>
+]]></content>
+    </entry>
     <entry>
         <title type="html"><![CDATA[Leetcode Bio-Weekly Contest Round 55]]></title>
         <id>https://rayzhang13.github.io/post/leetcode-bio-weekly-contest-round-55/</id>
@@ -2269,192 +2603,6 @@ boxes[j] 中的元素 <strong>互不相同</strong> 。</p>
 <p>NIO同步非阻塞：你打电话告诉老板你要买某书，老板拿起电话后说“我不知道有没有货，现在去查”便挂了电话，又过了10分种你第二次打电话说你要买某书，老板拿起电话说完“还没有查到，你再等会儿”便挂断电话。挂断电话5分钟后老板查到有书，但并没有主动打电话告诉你。你再次等待10分钟后第三次电话老板问结果，老板说“书有了，我给你送到家”，你断挂电话。每次电话你都要得得到结果（去查-&gt;还没有查到-&gt;有货）后你才挂断电话，这是同步。你每隔10分钟打电话询问结果，这是非阻塞。这一天一夜，你时不时的离开电话去下片片，老板却一直在给你死查，期间老板也无法接听其他人的查询电话。</p>
 <p>异步阻塞：你打电话过去问老板有没有某书，老板说“我不知道有没有货，现在去查，先挂了电话，有结果告诉你，你等我电话”就挂掉电话。等电话期间你什么也不干，老板主动给你发短信通知你结果书有了，5分钟后希望老板现在把书送来，你再次打电话让老板送书，老板马上送书上门。老板主动给你发短信，这是异步。等待老板的短信期间你什么也没干，这是阻塞。</p>
 <p>AIO异步非阻塞：你打电话过去后问老板有没有某书，老板说“好的，有货我直接给你送上门”就挂掉电话。然后你想干嘛干嘛，等老板把书送到后你看书。等待老板主动给你送书上门，这是异步。挂了电话后你就想干嘛干嘛，这是非阻塞。</p>
-]]></content>
-    </entry>
-    <entry>
-        <title type="html"><![CDATA[Java线程池简单理解]]></title>
-        <id>https://rayzhang13.github.io/post/thread-pool/</id>
-        <link href="https://rayzhang13.github.io/post/thread-pool/">
-        </link>
-        <updated>2021-06-04T14:15:06.000Z</updated>
-        <summary type="html"><![CDATA[<p>暂时快速梳理一下Java线程池（毕竟都是速成的）</p>
-]]></summary>
-        <content type="html"><![CDATA[<p>暂时快速梳理一下Java线程池（毕竟都是速成的）</p>
-<!-- more -->
-<h1 id="简介">简介</h1>
-<p>由于主线程的诸多限制，像网络请求等一些耗时的操作我们必须在子线程中 运行。我们往往会通过 new Thread 来开启一个子线程，待子线程操作完成以后通过 Handler 切换到主线程中运行。这么以来我们无法管理我们所创建的子线程，并且无限制的创建子线程，它们相互之间竞争，很有可能由于占用过多资源而导致死机或者内存不足。所以在 Java 中为我们提供了线程池来管理我们所创建的线程。</p>
-<h1 id="优势">优势</h1>
-<ul>
-<li>降低系统资源消耗，通过重用已存在的线程，降低线程创建和销毁造成的消耗;</li>
-<li>提高系统响应速度，当有任务到达时，无需等待新线程的创建便能立即执行;</li>
-<li>方便线程并发数的管控，线程若是无限制的创建，不仅会额外消耗大量系统资源，更是占用过多资源而阻塞系统或内存不足等状况，从而降低系统的稳定性。线程池能有效管控线程，统一分配、调优，提供资源使用率;</li>
-<li>更强大的功能，线程池提供了定时、定期以及可控线程数等功能的线程池，使用方便简单</li>
-</ul>
-<h1 id="线程池的创建">线程池的创建</h1>
-<p>有以下三种：</p>
-<ul>
-<li>Executors.newCachedThreadPool()：无限线程池。</li>
-</ul>
-<pre><code class="language-java">public static ExecutorService newCachedThreadPool(ThreadFactory threadFactory) {
-        return new ThreadPoolExecutor(0, Integer.MAX_VALUE,
-                                      60L, TimeUnit.SECONDS,
-                                      new SynchronousQueue&lt;Runnable&gt;(),
-                                      threadFactory);
-    }
-</code></pre>
-<ul>
-<li>Executors.newFixedThreadPool(nThreads)：创建固定大小的线程池。</li>
-</ul>
-<pre><code class="language-java">public static ExecutorService newFixedThreadPool(int nThreads, ThreadFactory threadFactory) {
-        return new ThreadPoolExecutor(nThreads, nThreads,
-                                      0L, TimeUnit.MILLISECONDS,
-                                      new LinkedBlockingQueue&lt;Runnable&gt;(),
-                                      threadFactory);
-    }
-</code></pre>
-<ul>
-<li>Executors.newSingleThreadExecutor()：创建单个线程的线程池。</li>
-</ul>
-<pre><code class="language-java">public static ExecutorService newSingleThreadExecutor(ThreadFactory threadFactory) {
-        return new FinalizableDelegatedExecutorService
-            (new ThreadPoolExecutor(1, 1,
-                                    0L, TimeUnit.MILLISECONDS,
-                                    new LinkedBlockingQueue&lt;Runnable&gt;(),
-                                    threadFactory));
-    }
-</code></pre>
-<p>线程池不允许使用Executors创建，而是通过ThreadPoolExecutor的方式，规避资源耗尽的风险</p>
-<ul>
-<li>Executors的弊端：</li>
-</ul>
-<ul>
-<li>FixedThreadPool和SingleThreadPool:<br>
-允许的请求队列长度为Integer.Max_VALUE，可能会堆积大量的请求，从而导致OOM（内存溢出）</li>
-<li>CachedThreadPool和ScheduledThreadPool:<br>
-允许的创建线程数目为Integer.Max_VALUE，可能会堆积大量的请求，从而导致OOM（内存溢出）</li>
-</ul>
-<h1 id="threadpoolexecutor七参数">ThreadPoolExecutor七参数</h1>
-<h2 id="代码">代码</h2>
-<p>Executors创建的线程池本质都是基于ThreadPoolExecutor</p>
-<pre><code class="language-java">public ThreadPoolExecutor(int corePoolSize,
-                              int maximumPoolSize,
-                              long keepAliveTime,
-                              TimeUnit unit,
-                              BlockingQueue&lt;Runnable&gt; workQueue,
-                              ThreadFactory threadFactory) {
-        this(corePoolSize, maximumPoolSize, keepAliveTime, unit, workQueue,
-             threadFactory, defaultHandler);
-    }
-</code></pre>
-<h2 id="corepoolsize核心线程数">corePoolSize：核心线程数</h2>
-<p>线程池维护的最小线程数量，核心线程创建后不会被回收（注意：设置allowCoreThreadTimeout=true&gt;后，空闲的核心线程超过存活时间也会被回收）。<br>
-大于核心线程数的线程，在空闲时间超过keepAliveTime后会被回收。<br>
-线程池刚创建时，里面没有一个线程，当调用 execute() 方法添加一个任务时，如果正在运行的线程数量小于corePoolSize，则马上创建新线程并运行这个任务。</p>
-<h2 id="maximumpoolsize最大线程数">maximumPoolSize：最大线程数</h2>
-<p>线程池允许创建的最大线程数量。<br>
-当添加一个任务时，核心线程数已满，线程池还没达到最大线程数，并且没有空闲线程，工作队列已满的情况下，创建一个新线程，然后从工作队列的头部取出一个任务交由新线程来处理，而将刚提交的任务放入工作队列尾部。</p>
-<h2 id="keepalivetime空闲线程存活时间">keepAliveTime：空闲线程存活时间</h2>
-<p>当一个可被回收的线程的空闲时间大于keepAliveTime，就会被回收。<br>
-可被回收的线程：<br>
-（1）设置allowCoreThreadTimeout=true的核心线程。<br>
-（2）大于核心线程数的线程（非核心线程）。</p>
-<h2 id="unit时间单位">unit：时间单位</h2>
-<p>keepAliveTime的时间单位：</p>
-<pre><code class="language-java">TimeUnit.NANOSECONDS
-TimeUnit.MICROSECONDS
-TimeUnit.MILLISECONDS // 毫秒
-TimeUnit.SECONDS
-TimeUnit.MINUTES
-TimeUnit.HOURS
-TimeUnit.DAYS
-</code></pre>
-<h2 id="workqueue工作队列">workQueue：工作队列</h2>
-<p>新任务被提交后，会先添加到工作队列，任务调度时再从队列中取出任务。工作队列实现了BlockingQueue接口。<br>
-JDK默认的工作队列有五种：<br>
-（1）ArrayBlockingQueue 数组型阻塞队列：数组结构，初始化时传入大小，有界，FIFO，使用一个重入锁，默认使用非公平锁，入队和出队共用一个锁，互斥。<br>
-（2）LinkedBlockingQueue 链表型阻塞队列：链表结构，默认初始化大小为Integer.MAX_VALUE，有界（近似无解），FIFO，使用两个重入锁分别控制元素的入队和出队，用Condition进行线程间的唤醒和等待。<br>
-（3）SynchronousQueue 同步队列：容量为0，添加任务必须等待取出任务，这个队列相当于通道，不存储元素。<br>
-（4）PriorityBlockingQueue 优先阻塞队列：无界，默认采用元素自然顺序升序排列。<br>
-（5）DelayQueue 延时队列：无界，元素有过期时间，过期的元素才能被取出。</p>
-<h2 id="threadfactory线程工厂">threadFactory：线程工厂</h2>
-<p>创建线程的工厂，可以设定线程名、线程编号等。</p>
-<pre><code class="language-java">public interface ThreadFactory {
-    /**
-     * Constructs a new {@code Thread}.  Implementations may also initialize
-     * priority, name, daemon status, {@code ThreadGroup}, etc.
-     *
-     * @param r a runnable to be executed by new thread instance
-     * @return constructed thread, or {@code null} if the request to
-     *         create a thread is rejected
-     */
-    Thread newThread(Runnable r);
-}
-</code></pre>
-<p>默认采用defaultThreadFactory</p>
-<pre><code class="language-java">public static ThreadFactory defaultThreadFactory() {
-        return new DefaultThreadFactory();
-    }
-</code></pre>
-<pre><code class="language-java">private static class DefaultThreadFactory implements ThreadFactory {
-        private static final AtomicInteger poolNumber = new AtomicInteger(1);
-        private final ThreadGroup group;
-        private final AtomicInteger threadNumber = new AtomicInteger(1);
-        private final String namePrefix;
-
-        DefaultThreadFactory() {
-            SecurityManager s = System.getSecurityManager();
-            group = (s != null) ? s.getThreadGroup() :
-                                  Thread.currentThread().getThreadGroup();
-            namePrefix = &quot;pool-&quot; +
-                          poolNumber.getAndIncrement() +
-                         &quot;-thread-&quot;;
-        }
-
-        public Thread newThread(Runnable r) {
-            Thread t = new Thread(group, r,
-                                  namePrefix + threadNumber.getAndIncrement(),
-                                  0);
-            if (t.isDaemon())
-                t.setDaemon(false);
-            if (t.getPriority() != Thread.NORM_PRIORITY)
-                t.setPriority(Thread.NORM_PRIORITY);
-            return t;
-        }
-    }
-</code></pre>
-<h2 id="handler拒绝策略">handler：拒绝策略</h2>
-<p>当线程池线程数已满，并且工作队列达到限制，新提交的任务使用拒绝策略处理。可以自定义拒绝策略，拒绝策略需要实现RejectedExecutionHandler接口。<br>
-JDK默认的拒绝策略有四种：<br>
-（1）AbortPolicy：丢弃任务并抛出RejectedExecutionException异常。<br>
-（2）DiscardPolicy：丢弃任务，但是不抛出异常。可能导致无法发现系统的异常状态。<br>
-（3）DiscardOldestPolicy：丢弃队列最前面的任务，然后重新提交被拒绝的任务。<br>
-（4）CallerRunsPolicy：由调用线程处理该任务。</p>
-<h1 id="基本执行流程">基本执行流程</h1>
-<figure data-type="image" tabindex="1"><img src="https://rayzhang13.github.io/post-images/1622822561168.png" alt="" loading="lazy"></figure>
-<p>任务调度是线程池的主要入口，当用户提交了一个任务，接下来这个任务将如何执行都是由这个阶段决定的。了解这部分就相当于了解了线程池的核心运行机制。<br>
-首先，所有任务的调度都是由execute方法完成的，这部分完成的工作是：检查现在线程池的运行状态、运行线程数、运行策略，决定接下来执行的流程，是直接申请线程执行，或是缓冲到队列中执行，亦或是直接拒绝该任务。其执行过程如下：<br>
-首先检测线程池运行状态，如果不是RUNNING，则直接拒绝，线程池要保证在RUNNING的状态下执行任务。<br>
-如果workerCount &lt; corePoolSize，则创建并启动一个线程来执行新提交的任务。<br>
-如果workerCount &gt;= corePoolSize，且线程池内的阻塞队列未满，则将任务添加到该阻塞队列中。<br>
-如果workerCount &gt;= corePoolSize &amp;&amp; workerCount &lt; maximumPoolSize，且线程池内的阻塞队列已满，则创建并启动一个线程来执行新提交的任务。<br>
-如果workerCount &gt;= maximumPoolSize，并且线程池内的阻塞队列已满, 则根据拒绝策略来处理该任务, 默认的处理方式是直接抛异常。</p>
-<h1 id="生命周期">生命周期</h1>
-<p>1、RUNNING<br>
-2、SHUNDOWN<br>
-3、STOP<br>
-4、TIDYING<br>
-5、TERMINATED<br>
-<img src="https://rayzhang13.github.io/post-images/1622823213188.png" alt="" loading="lazy"></p>
-<p>这几个状态的转化关系为：<br>
-1、调用shundown()方法线程池的状态由RUNNING——&gt;SHUTDOWN<br>
-2、调用shutdowNow()方法线程池的状态由RUNNING——&gt;STOP<br>
-3、当任务队列和线程池均为空的时候 线程池的状态由STOP/SHUTDOWN——–&gt;TIDYING<br>
-4、当terminated()方法被调用完成之后，线程池的状态由TIDYING———-&gt;TERMINATED状态<br>
-<img src="https://rayzhang13.github.io/post-images/1622823162874.png" alt="" loading="lazy"></p>
-<p>shutdown()/shutdownNow()有着重要的区别：<br>
-shutdown() 执行后停止接受新任务，会把队列的任务执行完毕。<br>
-shutdownNow() 也是停止接受新任务，但会中断所有的任务，将线程池状态变为 stop。<br>
-两个方法都会中断线程，用户可自行判断是否需要响应中断。</p>
 ]]></content>
     </entry>
 </feed>
