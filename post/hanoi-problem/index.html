@@ -9,7 +9,7 @@
 <meta name="description" content="Everything&#39;s gonna be just fine.">
 <meta name="theme-color" content="#000">
 <title>Hanoi问题 | Ray&#39;s Blog</title>
-<link rel="shortcut icon" href="/favicon.ico?v=1624379648871">
+<link rel="shortcut icon" href="/favicon.ico?v=1624776789898">
 <link rel="stylesheet" href="/media/css/pisces.css">
 <link rel="stylesheet" href="/media/fonts/font-awesome.css">
 <link
@@ -211,7 +211,7 @@
     <div class="sidebar-item-box">
       <a href="/archives/">
         
-        <span class="site-item-stat-count">15</span>
+        <span class="site-item-stat-count">16</span>
         <span class="site-item-stat-name language" data-lan="article">文章</span>
       </a>
     </div>
@@ -1192,6 +1192,314 @@ Process finished with exit code 0
       <hr>
     </div>
     <div class="result" id="result">
+      
+      <div class="item">
+        <a class="result-title" style="opacity: 0;" href="https://rayzhang13.github.io/post/leetcode-bio-weekly-contest-round-55/"" data-c="
+          &lt;p&gt;万年三题选手，菜鸡正常水平，t4出了很多问题，现场能过就见鬼了&lt;br&gt;
+&lt;img src=&#34;https://rayzhang13.github.io/post-images/1624774136156.png&#34; alt=&#34;&#34; loading=&#34;lazy&#34;&gt;&lt;/p&gt;
+&lt;!-- more --&gt;
+&lt;h1 id=&#34;t1-5780-删除一个元素使数组严格递增&#34;&gt;T1 &lt;a href=&#34;https://leetcode-cn.com/problems/remove-one-element-to-make-the-array-strictly-increasing/&#34;&gt;5780. 删除一个元素使数组严格递增&lt;/a&gt;&lt;/h1&gt;
+&lt;h2 id=&#34;题目&#34;&gt;题目&lt;/h2&gt;
+&lt;p&gt;给你一个下标从 &lt;strong&gt;0&lt;/strong&gt; 开始的整数数组 &lt;code&gt;nums&lt;/code&gt; ，如果 &lt;strong&gt;恰好&lt;/strong&gt; 删除 &lt;strong&gt;一个&lt;/strong&gt; 元素后，数组 &lt;strong&gt;严格递增&lt;/strong&gt; ，那么请你返回 &lt;code&gt;true&lt;/code&gt; ，否则返回 &lt;code&gt;false&lt;/code&gt; 。如果数组本身已经是严格递增的，请你也返回 &lt;code&gt;true&lt;/code&gt; 。&lt;/p&gt;
+&lt;p&gt;数组 &lt;code&gt;nums&lt;/code&gt; 是 &lt;strong&gt;严格递增&lt;/strong&gt; 的定义为：对于任意下标的 &lt;code&gt;1 &amp;lt;= i &amp;lt; nums.length&lt;/code&gt; 都满足 &lt;code&gt;nums[i - 1] &amp;lt; nums[i]&lt;/code&gt; 。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;示例 1：&lt;br&gt;
+输入：&lt;code&gt;nums = [1,2,10,5,7]&lt;/code&gt;&lt;br&gt;
+输出：true&lt;br&gt;
+解释：从 nums 中删除下标 2 处的 10 ，得到 &lt;code&gt;[1,2,5,7]&lt;/code&gt; 。&lt;br&gt;
+&lt;code&gt;[1,2,5,7]&lt;/code&gt; 是严格递增的，所以返回 true 。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;示例 2：&lt;br&gt;
+输入：&lt;code&gt;nums = [2,3,1,2]&lt;/code&gt;&lt;br&gt;
+输出：false&lt;br&gt;
+解释：&lt;br&gt;
+&lt;code&gt;[3,1,2]&lt;/code&gt; 是删除下标 0 处元素后得到的结果。&lt;br&gt;
+&lt;code&gt;[2,1,2]&lt;/code&gt; 是删除下标 1 处元素后得到的结果。&lt;br&gt;
+&lt;code&gt;[2,3,2]&lt;/code&gt; 是删除下标 2 处元素后得到的结果。&lt;br&gt;
+&lt;code&gt;[2,3,1]&lt;/code&gt; 是删除下标 3 处元素后得到的结果。&lt;br&gt;
+没有任何结果数组是严格递增的，所以返回 false 。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;示例 3：&lt;br&gt;
+输入：&lt;code&gt;nums = [1,1,1]&lt;/code&gt;&lt;br&gt;
+输出：false&lt;br&gt;
+解释：删除任意元素后的结果都是 &lt;code&gt;[1,1]&lt;/code&gt; 。&lt;br&gt;
+&lt;code&gt;[1,1]&lt;/code&gt; 不是严格递增的，所以返回 false 。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;示例 4：&lt;br&gt;
+输入：&lt;code&gt;nums = [1,2,3]&lt;/code&gt;&lt;br&gt;
+输出：true&lt;br&gt;
+解释：&lt;code&gt;[1,2,3]&lt;/code&gt; 已经是严格递增的，所以返回 true 。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;提示：&lt;br&gt;
+&lt;code&gt;2 &amp;lt;= nums.length &amp;lt;= 1000&lt;/code&gt;&lt;br&gt;
+&lt;code&gt;1 &amp;lt;= nums[i] &amp;lt;= 1000&lt;/code&gt;&lt;/p&gt;
+&lt;h2 id=&#34;题解&#34;&gt;题解&lt;/h2&gt;
+&lt;p&gt;这复杂度操作空间太大了，leetcode周赛第一题经典有手就行，别多想（&lt;br&gt;
+每次去掉一个数，强行遍历即可&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;class Solution {
+    public boolean canBeIncreasing(int[] nums) {
+        int len = nums.length;
+        for(int i = 0; i &amp;lt; len; i++){
+            Integer prev = null;
+            boolean flag = true;
+            for(int j = 0; j &amp;lt; len; j++){
+                if(j == i) continue;
+                if(prev == null){
+                    prev = nums[j];
+                    continue;
+                }
+                if(prev &amp;gt;= nums[j]) {
+                    flag = false;
+                    break;
+                }
+                else prev = nums[j];
+            }
+            if(flag) return true;
+        }
+        return false;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h1 id=&#34;t2-5781-删除一个字符串中所有出现的给定子字符串&#34;&gt;T2 &lt;a href=&#34;https://leetcode-cn.com/problems/remove-all-occurrences-of-a-substring/&#34;&gt;5781. 删除一个字符串中所有出现的给定子字符串&lt;/a&gt;&lt;/h1&gt;
+&lt;h2 id=&#34;题目-2&#34;&gt;题目&lt;/h2&gt;
+&lt;p&gt;给你两个字符串 &lt;code&gt;s&lt;/code&gt; 和 &lt;code&gt;part&lt;/code&gt; ，请你对 &lt;code&gt;s&lt;/code&gt; 反复执行以下操作直到 &lt;strong&gt;所有&lt;/strong&gt; 子字符串 &lt;code&gt;part&lt;/code&gt; 都被删除：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;找到 &lt;code&gt;s&lt;/code&gt; 中 &lt;strong&gt;最左边&lt;/strong&gt; 的子字符串 &lt;code&gt;part&lt;/code&gt; ，并将它从 &lt;code&gt;s&lt;/code&gt; 中删除。&lt;br&gt;
+请你返回从 &lt;code&gt;s&lt;/code&gt; 中删除所有 &lt;code&gt;part&lt;/code&gt; 子字符串以后得到的剩余字符串。&lt;br&gt;
+一个 &lt;strong&gt;子字符串&lt;/strong&gt; 是一个字符串中连续的字符序列。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;示例 1：&lt;br&gt;
+输入：s = &amp;quot;daabcbaabcbc&amp;quot;, part = &amp;quot;abc&amp;quot;&lt;br&gt;
+输出：&amp;quot;dab&amp;quot;&lt;br&gt;
+解释：以下操作按顺序执行：&lt;br&gt;
+s = &amp;quot;daabcbaabcbc&amp;quot; ，删除下标从 2 开始的 &amp;quot;abc&amp;quot; ，得到 s = &amp;quot;dabaabcbc&amp;quot; 。&lt;br&gt;
+s = &amp;quot;dabaabcbc&amp;quot; ，删除下标从 4 开始的 &amp;quot;abc&amp;quot; ，得到 s = &amp;quot;dababc&amp;quot; 。&lt;br&gt;
+s = &amp;quot;dababc&amp;quot; ，删除下标从 3 开始的 &amp;quot;abc&amp;quot; ，得到 s = &amp;quot;dab&amp;quot; 。&lt;br&gt;
+此时 s 中不再含有子字符串 &amp;quot;abc&amp;quot; 。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;示例 2：&lt;br&gt;
+输入：s = &amp;quot;axxxxyyyyb&amp;quot;, part = &amp;quot;xy&amp;quot;&lt;br&gt;
+输出：&amp;quot;ab&amp;quot;&lt;br&gt;
+解释：以下操作按顺序执行：&lt;br&gt;
+s = &amp;quot;axxxxyyyyb&amp;quot; ，删除下标从 4 开始的 &amp;quot;xy&amp;quot; ，得到 s = &amp;quot;axxxyyyb&amp;quot; 。&lt;br&gt;
+s = &amp;quot;axxxyyyb&amp;quot; ，删除下标从 3 开始的 &amp;quot;xy&amp;quot; ，得到 s = &amp;quot;axxyyb&amp;quot; 。&lt;br&gt;
+s = &amp;quot;axxyyb&amp;quot; ，删除下标从 2 开始的 &amp;quot;xy&amp;quot; ，得到 s = &amp;quot;axyb&amp;quot; 。&lt;br&gt;
+s = &amp;quot;axyb&amp;quot; ，删除下标从 1 开始的 &amp;quot;xy&amp;quot; ，得到 s = &amp;quot;ab&amp;quot; 。&lt;br&gt;
+此时 s 中不再含有子字符串 &amp;quot;xy&amp;quot; 。&lt;br&gt;
+ &lt;br&gt;
+提示：&lt;br&gt;
+1 &amp;lt;= s.length &amp;lt;= 1000&lt;br&gt;
+1 &amp;lt;= part.length &amp;lt;= 1000&lt;br&gt;
+s​​​​​​ 和 part 只包小写英文字母。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;题解-2&#34;&gt;题解&lt;/h2&gt;
+&lt;p&gt;&lt;code&gt;indexOf()&lt;/code&gt;方法好啊，虽然&lt;code&gt;indexOf&lt;/code&gt;也是通过自左向右遍历暴力实现的（但是可以提升手速&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;class Solution {
+    public String removeOccurrences(String s, String part) {
+        int len = part.length();
+        while(s.indexOf(part) != -1){
+            int cur = s.indexOf(part);
+            s = s.substring(0, cur) + s.substring(cur + len, s.length());
+        }
+        return s;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h1 id=&#34;t3-5782-最大子序列交替和&#34;&gt;T3 &lt;a href=&#34;https://leetcode-cn.com/problems/maximum-alternating-subsequence-sum/&#34;&gt;5782. 最大子序列交替和&lt;/a&gt;&lt;/h1&gt;
+&lt;h2 id=&#34;题目-3&#34;&gt;题目&lt;/h2&gt;
+&lt;p&gt;一个下标从 &lt;strong&gt;0&lt;/strong&gt; 开始的数组的 &lt;strong&gt;交替和&lt;/strong&gt; 定义为 &lt;strong&gt;偶数&lt;/strong&gt; 下标处元素之 &lt;strong&gt;和&lt;/strong&gt; 减去 &lt;strong&gt;奇数&lt;/strong&gt; 下标处元素之 &lt;strong&gt;和&lt;/strong&gt; 。&lt;/p&gt;
+&lt;p&gt;比方说，数组 &lt;code&gt;[4,2,5,3]&lt;/code&gt; 的交替和为 &lt;code&gt;(4 + 5) - (2 + 3) = 4&lt;/code&gt; 。&lt;br&gt;
+给你一个数组 &lt;code&gt;nums&lt;/code&gt; ，请你返回 &lt;code&gt;nums&lt;/code&gt; 中任意子序列的 &lt;strong&gt;最大交替和&lt;/strong&gt; （子序列的下标 &lt;strong&gt;重新&lt;/strong&gt; 从 0 开始编号）。&lt;/p&gt;
+&lt;p&gt;一个数组的 &lt;strong&gt;子序列&lt;/strong&gt; 是从原数组中删除一些元素后（也可能一个也不删除）剩余元素不改变顺序组成的数组。比方说，&lt;code&gt;[2,7,4]&lt;/code&gt; 是 &lt;code&gt;[4,2,3,7,2,1,4]&lt;/code&gt; 的一个子序列（加粗元素），但是 &lt;code&gt;[2,4,2]&lt;/code&gt; 不是。&lt;/p&gt;
+&lt;blockquote&gt;
+&lt;p&gt;示例 1：&lt;br&gt;
+输入：&lt;code&gt;nums = [4,2,5,3]&lt;/code&gt;&lt;br&gt;
+输出：7&lt;br&gt;
+解释：最优子序列为 &lt;code&gt;[4,2,5]&lt;/code&gt; ，交替和为 (4 + 5) - 2 = 7 。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;示例 2：&lt;br&gt;
+输入：&lt;code&gt;nums = [5,6,7,8]&lt;/code&gt;&lt;br&gt;
+输出：8&lt;br&gt;
+解释：最优子序列为 &lt;code&gt;[8]&lt;/code&gt; ，交替和为 8 。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;blockquote&gt;
+&lt;p&gt;示例 3：&lt;br&gt;
+输入：&lt;code&gt;nums = [6,2,1,2,4,5]&lt;/code&gt;&lt;br&gt;
+输出：10&lt;br&gt;
+解释：最优子序列为 &lt;code&gt;[6,1,5]&lt;/code&gt; ，交替和为 (6 + 5) - 1 = 10 。&lt;br&gt;
+ &lt;br&gt;
+提示：&lt;br&gt;
+&lt;code&gt;1 &amp;lt;= nums.length &amp;lt;= 10^5&lt;/code&gt;&lt;br&gt;
+&lt;code&gt;1 &amp;lt;= nums[i] &amp;lt;= 10^5&lt;/code&gt;&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;h2 id=&#34;题解-3&#34;&gt;题解&lt;/h2&gt;
+&lt;p&gt;数据量大小&lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;msup&gt;&lt;mn&gt;0&lt;/mn&gt;&lt;mn&gt;5&lt;/mn&gt;&lt;/msup&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;10^5&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.8141079999999999em;vertical-align:0em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;&lt;span class=&#34;mord&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;msupsub&#34;&gt;&lt;span class=&#34;vlist-t&#34;&gt;&lt;span class=&#34;vlist-r&#34;&gt;&lt;span class=&#34;vlist&#34; style=&#34;height:0.8141079999999999em;&#34;&gt;&lt;span style=&#34;top:-3.063em;margin-right:0.05em;&#34;&gt;&lt;span class=&#34;pstrut&#34; style=&#34;height:2.7em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;sizing reset-size6 size3 mtight&#34;&gt;&lt;span class=&#34;mord mtight&#34;&gt;5&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;首先&lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mi&gt;O&lt;/mi&gt;&lt;mo&gt;(&lt;/mo&gt;&lt;msup&gt;&lt;mi&gt;n&lt;/mi&gt;&lt;mn&gt;2&lt;/mn&gt;&lt;/msup&gt;&lt;mo&gt;)&lt;/mo&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;O(n^2)&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:1.064108em;vertical-align:-0.25em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34; style=&#34;margin-right:0.02778em;&#34;&gt;O&lt;/span&gt;&lt;span class=&#34;mopen&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;n&lt;/span&gt;&lt;span class=&#34;msupsub&#34;&gt;&lt;span class=&#34;vlist-t&#34;&gt;&lt;span class=&#34;vlist-r&#34;&gt;&lt;span class=&#34;vlist&#34; style=&#34;height:0.8141079999999999em;&#34;&gt;&lt;span style=&#34;top:-3.063em;margin-right:0.05em;&#34;&gt;&lt;span class=&#34;pstrut&#34; style=&#34;height:2.7em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;sizing reset-size6 size3 mtight&#34;&gt;&lt;span class=&#34;mord mtight&#34;&gt;2&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;mclose&#34;&gt;)&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;暴力必然会导致TLE&lt;br&gt;
+这道题是比较典型的状态转换dp题，我们发现计算交替和的时候，长度为奇数的子数组状态 可以和 长度为偶数的子数组状态 可以互相转换&lt;br&gt;
+我们定义：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;创建&lt;code&gt;dp1&lt;/code&gt;数组，其中&lt;code&gt;dp1[i]&lt;/code&gt;表示&lt;code&gt;nums&lt;/code&gt;数组&lt;code&gt;0 ~ i&lt;/code&gt;中可以生成的奇数长度子数组的最大交替和&lt;/li&gt;
+&lt;li&gt;同理，&lt;code&gt;dp2[i]&lt;/code&gt;表示&lt;code&gt;nums&lt;/code&gt;数组&lt;code&gt;0 ~ i&lt;/code&gt;中可以生成的偶数长度子数组的最大交替和&lt;br&gt;
+不难发现，有如下关系，动态规划方程如下：&lt;/li&gt;
+&lt;li&gt;&lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mi&gt;d&lt;/mi&gt;&lt;mi&gt;p&lt;/mi&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mo&gt;[&lt;/mo&gt;&lt;mi&gt;i&lt;/mi&gt;&lt;mo&gt;]&lt;/mo&gt;&lt;mo&gt;=&lt;/mo&gt;&lt;mi&gt;M&lt;/mi&gt;&lt;mi&gt;a&lt;/mi&gt;&lt;mi&gt;t&lt;/mi&gt;&lt;mi&gt;h&lt;/mi&gt;&lt;mi mathvariant=&#34;normal&#34;&gt;.&lt;/mi&gt;&lt;mi&gt;m&lt;/mi&gt;&lt;mi&gt;a&lt;/mi&gt;&lt;mi&gt;x&lt;/mi&gt;&lt;mo&gt;(&lt;/mo&gt;&lt;mi&gt;d&lt;/mi&gt;&lt;mi&gt;p&lt;/mi&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mo&gt;[&lt;/mo&gt;&lt;mi&gt;i&lt;/mi&gt;&lt;mo&gt;−&lt;/mo&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mo&gt;]&lt;/mo&gt;&lt;mo separator=&#34;true&#34;&gt;,&lt;/mo&gt;&lt;mi&gt;d&lt;/mi&gt;&lt;mi&gt;p&lt;/mi&gt;&lt;mn&gt;2&lt;/mn&gt;&lt;mo&gt;[&lt;/mo&gt;&lt;mi&gt;i&lt;/mi&gt;&lt;mo&gt;−&lt;/mo&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mo&gt;]&lt;/mo&gt;&lt;mo&gt;+&lt;/mo&gt;&lt;mi&gt;n&lt;/mi&gt;&lt;mi&gt;u&lt;/mi&gt;&lt;mi&gt;m&lt;/mi&gt;&lt;mi&gt;s&lt;/mi&gt;&lt;mo&gt;[&lt;/mo&gt;&lt;mi&gt;i&lt;/mi&gt;&lt;mo&gt;]&lt;/mo&gt;&lt;mo&gt;)&lt;/mo&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;dp1[i] = Math.max(dp1[i - 1], dp2[i - 1] + nums[i])&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:1em;vertical-align:-0.25em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;d&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;p&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;mopen&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;mclose&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.2777777777777778em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mrel&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.2777777777777778em;&#34;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:1em;vertical-align:-0.25em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34; style=&#34;margin-right:0.10903em;&#34;&gt;M&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;a&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;t&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;h&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;m&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;a&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;x&lt;/span&gt;&lt;span class=&#34;mopen&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;d&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;p&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;mopen&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.2222222222222222em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mbin&#34;&gt;−&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.2222222222222222em;&#34;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:1em;vertical-align:-0.25em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;mclose&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;mpunct&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.16666666666666666em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;d&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;p&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;2&lt;/span&gt;&lt;span class=&#34;mopen&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.2222222222222222em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mbin&#34;&gt;−&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.2222222222222222em;&#34;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:1em;vertical-align:-0.25em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;mclose&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.2222222222222222em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mbin&#34;&gt;+&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.2222222222222222em;&#34;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:1em;vertical-align:-0.25em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;n&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;u&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;m&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;s&lt;/span&gt;&lt;span class=&#34;mopen&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;mclose&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;mclose&#34;&gt;)&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/li&gt;
+&lt;li&gt;&lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mi&gt;d&lt;/mi&gt;&lt;mi&gt;p&lt;/mi&gt;&lt;mn&gt;2&lt;/mn&gt;&lt;mo&gt;[&lt;/mo&gt;&lt;mi&gt;i&lt;/mi&gt;&lt;mo&gt;]&lt;/mo&gt;&lt;mo&gt;=&lt;/mo&gt;&lt;mi&gt;M&lt;/mi&gt;&lt;mi&gt;a&lt;/mi&gt;&lt;mi&gt;t&lt;/mi&gt;&lt;mi&gt;h&lt;/mi&gt;&lt;mi mathvariant=&#34;normal&#34;&gt;.&lt;/mi&gt;&lt;mi&gt;m&lt;/mi&gt;&lt;mi&gt;a&lt;/mi&gt;&lt;mi&gt;x&lt;/mi&gt;&lt;mo&gt;(&lt;/mo&gt;&lt;mi&gt;d&lt;/mi&gt;&lt;mi&gt;p&lt;/mi&gt;&lt;mn&gt;2&lt;/mn&gt;&lt;mo&gt;[&lt;/mo&gt;&lt;mi&gt;i&lt;/mi&gt;&lt;mo&gt;−&lt;/mo&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mo&gt;]&lt;/mo&gt;&lt;mo separator=&#34;true&#34;&gt;,&lt;/mo&gt;&lt;mi&gt;d&lt;/mi&gt;&lt;mi&gt;p&lt;/mi&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mo&gt;[&lt;/mo&gt;&lt;mi&gt;i&lt;/mi&gt;&lt;mo&gt;−&lt;/mo&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;mo&gt;]&lt;/mo&gt;&lt;mo&gt;−&lt;/mo&gt;&lt;mi&gt;n&lt;/mi&gt;&lt;mi&gt;u&lt;/mi&gt;&lt;mi&gt;m&lt;/mi&gt;&lt;mi&gt;s&lt;/mi&gt;&lt;mo&gt;[&lt;/mo&gt;&lt;mi&gt;i&lt;/mi&gt;&lt;mo&gt;]&lt;/mo&gt;&lt;mo&gt;)&lt;/mo&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;dp2[i] = Math.max(dp2[i - 1], dp1[i - 1] - nums[i])&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:1em;vertical-align:-0.25em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;d&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;p&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;2&lt;/span&gt;&lt;span class=&#34;mopen&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;mclose&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.2777777777777778em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mrel&#34;&gt;=&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.2777777777777778em;&#34;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:1em;vertical-align:-0.25em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34; style=&#34;margin-right:0.10903em;&#34;&gt;M&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;a&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;t&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;h&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;.&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;m&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;a&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;x&lt;/span&gt;&lt;span class=&#34;mopen&#34;&gt;(&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;d&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;p&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;2&lt;/span&gt;&lt;span class=&#34;mopen&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.2222222222222222em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mbin&#34;&gt;−&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.2222222222222222em;&#34;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:1em;vertical-align:-0.25em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;mclose&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;mpunct&#34;&gt;,&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.16666666666666666em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;d&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;p&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;mopen&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.2222222222222222em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mbin&#34;&gt;−&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.2222222222222222em;&#34;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:1em;vertical-align:-0.25em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;mclose&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.2222222222222222em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mbin&#34;&gt;−&lt;/span&gt;&lt;span class=&#34;mspace&#34; style=&#34;margin-right:0.2222222222222222em;&#34;&gt;&lt;/span&gt;&lt;/span&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:1em;vertical-align:-0.25em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;n&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;u&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;m&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;s&lt;/span&gt;&lt;span class=&#34;mopen&#34;&gt;[&lt;/span&gt;&lt;span class=&#34;mord mathdefault&#34;&gt;i&lt;/span&gt;&lt;span class=&#34;mclose&#34;&gt;]&lt;/span&gt;&lt;span class=&#34;mclose&#34;&gt;)&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;br&gt;
+注意到，&lt;code&gt;nums.length&lt;/code&gt;和&lt;code&gt;nums[i]&lt;/code&gt;在最差情况下都可以到达&lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mn&gt;1&lt;/mn&gt;&lt;msup&gt;&lt;mn&gt;0&lt;/mn&gt;&lt;mn&gt;5&lt;/mn&gt;&lt;/msup&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;10^5&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.8141079999999999em;vertical-align:0em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;1&lt;/span&gt;&lt;span class=&#34;mord&#34;&gt;&lt;span class=&#34;mord&#34;&gt;0&lt;/span&gt;&lt;span class=&#34;msupsub&#34;&gt;&lt;span class=&#34;vlist-t&#34;&gt;&lt;span class=&#34;vlist-r&#34;&gt;&lt;span class=&#34;vlist&#34; style=&#34;height:0.8141079999999999em;&#34;&gt;&lt;span style=&#34;top:-3.063em;margin-right:0.05em;&#34;&gt;&lt;span class=&#34;pstrut&#34; style=&#34;height:2.7em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;sizing reset-size6 size3 mtight&#34;&gt;&lt;span class=&#34;mord mtight&#34;&gt;5&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;的大小，对于&lt;code&gt;int&lt;/code&gt;来说存在溢出的风险，可以暂时使用&lt;code&gt;long&lt;/code&gt;进行替代存储&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;代码如下：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;class Solution {
+    public long maxAlternatingSum(int[] nums) {
+        int len = nums.length;
+        long[] dp1 = new long[len];
+        long[] dp2 = new long[len];
+        dp1[0] = (long)nums[0];
+        for(int i = 1; i &amp;lt; len; i++){
+            dp1[i] = Math.max((long)dp1[i - 1], (long)dp2[i - 1] + (long)nums[i]);
+            dp2[i] = Math.max((long)dp2[i - 1], (long)dp1[i - 1] - (long)nums[i]);
+        }
+        return dp1[len - 1] &amp;gt; dp2[len - 1] ? dp1[len - 1]: dp2[len - 1];
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;h1 id=&#34;t4-5783-设计电影租借系统&#34;&gt;T4 &lt;a href=&#34;https://leetcode-cn.com/problems/design-movie-rental-system/&#34;&gt;5783. 设计电影租借系统&lt;/a&gt;&lt;/h1&gt;
+&lt;h2 id=&#34;题目-4&#34;&gt;题目&lt;/h2&gt;
+&lt;p&gt;你有一个电影租借公司和 &lt;code&gt;n&lt;/code&gt; 个电影商店。你想要实现一个电影租借系统，它支持查询、预订和返还电影的操作。同时系统还能生成一份当前被借出电影的报告。&lt;/p&gt;
+&lt;p&gt;所有电影用二维整数数组 &lt;code&gt;entries&lt;/code&gt; 表示，其中 &lt;code&gt;entries[i] = [shopi, moviei, pricei]&lt;/code&gt; 表示商店 &lt;code&gt;shopi&lt;/code&gt; 有一份电影 &lt;code&gt;moviei&lt;/code&gt; 的拷贝，租借价格为 &lt;code&gt;pricei&lt;/code&gt; 。每个商店有 &lt;strong&gt;至多一份&lt;/strong&gt; 编号为 &lt;code&gt;moviei&lt;/code&gt; 的电影拷贝。&lt;/p&gt;
+&lt;p&gt;系统需要支持以下操作：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;strong&gt;Search&lt;/strong&gt; 找到拥有指定电影且 &lt;strong&gt;未借出&lt;/strong&gt; 的商店中 &lt;strong&gt;最便宜的 5 个&lt;/strong&gt; 。商店需要按照 &lt;strong&gt;价格&lt;/strong&gt; 升序排序，如果价格相同，则 &lt;code&gt;shopi&lt;/code&gt; &lt;strong&gt;较小&lt;/strong&gt; 的商店排在前面。如果查询结果少于 5 个商店，则将它们全部返回。如果查询结果没有任何商店，则返回空列表。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Rent&lt;/strong&gt; 从指定商店借出指定电影，题目保证指定电影在指定商店 &lt;strong&gt;未借出&lt;/strong&gt; 。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Drop&lt;/strong&gt; 在指定商店返还 &lt;strong&gt;之前已借出&lt;/strong&gt; 的指定电影。&lt;/li&gt;
+&lt;li&gt;&lt;strong&gt;Report&lt;/strong&gt; 返回 &lt;strong&gt;最便宜的 5 部已借出电影&lt;/strong&gt; （可能有重复的电影 ID），将结果用二维列表 &lt;code&gt;res&lt;/code&gt; 返回，其中 &lt;code&gt;res[j] = [shopj, moviej]&lt;/code&gt; 表示第 &lt;code&gt;j&lt;/code&gt; 便宜的已借出电影是从商店 &lt;code&gt;shopj&lt;/code&gt; 借出的电影 &lt;code&gt;moviej&lt;/code&gt; 。&lt;code&gt;res&lt;/code&gt; 中的电影需要按 &lt;strong&gt;价格&lt;/strong&gt; 升序排序；如果价格相同，则 &lt;code&gt;shopj&lt;/code&gt; &lt;strong&gt;较小&lt;/strong&gt; 的排在前面；如果仍然相同，则 &lt;code&gt;moviej&lt;/code&gt; &lt;strong&gt;较小&lt;/strong&gt; 的排在前面。如果当前借出的电影小于 5 部，则将它们全部返回。如果当前没有借出电影，则返回一个空的列表。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;p&gt;请你实现 MovieRentingSystem 类：&lt;/p&gt;
+&lt;ul&gt;
+&lt;li&gt;&lt;code&gt;MovieRentingSystem(int n, int[][] entries)&lt;/code&gt; 将 &lt;code&gt;MovieRentingSystem&lt;/code&gt; 对象用 &lt;code&gt;n&lt;/code&gt; 个商店和 &lt;code&gt;entries&lt;/code&gt; 表示的电影列表初始化。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;List&amp;lt;Integer&amp;gt; search(int movie)&lt;/code&gt; 如上所述，返回 &lt;strong&gt;未借出&lt;/strong&gt; 指定 &lt;code&gt;movie&lt;/code&gt; 的商店列表。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;void rent(int shop, int movie)&lt;/code&gt; 从指定商店 &lt;code&gt;shop&lt;/code&gt; 借出指定电影 &lt;code&gt;movie&lt;/code&gt; 。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;void drop(int shop, int movie)&lt;/code&gt; 在指定商店 &lt;code&gt;shop&lt;/code&gt; 返还之前借出的电影 &lt;code&gt;movie&lt;/code&gt; 。&lt;/li&gt;
+&lt;li&gt;&lt;code&gt;List&amp;lt;List&amp;lt;Integer&amp;gt;&amp;gt; report()&lt;/code&gt; 如上所述，返回最便宜的 **已借出 **电影列表。&lt;br&gt;
+&lt;strong&gt;注意&lt;/strong&gt; 测试数据保证 &lt;code&gt;rent&lt;/code&gt; 操作中指定商店拥有 &lt;strong&gt;未借出&lt;/strong&gt; 的指定电影，且 &lt;code&gt;drop&lt;/code&gt; 操作指定的商店 &lt;strong&gt;之前已借出&lt;/strong&gt; 指定电影。&lt;/li&gt;
+&lt;/ul&gt;
+&lt;blockquote&gt;
+&lt;p&gt;示例 1：&lt;br&gt;
+输入：&lt;br&gt;
+&lt;code&gt;[&amp;quot;MovieRentingSystem&amp;quot;, &amp;quot;search&amp;quot;, &amp;quot;rent&amp;quot;, &amp;quot;rent&amp;quot;, &amp;quot;report&amp;quot;, &amp;quot;drop&amp;quot;, &amp;quot;search&amp;quot;]&lt;/code&gt;&lt;br&gt;
+&lt;code&gt;[[3, [[0, 1, 5], [0, 2, 6], [0, 3, 7], [1, 1, 4], [1, 2, 7], [2, 1, 5]]], [1], [0, 1], [1, 2], [], [1, 2], [2]]&lt;/code&gt;&lt;br&gt;
+输出：&lt;br&gt;
+&lt;code&gt;[null, [1, 0, 2], null, null, [[0, 1], [1, 2]], null, [0, 1]]&lt;/code&gt;&lt;br&gt;
+解释：&lt;br&gt;
+&lt;code&gt;MovieRentingSystem movieRentingSystem = new MovieRentingSystem(3, [[0, 1, 5], [0, 2, 6], [0, 3, 7], [1, 1, 4], [1, 2, 7], [2, 1, 5]]);&lt;/code&gt;&lt;br&gt;
+&lt;code&gt;movieRentingSystem.search(1);&lt;/code&gt;  // 返回 &lt;code&gt;[1, 0, 2]&lt;/code&gt; ，商店 1，0 和 2 有未借出的 ID 为 1 的电影。商店 1 最便宜，商店 0 和 2 价格相同，所以按商店编号排序。&lt;br&gt;
+&lt;code&gt;movieRentingSystem.rent(0, 1);&lt;/code&gt; // 从商店 0 借出电影 1 。现在商店 0 未借出电影编号为 &lt;code&gt;[2,3]&lt;/code&gt; 。&lt;br&gt;
+&lt;code&gt;movieRentingSystem.rent(1, 2);&lt;/code&gt; // 从商店 1 借出电影 2 。现在商店 1 未借出的电影编号为 &lt;code&gt;[1]&lt;/code&gt; 。&lt;br&gt;
+&lt;code&gt;movieRentingSystem.report();&lt;/code&gt;   // 返回 &lt;code&gt;[[0, 1], [1, 2]]&lt;/code&gt; 。商店 0 借出的电影 1 最便宜，然后是商店 1 借出的电影 2 。&lt;br&gt;
+&lt;code&gt;movieRentingSystem.drop(1, 2);&lt;/code&gt; // 在商店 1 返还电影 2 。现在商店 1 未借出的电影编号为 &lt;code&gt;[1,2]&lt;/code&gt; 。&lt;br&gt;
+&lt;code&gt;movieRentingSystem.search(2);&lt;/code&gt;  // 返回 &lt;code&gt;[0, 1]&lt;/code&gt; 。商店 0 和 1 有未借出的 ID 为 2 的电影。商店 0 最便宜，然后是商店 1 。&lt;/p&gt;
+&lt;/blockquote&gt;
+&lt;p&gt;提示：&lt;br&gt;
+&lt;code&gt;1 &amp;lt;= n &amp;lt;= 3 * 10^5&lt;/code&gt;&lt;br&gt;
+&lt;code&gt;1 &amp;lt;= entries.length &amp;lt;= 10^5&lt;/code&gt;&lt;br&gt;
+&lt;code&gt;0 &amp;lt;= shopi &amp;lt; n&lt;/code&gt;&lt;br&gt;
+&lt;code&gt;1 &amp;lt;= moviei, pricei &amp;lt;= 10^4&lt;/code&gt;&lt;br&gt;
+每个商店 &lt;strong&gt;至多&lt;/strong&gt; 有一份电影 moviei 的拷贝。&lt;br&gt;
+search，rent，drop 和 report 的调用 &lt;strong&gt;总共&lt;/strong&gt; 不超过 10^5 次。&lt;/p&gt;
+&lt;h2 id=&#34;题解-4&#34;&gt;题解&lt;/h2&gt;
+&lt;p&gt;大型阅读理解现场，读得死去活来，题目不难，关键是自己犯了点错误&lt;br&gt;
+代码如下：&lt;/p&gt;
+&lt;pre&gt;&lt;code class=&#34;language-java&#34;&gt;class MovieRentingSystem {
+    Map&amp;lt;Integer,PriorityQueue&amp;lt;int[]&amp;gt;&amp;gt;movies=new HashMap&amp;lt;&amp;gt;();
+    Set&amp;lt;int[]&amp;gt;set=new HashSet&amp;lt;&amp;gt;();
+    PriorityQueue&amp;lt;int[]&amp;gt;jie=new PriorityQueue&amp;lt;&amp;gt;(new Comparator&amp;lt;int[]&amp;gt;() {
+        @Override
+        public int compare(int[] o1, int[] o2) {
+            if(o1[2]!=o2[2])return o1[2]-o2[2];
+            else if(o1[1]!=o2[1])return o1[1]-o2[1];
+            else return o1[0]-o2[0];
+        }
+    });
+    Map&amp;lt;Integer,int[]&amp;gt;[]shops;
+    public MovieRentingSystem(int n, int[][] entries) {
+        shops=new Map[n];
+        for(int i=0;i&amp;lt;n;i++)
+            shops[i]=new HashMap();
+        for(int i=0;i&amp;lt;entries.length;i++)
+        {
+            int[]tem=entries[i];
+            if(movies.get(tem[1])==null)movies.put(tem[1],new PriorityQueue&amp;lt;&amp;gt;(new Comparator&amp;lt;int[]&amp;gt;() {
+                @Override
+                public int compare(int[] o1, int[] o2) {
+                    if(o1[2]!=o2[2])
+                        return o1[2]-o2[2];
+                    else return o1[0]-o2[0];
+                }
+            }));
+            movies.get(tem[1]).add(tem);
+            shops[tem[0]].put(tem[1],tem);
+        }
+    }
+    public List&amp;lt;Integer&amp;gt; search(int movie) {
+        int num=5;
+        List&amp;lt;Integer&amp;gt;list=new ArrayList&amp;lt;&amp;gt;();
+        if(movies.get(movie)==null)return list;
+        PriorityQueue&amp;lt;int[]&amp;gt;tem=(movies.get(movie));
+        Stack&amp;lt;int[]&amp;gt;stack=new Stack&amp;lt;&amp;gt;();
+        while (!tem.isEmpty()&amp;amp;&amp;amp;num&amp;gt;0)
+        {
+            int[]arr=tem.poll();
+            stack.add(arr);
+            if(!set.contains(arr)) {
+                list.add(arr[0]);
+                num--;
+            }
+        }
+
+        while (!stack.isEmpty())
+            tem.add(stack.pop());
+        return list;
+    }
+
+    public void rent(int shop, int movie) {
+        int[]tem=shops[shop].get(movie);
+        set.add(tem);
+        jie.add(tem);
+    }
+
+    public void drop(int shop, int movie) {
+        int[]tem=shops[shop].get(movie);
+        set.remove(tem);
+        jie.remove(tem);
+    }
+
+    public List&amp;lt;List&amp;lt;Integer&amp;gt;&amp;gt; report() {
+        int num=5;
+        PriorityQueue&amp;lt;int[]&amp;gt;tem=jie;
+        List&amp;lt;List&amp;lt;Integer&amp;gt;&amp;gt;list=new ArrayList&amp;lt;&amp;gt;();
+        Stack&amp;lt;int[]&amp;gt;stack=new Stack&amp;lt;&amp;gt;();
+        while (!tem.isEmpty()&amp;amp;&amp;amp;num&amp;gt;0)
+        {
+            int[]arr=tem.poll();
+            stack.add(arr);
+                List&amp;lt;Integer&amp;gt; ll = new ArrayList&amp;lt;&amp;gt;();
+                ll.add(arr[0]);
+                ll.add(arr[1]);
+                list.add(ll);
+                num--;
+        }
+        while (!stack.isEmpty())
+            jie.add(stack.pop());
+        return list;
+    }
+}
+&lt;/code&gt;&lt;/pre&gt;
+&lt;p&gt;我们都知道Java有一个常量池，例如Integer整型常量池，有一个特殊的范围&lt;code&gt;-128 ~ 127&lt;/code&gt;，当我们创建在范围内的Integer对象时，Java会自动将指针指向常量池已有对象，这时如果我们用&lt;code&gt;==&lt;/code&gt;或者&lt;code&gt;!=&lt;/code&gt;判断时是没有问题的，但是当我们创建的对象超出了范围，就会自行创建相应的新对象，该对象拥有不同的指针地址，即使他们的对象值相同，&lt;code&gt;==&lt;/code&gt;运算时也不会相等，因为地址不同，不是同一个对象，必须使用&lt;code&gt;equals()&lt;/code&gt;方法来解决问题&lt;br&gt;
+这道题目中，&lt;code&gt;Map&amp;lt;Integer, Integer&amp;gt;&lt;/code&gt;取出的&lt;code&gt;value&lt;/code&gt;是Integer类型的，直接写入lambda表达式时应当注意，不能使用&lt;code&gt;==&lt;/code&gt;&lt;/p&gt;
+">Leetcode Bio-Weekly Contest Round 55</a>
+      </div>
       
       <div class="item">
         <a class="result-title" style="opacity: 0;" href="https://rayzhang13.github.io/post/thymeleaf-usages/"" data-c="
@@ -4093,7 +4401,7 @@ Process finished with exit code 0
 所以刷题也要适度哦，还有很多别的事情没有完成，不要把刷题当作逃避的借口&lt;br&gt;
 万事开头难，共勉！&lt;/p&gt;
 &lt;!-- more --&gt;
-&lt;p&gt;这是菜鸡的主页&lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mo&gt;⟹&lt;/mo&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;\Longrightarrow&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.549em;vertical-align:-0.024em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mrel&#34;&gt;⟹&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;  &lt;a href=&#34;https://leetcode-cn.com/u/chmod-r-000-e/&#34;&gt;https://leetcode-cn.com/u/chmod-r-000-e/&lt;/a&gt;&lt;br&gt;
+&lt;p&gt;这是菜鸡的主页 &lt;span class=&#34;katex&#34;&gt;&lt;span class=&#34;katex-mathml&#34;&gt;&lt;math&gt;&lt;semantics&gt;&lt;mrow&gt;&lt;mo&gt;⟹&lt;/mo&gt;&lt;/mrow&gt;&lt;annotation encoding=&#34;application/x-tex&#34;&gt;\Longrightarrow&lt;/annotation&gt;&lt;/semantics&gt;&lt;/math&gt;&lt;/span&gt;&lt;span class=&#34;katex-html&#34; aria-hidden=&#34;true&#34;&gt;&lt;span class=&#34;base&#34;&gt;&lt;span class=&#34;strut&#34; style=&#34;height:0.549em;vertical-align:-0.024em;&#34;&gt;&lt;/span&gt;&lt;span class=&#34;mrel&#34;&gt;⟹&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;&lt;/span&gt;  &lt;a href=&#34;https://leetcode-cn.com/u/chmod-r-000-e/&#34;&gt;https://leetcode-cn.com/u/chmod-r-000-e/&lt;/a&gt;&lt;br&gt;
 &lt;img src=&#34;https://rayzhang13.github.io/post-images/1624379647048.png&#34; alt=&#34;&#34; loading=&#34;lazy&#34;&gt;&lt;/p&gt;
 &lt;figure data-type=&#34;image&#34; tabindex=&#34;1&#34;&gt;&lt;img src=&#34;https://rayzhang13.github.io/post-images/1622390983063.png&#34; alt=&#34;&#34; loading=&#34;lazy&#34;&gt;&lt;/figure&gt;
 ">Leetcode刷题计划</a>
